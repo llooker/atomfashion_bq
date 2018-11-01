@@ -1,5 +1,5 @@
 view: order_items {
-  sql_table_name: order_items ;;
+  sql_table_name: ecomm.order_items ;;
   ########## IDs, Foreign Keys, Counts ##########
 
   dimension: id {
@@ -194,17 +194,17 @@ view: order_items {
 
   dimension: is_order_in_last_60_days {
     type: yesno
-    sql: datediff(days, ${order_items.created_date}, current_date) < 60 ;;
+    sql: datediff('days', ${order_items.created_date}, current_date()) < 60 ;;
   }
 
   dimension: is_order_in_last_month {
     type: yesno
-    sql: datediff(days, ${order_items.created_date}, current_date) < 30 ;;
+    sql: datediff('days', ${order_items.created_date}, current_date()) < 30 ;;
   }
 
   dimension: is_order_in_last_day {
     type: yesno
-    sql: ${order_items.created_date} = current_date-7 ;;
+    sql: ${order_items.created_date} = current_date()-7 ;;
   }
 
   dimension: months_since_signup {
@@ -215,12 +215,12 @@ view: order_items {
 
   dimension: reporting_period {
     sql: CASE
-        WHEN date_part('year',${created_raw}) = date_part('year',current_date)
-        AND ${created_raw} < CURRENT_DATE
+        WHEN date_part('year',${created_raw}) = date_part('year',current_date())
+        AND ${created_raw} < current_date()
         THEN 'This Year to Date'
 
-        WHEN date_part('year',${created_raw}) + 1 = date_part('year',current_date)
-        AND date_part('dayofyear',${created_raw}) <= date_part('dayofyear',current_date)
+        WHEN date_part('year',${created_raw}) + 1 = date_part('year',current_date())
+        AND date_part('dayofyear',${created_raw}) <= date_part('dayofyear',current_date())
         THEN 'Last Year to Date'
 
       END
@@ -238,7 +238,7 @@ view: order_items {
     type: number
     value_format_name: decimal_2
     sql: CASE
-        WHEN ${status} = 'Processing' THEN DATEDIFF('day',${created_raw},GETDATE())*1.0
+        WHEN ${status} = 'Processing' THEN DATEDIFF('day',${created_raw},current_timestamp()::timestamp_ntz)*1.0
         WHEN ${status} IN ('Shipped', 'Delivered') THEN DATEDIFF('day',${created_raw},${shipped_raw})*1.0
       END
        ;;

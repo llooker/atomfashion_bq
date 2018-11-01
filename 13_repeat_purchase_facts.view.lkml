@@ -1,15 +1,13 @@
 view: repeat_purchase_facts {
   derived_table: {
-    sortkeys: ["order_id"]
-    distribution: "order_id"
     sql_trigger_value: SELECT MAX(created_at) FROM order_items ;;
     sql: SELECT
         order_items.order_id
         , COUNT(DISTINCT repeat_order_items.id) AS number_subsequent_orders
         , MIN(repeat_order_items.created_at) AS next_order_date
         , MIN(repeat_order_items.order_id) AS next_order_id
-      FROM order_items
-      LEFT JOIN order_items repeat_order_items
+      FROM ecomm.order_items
+      LEFT JOIN ecomm.order_items repeat_order_items
         ON order_items.user_id = repeat_order_items.user_id
         AND order_items.created_at < repeat_order_items.created_at
       GROUP BY 1

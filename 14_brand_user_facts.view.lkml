@@ -5,14 +5,11 @@ view: brand_user_facts {
         , count(*) as total_orders
         , sum(sale_price) as total_sale_price
         , RANK() OVER(partition by product_brand order by total_sale_price desc, user_id)
-
-      from order_items
-      left join inventory_items on order_items.inventory_item_id = inventory_items.id
-      group by 1, 2
+from ecomm.order_items
+left join ecomm.inventory_items on order_items.inventory_item_id = inventory_items.id
+group by 1, 2
        ;;
-    sortkeys: ["brand", "user_id"]
-    distribution: "brand"
-    sql_trigger_value: SELECT MAX(created_at) FROM order_items ;;
+    sql_trigger_value: SELECT MAX(created_at) FROM ecomm.order_items ;;
   }
 
   dimension: primary_key {

@@ -1,4 +1,4 @@
-connection: "demonew_events_ecommerce"
+connection: "snowflake"
 label: "4) Powered By Looker"
 
 # include all the views

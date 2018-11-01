@@ -1,7 +1,5 @@
 view: sessions {
   derived_table: {
-    sortkeys: ["session_id"]
-    distribution: "session_id"
     sql_trigger_value: select max(created_at) from events ;;
     sql: SELECT
         session_id
@@ -15,7 +13,7 @@ view: sessions {
         , MAX(user_id) AS session_user_id
         , MIN(id) AS landing_event_id
         , MAX(id) AS bounce_event_id
-      FROM events
+      FROM ecomm.events
       GROUP BY session_id
        ;;
   }

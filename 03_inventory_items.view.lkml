@@ -1,5 +1,5 @@
 view: inventory_items {
-  sql_table_name: inventory_items ;;
+  sql_table_name: ecomm.inventory_items ;;
   ## DIMENSIONS ##
 
   dimension: id {
@@ -34,13 +34,13 @@ view: inventory_items {
 
   dimension: is_sold {
     type: yesno
-    sql: ${sold_raw} is not null ;;
+    sql: ${sold_raw} is [not] null ;;
   }
 
   dimension: days_in_inventory {
     description: "days between created and sold date"
     type: number
-    sql: DATEDIFF('day', ${created_raw}, coalesce(${sold_raw},CURRENT_DATE)) ;;
+    sql: DATEDIFF('day', ${created_raw}, coalesce(${sold_raw},current_date())) ;;
   }
 
   dimension: days_in_inventory_tier {
@@ -62,7 +62,7 @@ view: inventory_items {
   dimension: days_since_arrival {
     description: "days since created - useful when filtering on sold yesno for items still in inventory"
     type: number
-    sql: DATEDIFF('day', ${created_date}, GETDATE()) ;;
+    sql: DATEDIFF('day', ${created_date}, current_date())) ;;
   }
 
   dimension: days_since_arrival_tier {

@@ -1,5 +1,5 @@
 view: etl_jobs {
-  sql_table_name: public.etl_jobs ;;
+  sql_table_name: ecomm.etl_jobs ;;
 
   dimension_group: completed {
     type: time

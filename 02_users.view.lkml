@@ -1,5 +1,5 @@
 view: users {
-  sql_table_name: users ;;
+  sql_table_name: ecomm.users ;;
   ## Demographics ##
 
   dimension: id {
@@ -127,9 +127,9 @@ view: users {
       }
       when: {
         sql: ${state} in ('Florida', 'Georgia', 'Maryland', 'North Carolina', 'South Carolina', 'Virginia'
-        , 'District of Columbia', 'West Virginia'
-        , 'Alabama', 'Kentucky', 'Mississippi', 'Tennessee'
-        , 'Arkansas', 'Louisiana', 'Oklahoma', 'Texas');;
+                  , 'District of Columbia', 'West Virginia'
+                  , 'Alabama', 'Kentucky', 'Mississippi', 'Tennessee'
+                  , 'Arkansas', 'Louisiana', 'Oklahoma', 'Texas');;
         label: "South"
       }
       when: {
@@ -207,17 +207,17 @@ view: users {
 
   dimension: is_user_created_in_last_60_days {
     type: yesno
-    sql: datediff(days, ${created_date}, current_date) < 60 ;;
+    sql: datediff('days', ${created_date}, current_date()) < 60 ;;
   }
 
   dimension: is_user_created_in_last_month {
     type: yesno
-    sql: datediff(days, ${created_date}, current_date) < 30 ;;
+    sql: datediff('days', ${created_date}, current_date()) < 30 ;;
   }
 
   dimension: is_user_created_in_last_day {
     type: yesno
-    sql: ${created_date} = current_date-7 ;;
+    sql: ${created_date} = current_date()-7 ;;
   }
 
   measure: count_users_this_month {

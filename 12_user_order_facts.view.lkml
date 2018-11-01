@@ -4,15 +4,13 @@ view: user_order_facts {
         user_id
         , COUNT(DISTINCT order_id) AS lifetime_orders
         , SUM(sale_price) AS lifetime_revenue
-        , MIN(NULLIF(created_at,0)) AS first_order
-        , MAX(NULLIF(created_at,0)) AS latest_order
-        , COUNT(DISTINCT DATE_TRUNC('month', NULLIF(created_at,0))) AS number_of_distinct_months_with_orders
-      FROM order_items
-      GROUP BY user_id
+        , MIN(NULLIF(created_at,0::timestamp_ntz)) AS first_order
+        , MAX(NULLIF(created_at,0::timestamp_ntz)) AS latest_order
+        , COUNT(DISTINCT DATE_TRUNC('month', NULLIF(created_at,0::timestamp_ntz))) AS number_of_distinct_months_with_orders
+FROM ecomm.order_items
+GROUP BY user_id
        ;;
-    sortkeys: ["user_id"]
-    distribution: "user_id"
-    sql_trigger_value: SELECT MAX(created_at) FROM order_items ;;
+    sql_trigger_value: SELECT MAX(created_at) FROM ecomm.order_items ;;
   }
 
   dimension: user_id {

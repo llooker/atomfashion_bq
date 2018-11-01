@@ -1,5 +1,5 @@
 view: foo {
-  sql_table_name: public.foo ;;
+  sql_table_name: ecomm.foo ;;
 
   dimension: i {
     type: number
