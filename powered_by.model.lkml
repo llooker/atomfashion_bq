@@ -1,5 +1,5 @@
 connection: "snowflake"
-label: "4) Powered By Looker"
+label: "Powered By Looker"
 
 # include all the views
 include: "*.view"
