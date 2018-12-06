@@ -17,9 +17,19 @@ view: distribution_centers {
     sql: ${TABLE}.longitude ;;
   }
 
+  dimension: location {
+    type: location
+    sql_latitude: ${latitude} ;;
+    sql_longitude: ${longitude} ;;
+  }
+
   dimension: name {
-    type: string
     sql: ${TABLE}.name ;;
+    link: {
+      label: "Shipping Dashboard"
+      url: "/dashboards/161?Distribution%20Center={{ value | encode_uri }}"
+      icon_url: "https://www.evernote.com/l/An8ygmzU7MVBBoI3yUkTQgWXGg3ehAFh3ooB/image.png"
+    }
   }
 
   measure: count {

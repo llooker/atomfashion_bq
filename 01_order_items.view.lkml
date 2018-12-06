@@ -192,6 +192,30 @@ view: order_items {
     sql: ${TABLE}.created_at ;;
   }
 
+  filter: previous_period_filter {
+    type: date
+    description: "Use this filter for period analysis"
+    sql: ${previous_period} IS NOT NULL ;;
+  }
+
+  dimension: previous_period {
+    type: string
+    description: "The reporting period as selected by the Previous Period Filter"
+    sql:
+      CASE
+        WHEN {% date_start previous_period_filter %} is not null AND {% date_end previous_period_filter %} is not null /* date ranges or in the past x days */
+          THEN
+            CASE
+              WHEN ${created_raw} >=  {% date_start previous_period_filter %}
+                AND ${created_raw} <= {% date_end previous_period_filter %}
+                THEN 'This Period'
+              WHEN ${created_raw} >= DATEADD(day,-1*DATEDIFF(day,{% date_start previous_period_filter %}, {% date_end previous_period_filter %} ) + 1, DATEADD(day,-1,{% date_start previous_period_filter %} ) )
+                AND ${created_raw} <= DATEADD(day,-1,{% date_start previous_period_filter %} )
+                THEN 'Previous Period'
+            END
+          END ;;
+  }
+
   dimension: is_order_in_last_60_days {
     type: yesno
     sql: datediff('days', ${order_items.created_date}, current_date()) < 60 ;;

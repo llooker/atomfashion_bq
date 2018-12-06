@@ -4,6 +4,9 @@ label: "Powered By Looker"
 # include all the views
 include: "*.view"
 
+# include all the dashboards
+# include: "*.dashboard"
+
 ########################################
 ############## Base Explores ###########
 ########################################
@@ -58,6 +61,14 @@ explore: order_items {
     sql_on: ${distribution_centers.id} = ${inventory_items.product_distribution_center_id} ;;
     relationship: many_to_one
   }
+}
+
+explore: projected_revenue {
+  label: "(2) Projected Revenue"
+  access_filter: {
+    field: brand
+    user_attribute: brand
+    }
 }
 
 explore: products {
