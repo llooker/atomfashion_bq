@@ -1,6 +1,6 @@
 view: projected_revenue {
-  derived_table: {
-    sql: WITH DATE_TABLE AS (
+    derived_table: {
+      sql: WITH DATE_TABLE AS (
         SELECT X.*,
                EXTRACT(YEAR FROM DAY)  AS YEAR,
                EXTRACT(MONTH FROM DAY) AS MONTH
@@ -21,7 +21,7 @@ DAILY_HISTORY AS
                FROM (
                SELECT   PRODUCTS.BRAND                                                                        AS BRAND,
                         EXTRACT(YEAR FROM ORDER_ITEMS.CREATED_AT)                                             AS YEAR,
-                        TO_DATE(ORDER_ITEMS.CREATED_AT)                                                          AS DAY,
+                        TO_DATE(ORDER_ITEMS.CREATED_AT)                                                       AS DAY,
                         SUM(SALE_PRICE)                                                                       AS REVENUE
                FROM     ECOMM.ORDER_ITEMS
                LEFT JOIN ECOMM.INVENTORY_ITEMS ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
@@ -57,75 +57,79 @@ FROM DATE_TABLE DT
 LEFT JOIN DAILY_HISTORY DH ON TO_DATE(DT.DAY) = TO_DATE(DH.DAY) AND DT.BRAND = DH.BRAND
 ORDER BY 1,2,3) Y) YY
              ;;
-sql_trigger_value: SELECT current_date() ;;
-  }
-
-  dimension: pk {
-    primary_key: yes
-    hidden: yes
-    type: string
-    sql: ${TABLE}.pk ;;
-  }
-
-  dimension: year {
-    hidden: yes
-    type: number
-    sql: ${TABLE}.year ;;
-  }
-
-  dimension: brand {
-    type: string
-    sql: ${TABLE}.brand ;;
-  }
-
-  dimension_group: day {
-    label: "Created"
-    timeframes: [raw,date,day_of_month,week_of_year,month,quarter,year,day_of_year,month_name,month_num]
-    type: time
-    sql: TO_TIMESTAMP(${TABLE}.day) ;;
-  }
-
-  dimension: revenue {
-    type: number
-    sql: ${TABLE}.revenue ;;
-    value_format_name: usd
-  }
-
-  measure: total_revenue {
-    description: "This measure can only be grouped by date formats and brand"
-    type: sum
-    sql: ${revenue} ;;
-    value_format_name: usd_0
-  }
-
-  measure: projected_revenue {
-    description: "This measure can only be grouped by date formats and brand"
-    type: sum
-    sql: ${revenue} ;;
-    filters: {
-      field: projected
-      value: "Yes"
+      sql_trigger_value: SELECT current_date() ;;
     }
-    value_format_name: usd_0
-  }
 
-  measure: actual_revenue {
-    description: "This measure can only be grouped by date formats and brand"
-    type: sum
-    sql: ${revenue} ;;
-    filters: {
-      field: projected
-      value: "No"
+    dimension: pk {
+      primary_key: yes
+      hidden: yes
+      type: string
+      sql: ${TABLE}.pk ;;
     }
-    value_format_name: usd_0
-  }
 
-  dimension: projected {
-    type: yesno
-    sql: ${TABLE}.projected = 'Yes' ;;
-  }
+    dimension: year {
+      hidden: yes
+      type: number
+      sql: ${TABLE}.year ;;
+    }
 
-}
+    dimension: brand {
+      hidden: yes
+      type: string
+      sql: ${TABLE}.brand ;;
+    }
+
+    dimension_group: day {
+      label: "Created"
+      timeframes: [raw,date,day_of_month,week_of_year,month,quarter,year,day_of_year,month_name,month_num]
+      type: time
+      sql: TO_TIMESTAMP(${TABLE}.day) ;;
+    }
+
+    dimension: revenue {
+      type: number
+      sql: ${TABLE}.revenue ;;
+      value_format_name: usd
+    }
+
+    measure: total_revenue {
+      description: "This measure can only be grouped by date formats"
+      type: sum
+      sql: ${revenue} ;;
+      value_format_name: usd_0
+      drill_fields: [day_month,actual_revenue,projected_revenue,total_revenue]
+    }
+
+    measure: projected_revenue {
+      description: "This measure can only be grouped by date formats"
+      type: sum
+      sql: ${revenue} ;;
+      filters: {
+        field: projected
+        value: "Yes"
+      }
+      value_format_name: usd_0
+      drill_fields: [day_month,total_revenue]
+    }
+
+    measure: actual_revenue {
+      description: "This measure can only be grouped by date formats"
+      type: sum
+      sql: ${revenue} ;;
+      filters: {
+        field: projected
+        value: "No"
+      }
+      value_format_name: usd_0
+      drill_fields: [day_month,total_revenue]
+    }
+
+    dimension: projected {
+      type: yesno
+      sql: ${TABLE}.projected = 'Yes' ;;
+    }
+
+  }
 
 #   set: detail {
 #     fields: [year, day, revenue, projected]

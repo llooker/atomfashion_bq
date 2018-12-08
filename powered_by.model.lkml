@@ -66,7 +66,7 @@ explore: order_items {
 explore: projected_revenue {
   label: "(2) Projected Revenue"
   access_filter: {
-    field: brand
+    field: projected_revenue.brand
     user_attribute: brand
     }
 }
