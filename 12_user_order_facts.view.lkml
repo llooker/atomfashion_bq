@@ -123,7 +123,7 @@ GROUP BY user_id
 
   measure: average_lifetime_revenue {
     type: average
-    sql: ${lifetime_revenue} ;;
+    sql: roune(${lifetime_revenue}, 2) ;;
     value_format_name: usd_0
 
   }

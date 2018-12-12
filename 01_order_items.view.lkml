@@ -326,7 +326,7 @@ view: order_items {
   measure: total_sale_price {
     type: sum
     value_format: "$#,##0.00"
-    sql: ${sale_price} ;;
+    sql: round(${sale_price}, 2) ;;
     drill_fields: [order_id, user_id, shipped_date, total_sale_price]
   }
 
