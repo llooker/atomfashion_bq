@@ -19,7 +19,7 @@ view: users {
   }
 
   dimension: name {
-    sql: ${first_name} || ' ' || ${last_name} ;;
+    sql: initcap(${first_name} || ' ' || ${last_name}) ;;
   }
 
   dimension: age {
