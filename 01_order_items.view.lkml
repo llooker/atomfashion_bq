@@ -373,7 +373,7 @@ view: order_items {
     type: sum
     description: "Sum of Gross Margin"
     value_format: "$#,##0.00"
-    sql: ${gross_margin} ;;
+    sql: round(${gross_margin}, 2) ;;
   }
 
   measure: average_sale_price {
