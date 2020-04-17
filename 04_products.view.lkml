@@ -91,7 +91,7 @@ view: products {
 
     link: {
       label: "Brand Analytics Dashboard"
-      url: "/dashboards/1516?Brand%20Name={{ value | encode_uri }}"
+      url: "/dashboards/5?Brand%20Name={{ value | encode_uri }}"
       icon_url: "http://www.looker.com/favicon.ico"
     }
   }
