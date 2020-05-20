@@ -107,6 +107,7 @@ view: users {
 
   dimension: state {
     full_suggestions: yes
+    map_layer_name: us_states
     sql: ${TABLE}.state ;;
   }
 
