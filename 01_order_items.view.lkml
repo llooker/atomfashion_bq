@@ -330,6 +330,14 @@ view: order_items {
     drill_fields: [order_id, user_id, shipped_date, total_sale_price]
   }
 
+  measure: total_returns {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price} ;;
+    filters: [returned_date: "-null"]
+    drill_fields: [order_id, user_id, total_returns]
+  }
+
   measure: total_sale_price_today {
     type: sum
     value_format: "$#,##0.00"
