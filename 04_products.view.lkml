@@ -68,6 +68,10 @@ view: products {
       # Possibly more when statements
     }
     alpha_sort: yes
+    link: {
+      label: "View {{value}} inventory"
+      url: "/dashboards/137?Product%20Category%20Type={{ value | encode_uri }}"
+    }
   }
 
 
