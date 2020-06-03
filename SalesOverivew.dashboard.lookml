@@ -55,8 +55,8 @@
     col: 0
     width: 24
     height: 7
-  - title: First Order vs. Repeat Customer Split
-    name: First Order vs. Repeat Customer Split
+  - title: First Order vs Repeat Customer Split
+    name: First Order vs Repeat Customer Split
     model: atom_fashion
     explore: order_items
     type: looker_column
