@@ -163,9 +163,57 @@ explore: order_items_simple {
 ########################################
 #########  Event Data Explores #########
 ########################################
+explore: web_events {
+  from: events
+  view_name: events
+  label: "(2) Web Event Data"
+  fields: [ALL_FIELDS*, -sessions.spend_per_session, -sessions.spend_per_purchase, -sessions.weeks_since_campaing_start]
+
+  join: sessions {
+    type: left_outer
+    sql_on: ${events.session_id} =  ${sessions.session_id} ;;
+    relationship: many_to_one
+  }
+
+  join: session_landing_page {
+    from: events
+    type: left_outer
+    sql_on: ${sessions.landing_event_id} = ${session_landing_page.event_id} ;;
+    fields: [simple_page_info*]
+    relationship: one_to_one
+  }
+
+  join: session_bounce_page {
+    from: events
+    type: left_outer
+    sql_on: ${sessions.bounce_event_id} = ${session_bounce_page.event_id} ;;
+    fields: [simple_page_info*]
+    relationship: many_to_one
+  }
+
+  join: product_viewed {
+    from: products
+    type: left_outer
+    sql_on: ${events.viewed_product_id} = ${product_viewed.id} ;;
+    relationship: many_to_one
+  }
+
+  join: users {
+    type: left_outer
+    sql_on: ${sessions.session_user_id} = ${users.id} ;;
+    relationship: many_to_one
+  }
+
+  join: user_order_facts {
+    type: left_outer
+    sql_on: ${users.id} = ${user_order_facts.user_id} ;;
+    relationship: one_to_one
+    view_label: "Users"
+  }
+}
 
 explore: events{
-  label:  "(1) Digital Ads - Event Data"
+  label:  "(3) Digital Ads - Event Data"
   join: sessions {
     relationship: many_to_one
     sql_on: ${events.session_id} = ${sessions.session_id} ;;
@@ -214,7 +262,7 @@ explore: events{
 
 explore: sessions{
   fields: [ALL_FIELDS*, -sessions.funnel_view*]
-  label: "(2) Marketing Attribution"
+  label: "(4) Marketing Attribution"
   join: adevents {
     relationship: many_to_one
     sql_on: ${adevents.adevent_id} = ${sessions.ad_event_id} ;;
