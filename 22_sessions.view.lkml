@@ -1,36 +1,70 @@
 view: sessions {
   derived_table: {
-    sql_trigger_value: select max(created_at) from events ;;
-    sql: SELECT
+    datagroup_trigger: ecommerce_etl
+    sql:
+      SELECT
+        row_number() over (partition by session_user_id order by session_end) as session_rank
+        ,CASE WHEN purchase_events > 0
+              THEN row_number() over (partition by session_user_id order by session_end)
+              ELSE null
+          END AS purchase_rank
+        , *
+      FROM(
+      SELECT
         session_id
         , MIN(created_at) AS session_start
         , MAX(created_at) AS session_end
         , COUNT(*) AS number_of_events_in_session
-        , SUM(CASE WHEN event_type IN ('Category','Brand') THEN 1 END) AS browse_events
-        , SUM(CASE WHEN event_type = 'Product' THEN 1 END) AS product_events
-        , SUM(CASE WHEN event_type = 'Cart' THEN 1 END) AS cart_events
-        , SUM(CASE WHEN event_type = 'Purchase' THEN 1 end) AS purchase_events
+        , SUM(CASE WHEN event_type IN ('Category','Brand') THEN 1 else 0 END) AS browse_events
+        , SUM(CASE WHEN event_type = 'Product' THEN 1 else 0 END) AS product_events
+        , SUM(CASE WHEN event_type = 'Cart' THEN 1 else 0 END) AS cart_events
+        , SUM(CASE WHEN event_type = 'Purchase' THEN 1 else 0 end) AS purchase_events
         , MAX(user_id) AS session_user_id
         , MIN(id) AS landing_event_id
         , MAX(id) AS bounce_event_id
+        , MAX(traffic_source) AS traffic_source
+        , MAX(ad_event_id) AS ad_event_id
       FROM ecomm.events
       GROUP BY session_id
-       ;;
+      )
+;;
   }
 
   #####  Basic Web Info  ########
 
-  measure: count {
-    type: count
-  }
-
   dimension: session_id {
     type: string
+    hidden: yes
     primary_key: yes
     sql: ${TABLE}.session_id ;;
   }
 
+  dimension: traffic_source {
+    type: string
+  }
+
+  dimension: ad_event_id {
+    type: number
+  }
+
+  dimension: session_rank {
+    type: number
+    sql: ${TABLE}.session_rank ;;
+  }
+
+  dimension: purchase_rank {
+    type: number
+    sql: ${TABLE}.purchase_rank ;;
+  }
+
+  dimension: session_type {
+    description: "Used for Pivots"
+    type: string
+    sql: 'All' ;;
+  }
+
   dimension: session_user_id {
+    type: number
     sql: ${TABLE}.session_user_id ;;
   }
 
@@ -44,33 +78,26 @@ view: sessions {
 
   dimension_group: session_start {
     type: time
-    timeframes: [
-      time,
-      date,
-      week,
-      month,
-      hour_of_day,
-      day_of_week
-    ]
+    timeframes: [raw, time, date, week, month, quarter, hour_of_day, day_of_week]
     sql: ${TABLE}.session_start ;;
   }
 
   dimension_group: session_end {
     type: time
-    timeframes: [time, date, week, month]
+    timeframes: [raw, time, date, week, month,quarter]
     sql: ${TABLE}.session_end ;;
   }
 
   dimension: duration {
     label: "Duration (sec)"
     type: number
-    sql: DATEDIFF('second', ${TABLE}.session_start, ${TABLE}.session_end) ;;
+    sql: DATEDIFF('second', ${session_start_raw}, ${session_end_raw}) ;;
   }
 
   measure: average_duration {
     label: "Average Duration (sec)"
     type: average
-    value_format_name: decimal_1
+    value_format_name: decimal_2
     sql: ${duration} ;;
   }
 
@@ -80,6 +107,32 @@ view: sessions {
     tiers: [10, 30, 60, 120, 300]
     style: integer
     sql: ${duration} ;;
+  }
+
+  dimension: months_since_first_session {
+    type: number
+    sql: datediff( 'month', ${users.created_raw}, ${session_start_raw} ) ;;
+  }
+
+  measure: count {
+    type: count
+    drill_fields: [detail*]
+  }
+
+  measure: spend_per_session {
+    hidden: yes
+    type: number
+    value_format_name: usd
+    sql: 1.0*${adevents.total_cost} / NULLIF(${count},0) ;;
+    drill_fields: [detail*]
+  }
+
+  measure: spend_per_purchase {
+    hidden: yes
+    type: number
+    value_format_name: usd
+    sql: 1.0*${adevents.total_cost} / NULLIF(${count_with_purchase},0) ;;
+    drill_fields: [detail*]
   }
 
   #####  Bounce Information  ########
@@ -96,12 +149,13 @@ view: sessions {
       field: is_bounce_session
       value: "Yes"
     }
+    drill_fields: [detail*]
   }
 
   measure: percent_bounce_sessions {
     type: number
-    value_format: "#.#\%"
-    sql: 100.0 * ${count_bounce_sessions} / nullif(${count},0) ;;
+    value_format_name: percent_2
+    sql: 1.0 * ${count_bounce_sessions} / nullif(${count},0) ;;
   }
 
   ####### Session by event types included  ########
@@ -150,6 +204,14 @@ view: sessions {
     sql: ${number_of_purchase_events_in_session} > 0 ;;
   }
 
+  dimension: weeks_since_campaing_start {
+    label: "Weeks Since Campaign Start"
+    description:  "Weeks between campaign start and user's session start (e.g. first click)"
+    view_label: "Campaigns"
+    type: number
+    sql: DATEDIFF('week', ${campaigns.created_date}, ${session_start_date})  ;;
+  }
+
   measure: count_with_cart {
     type: count
 
@@ -157,6 +219,8 @@ view: sessions {
       field: includes_cart
       value: "Yes"
     }
+
+    drill_fields: [detail*]
   }
 
   measure: count_with_purchase {
@@ -166,6 +230,8 @@ view: sessions {
       field: includes_purchase
       value: "Yes"
     }
+
+    drill_fields: [detail*]
   }
 
   dimension: number_of_events_in_session {
@@ -190,6 +256,7 @@ view: sessions {
     view_label: "Funnel View"
     label: "(1) All Sessions"
     type: count
+    drill_fields: [detail*]
   }
 
   measure: count_browse_or_later {
@@ -199,9 +266,10 @@ view: sessions {
 
     filters: {
       field: furthest_funnel_step
-      value: "'(2) Browse','(3) View Product','(4) Add to Cart','(5) Purchase'
+      value: "(2) Browse,(3) View Product,(4) Add to Cart,(5) Purchase
       "
     }
+    drill_fields: [detail*]
   }
 
   measure: count_product_or_later {
@@ -211,9 +279,11 @@ view: sessions {
 
     filters: {
       field: furthest_funnel_step
-      value: "'(3) View Product','(4) Add to Cart','(5) Purchase'
+      value: "(3) View Product,(4) Add to Cart,(5) Purchase
       "
     }
+
+    drill_fields: [detail*]
   }
 
   measure: count_cart_or_later {
@@ -223,9 +293,11 @@ view: sessions {
 
     filters: {
       field: furthest_funnel_step
-      value: "'(4) Add to Cart','(5) Purchase'
+      value: "(4) Add to Cart,(5) Purchase
       "
     }
+
+    drill_fields: [detail*]
   }
 
   measure: count_purchase {
@@ -235,34 +307,79 @@ view: sessions {
 
     filters: {
       field: furthest_funnel_step
-      value: "'(5) Purchase'
+      value: "(5) Purchase
       "
     }
+
+    drill_fields: [detail*]
   }
 
   measure: cart_to_checkout_conversion {
     view_label: "Funnel View"
     type: number
     value_format_name: percent_2
-    sql: ${count_purchase} / nullif(${count_cart_or_later},0) ;;
+    sql: 1.0 * ${count_purchase} / nullif(${count_cart_or_later},0) ;;
   }
 
   measure: overall_conversion {
     view_label: "Funnel View"
     type: number
-    value_format: "#.#\%"
-    sql: 100.0 * ${count_purchase} / nullif(${count},0) ;;
+    value_format_name: percent_2
+    sql: 1.0 * ${count_purchase} / nullif(${count},0) ;;
+  }
+
+  ### Acquisition Info
+  dimension: is_first {
+    hidden: yes
+    type: yesno
+    sql: ${session_rank} = 1 ;;
+  }
+  dimension: is_first_purchase {
+    hidden: yes
+    type: yesno
+    sql: ${purchase_rank} = 1 ;;
+  }
+  measure: site_acquisition_source {
+    hidden: yes
+    type: string
+    sql: max(case when ${is_first} then ${sessions.traffic_source} else null end) ;;
+  }
+  measure: site_acquisition_ad_event_id {
+    hidden: yes
+    type: number
+    sql: max(case when ${is_first} then ${sessions.ad_event_id} else null end) ;;
+  }
+  measure: first_visit_dt {
+    hidden: yes
+    type: number
+    sql: min(case when ${is_first} then ${sessions.session_start_raw} else null end) ;;
+  }
+  measure: first_purchase_dt {
+    type: string
+    hidden: yes
+    sql: min(case when ${is_first_purchase} then ${sessions.session_start_raw} else null end) ;;
+  }
+
+
+  set: funnel_view {
+    fields: [
+      all_sessions,
+      count_browse_or_later,
+      count_product_or_later,
+      count_cart_or_later,
+      count_purchase,
+      cart_to_checkout_conversion,
+      overall_conversion
+    ]
   }
 
   set: detail {
-    fields: [
-      session_id,
+    fields: [session_id,
       session_start_time,
       session_end_time,
       number_of_events_in_session,
       duration,
       number_of_purchase_events_in_session,
-      number_of_cart_events_in_session
-    ]
+      number_of_cart_events_in_session]
   }
 }

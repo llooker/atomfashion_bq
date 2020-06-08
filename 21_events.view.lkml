@@ -2,46 +2,139 @@ view: events {
   sql_table_name: ecomm.events ;;
 
   dimension: event_id {
-    type: number
     primary_key: yes
+    type: number
     sql: ${TABLE}.id ;;
   }
 
   dimension: session_id {
-    type: number
-    hidden: yes
+    type: string
     sql: ${TABLE}.session_id ;;
   }
 
-  dimension: ip {
-    label: "IP Address"
-    view_label: "Visitors"
-    sql: ${TABLE}.ip_address ;;
+  dimension: utm_code {
+    type: string
+    sql: ${ad_event_id}:: varchar || ' - ' || ${referrer_code} ::varchar ;;
   }
 
-  dimension: user_id {
-    sql: ${TABLE}.user_id ;;
+  dimension: ad_event_id {
+    type: number
+    sql: ${TABLE}.ad_event_id :: int ;;
+  }
+
+  dimension: referrer_code {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.referrer_code :: int ;;
+  }
+
+  dimension: browser {
+    type: string
+    sql: ${TABLE}.browser ;;
+  }
+
+  dimension: city {
+    type: string
+    sql: ${TABLE}.city ;;
+  }
+
+  dimension: country {
+    type: string
+    map_layer_name: countries
+    sql: ${TABLE}.country ;;
   }
 
   dimension_group: event {
     type: time
     timeframes: [
+      raw,
       time,
       date,
-      hour,
-      time_of_day,
-      hour_of_day,
       week,
-      day_of_week_index,
-      day_of_week
+      month,
+      quarter,
+      year
     ]
     sql: ${TABLE}.created_at ;;
   }
 
+  filter: previous_period_filter {
+    type: date
+    description: "Use this filter for period analysis"
+  }
+
+  dimension: previous_period {
+    type: string
+    description: "The reporting period as selected by the Previous Period Filter"
+    sql:
+      CASE
+        WHEN {% date_start previous_period_filter %} is not null AND {% date_end previous_period_filter %} is not null /* date ranges or in the past x days */
+          THEN
+            CASE
+              WHEN ${event_raw} >=  {% date_start previous_period_filter %}
+                AND ${event_raw}  <= {% date_end previous_period_filter %}
+                THEN 'This Period'
+              WHEN ${event_raw}  >= DATEADD(day,-1*DATEDIFF('day',{% date_start previous_period_filter %}, {% date_end previous_period_filter %} ) + 1, DATEADD(day,-1,{% date_start previous_period_filter %} ) )
+                AND ${event_raw}  <= DATEADD(day,-1,{% date_start previous_period_filter %} )
+                THEN 'Previous Period'
+            END
+          END ;;
+  }
+
+
+  dimension: event_type {
+    type: string
+    sql: ${TABLE}.event_type ;;
+  }
+
+  dimension: ip_address {
+    type: string
+    sql: ${TABLE}.ip_address ;;
+  }
+
+  dimension: latitude {
+    type: number
+    sql: ${TABLE}.latitude ;;
+  }
+
+  dimension: longitude {
+    type: number
+    sql: ${TABLE}.longitude ;;
+  }
+
+  dimension: os {
+    type: string
+    sql: ${TABLE}.os ;;
+  }
+
   dimension: sequence_number {
     type: number
-    description: "Within a given session, what order did the events take place in? 1=First, 2=Second, etc"
     sql: ${TABLE}.sequence_number ;;
+  }
+
+  dimension: state {
+    type: string
+    sql: ${TABLE}.state ;;
+  }
+
+  dimension: traffic_source {
+    type: string
+    sql: ${TABLE}.traffic_source ;;
+  }
+
+  dimension: uri {
+    type: string
+    sql: ${TABLE}.uri ;;
+  }
+
+  dimension: user_id {
+    type: number
+    sql: ${TABLE}.user_id ;;
+  }
+
+  dimension: zip {
+    type: zipcode
+    sql: ${TABLE}.zip ;;
   }
 
   dimension: is_entry_event {
@@ -69,50 +162,61 @@ view: events {
 
   measure: bounce_rate {
     type: number
-    value_format: "#.00%"
+    value_format_name: percent_2
     description: "Percent of events where those events were the bounce page for the session, out of all events"
     sql: ${count_bounces}*1.0 / nullif(${count}*1.0,0) ;;
   }
 
   dimension: full_page_url {
-    sql: ${TABLE}."uri" ;;
+    sql: ${TABLE}.uri ;;
   }
 
   dimension: viewed_product_id {
     type: number
     sql: CASE
-      WHEN ${event_type} = 'Product' THEN right(${full_page_url},length(${full_page_url})-9)
+        WHEN ${event_type} = 'Product' THEN right(${full_page_url},length(${full_page_url})-9)
       END
        ;;
   }
 
-  dimension: event_type {
-    sql: ${TABLE}.event_type ;;
-  }
+##### Funnel Analysis #####
 
   dimension: funnel_step {
     description: "Login -> Browse -> Add to Cart -> Checkout"
     sql: CASE
-      WHEN ${event_type} in ('Login', 'Home')     THEN '(1) Land'
-      WHEN ${event_type} in ('Category', 'Brand') THEN '(2) Browse Inventory'
-      WHEN ${event_type} = 'Product'              THEN '(3) View Product'
-      WHEN ${event_type} = 'Cart'                 THEN '(4) Add Item to Cart'
-      WHEN ${event_type} = 'Purchase'             THEN '(5) Prucase'
+        WHEN ${event_type} IN ('Login', 'Home') THEN '(1) Land'
+        WHEN ${event_type} IN ('Category', 'Brand') THEN '(2) Browse Inventory'
+        WHEN ${event_type} = 'Product' THEN '(3) View Product'
+        WHEN ${event_type} = 'Cart' THEN '(4) Add Item to Cart'
+        WHEN ${event_type} = 'Purchase' THEN '(5) Purchase'
       END
        ;;
   }
 
-  measure: unique_visitors {
-    type: count_distinct
-    description: "Uniqueness determined by IP Address and User Login"
-    view_label: "Visitors"
-    sql: ${ip} ;;
+  dimension: funnel_step_adwords {
+    description: "Login -> Browse -> Add to Cart -> Checkout (for Adwords)"
+    sql: CASE
+        WHEN ${event_type} IN ('Login', 'Home') and ${utm_code} is [not] null THEN '(1) Land'
+        WHEN ${event_type} IN ('Category', 'Brand') and ${utm_code} is [not] null THEN '(2) Browse Inventory'
+        WHEN ${event_type} = 'Product' and ${utm_code} is [not] null THEN '(3) View Product'
+        WHEN ${event_type} = 'Cart' and ${utm_code} is [not] null THEN '(4) Add Item to Cart'
+        WHEN ${event_type} = 'Purchase' and ${utm_code} is [not] null THEN '(5) Purchase'
+      END
+       ;;
   }
+
+#   measure: unique_visitors {
+#     type: count_distinct
+#     description: "Uniqueness determined by IP Address and User Login"
+#     view_label: "Visitors"
+#     sql: ${ip} ;;
+#     drill_fields: [visitors*]
+#   }
 
   dimension: location {
     type: location
     view_label: "Visitors"
-    sql_latitude: ${TABLE}.latitue ;;
+    sql_latitude: ${TABLE}.latitude ;;
     sql_longitude: ${TABLE}.longitude ;;
   }
 
@@ -123,26 +227,16 @@ view: events {
     sql_longitude: round(${TABLE}.longitude,1) ;;
   }
 
-  dimension: has_user_id {
-    type: yesno
-    view_label: "Visitors"
-    description: "Did the visitor sign in as a website user?"
-    sql: ${users.id} > 0 ;;
-  }
-
-  dimension: browser {
-    view_label: "Visitors"
-    sql: ${TABLE}.browser ;;
-  }
-
-  dimension: os {
-    label: "Operating System"
-    view_label: "Visitors"
-    sql: ${TABLE}.os ;;
-  }
+#   dimension: has_user_id {
+#     type: yesno
+#     view_label: "Visitors"
+#     description: "Did the visitor sign in as a website user?"
+#     sql: ${users.id} > 0 ;;
+#   }
 
   measure: count {
     type: count
+    drill_fields: [simple_page_info*]
   }
 
   measure: sessions_count {
@@ -153,42 +247,45 @@ view: events {
   measure: count_m {
     label: "Count (MM)"
     type: number
+    hidden: yes
     sql: ${count}/1000000.0 ;;
-    value_format: "#.## \"M\""
+    drill_fields: [simple_page_info*]
+    value_format: "#.### \"M\""
   }
 
-  measure: unique_visitors_m {
-    label: "Unique Visitors (MM)"
-    view_label: "Visitors"
-    type: number
-    sql: count (distinct ${ip}) / 1000000.0 ;;
-    description: "Uniqueness determined by IP Address and User Login"
-    value_format_name: decimal_3
-  }
-
-  measure: unique_visitors_k {
-    label: "Unique Visitors (k)"
-    view_label: "Visitors"
-    type: number
-    description: "Uniqueness determined by IP Address and User Login"
-    sql: count (distinct ${ip}) / 1000.0 ;;
-    value_format_name: decimal_3
-  }
+#   measure: unique_visitors_m {
+#     label: "Unique Visitors (MM)"
+#     view_label: "Visitors"
+#     type: number
+#     sql: count (distinct ${ip}) / 1000000.0 ;;
+#     description: "Uniqueness determined by IP Address and User Login"
+#     value_format: "#.### \"M\""
+#     hidden: yes
+#     drill_fields: [visitors*]
+#   }
+#
+#   measure: unique_visitors_k {
+#     label: "Unique Visitors (k)"
+#     view_label: "Visitors"
+#     type: number
+#     hidden: yes
+#     description: "Uniqueness determined by IP Address and User Login"
+#     sql: count (distinct ${ip}) / 1000.0 ;;
+#     value_format: "#.### \"k\""
+#     drill_fields: [visitors*]
+#   }
 
   set: simple_page_info {
     fields: [
       event_id,
       event_time,
       event_type,
-      os,
-      browser,
-      full_page_url,
-      user_id,
-      funnel_step
-    ]
+      #       - os
+      #       - browser
+      full_page_url, user_id, funnel_step]
   }
 
   set: visitors {
-    fields: [ip, os, browser, user_id, count]
+    fields: [os, browser, user_id, count]
   }
 }

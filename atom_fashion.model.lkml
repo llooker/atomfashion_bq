@@ -8,6 +8,10 @@ include: "*.dashboard"
 # include all the dashboards
 # include: "*.dashboard"
 
+datagroup: ecommerce_etl {
+  sql_trigger: SELECT max(completed_at) FROM ecomm.etl_jobs ;;
+  max_cache_age: "24 hours"}
+
 ########################################
 ############## Base Explores ###########
 ########################################
@@ -160,95 +164,90 @@ explore: order_items_simple {
 #########  Event Data Explores #########
 ########################################
 
-explore: events {
-  hidden: yes
-  label: "Web Event Data"
-  description: "All Events that occurred on the site, including sessions, users, and products"
-#   access_filter_fields: [product_viewed.brand]
-  access_filter: {
-    field: product_viewed.brand
-    user_attribute: brand
-  }
-
+explore: events{
+  label:  "(1) Digital Ads - Event Data"
   join: sessions {
-    sql_on: ${events.session_id} =  ${sessions.session_id} ;;
     relationship: many_to_one
+    sql_on: ${events.session_id} = ${sessions.session_id} ;;
   }
-
-  join: session_landing_page {
-    from: events
-    sql_on: ${sessions.landing_event_id} = ${session_landing_page.event_id} ;;
-    fields: [simple_page_info*]
-    relationship: one_to_one
-  }
-
-  join: session_bounce_page {
-    from: events
-    sql_on: ${sessions.bounce_event_id} = ${session_bounce_page.event_id} ;;
-    fields: [simple_page_info*]
-    relationship: many_to_one
-  }
-
-  join: product_viewed {
-    from: products
-    sql_on: ${events.viewed_product_id} = ${product_viewed.id} ;;
-    relationship: many_to_one
-  }
-
   join: users {
-    sql_on: ${sessions.session_user_id} = ${users.id} ;;
+    view_label: "Users"
     relationship: many_to_one
+    sql_on: ${sessions.session_user_id} = ${users.id} ;;
+  }
+  join: user_session_fact {
+    view_label: "Users"
+    relationship: one_to_one
+    sql_on: ${users.id} = ${user_session_fact.session_user_id} ;;
   }
 
-  join: user_order_facts {
-    sql_on: ${users.id} = ${user_order_facts.user_id} ;;
-    relationship: one_to_one
-    view_label: "Users"
+  join: session_purchase_facts {
+    relationship: many_to_one
+    sql_on: ${sessions.session_user_id} = ${session_purchase_facts.session_user_id}
+          and ${sessions.session_start_raw} >= ${session_purchase_facts.last_session_end_raw}
+          and ${sessions.session_end_raw} <= ${session_purchase_facts.session_end_raw};;
+  }
+
+  join: adevents {
+    relationship: one_to_many
+    sql_on: ${events.ad_event_id} = ${adevents.adevent_id}
+      and ${events.referrer_code} = ${adevents.keyword_id}
+      and ${events.is_entry_event}
+      ;;
+  }
+  join: keywords {
+    relationship: many_to_one
+    sql_on:${keywords.keyword_id} = ${adevents.keyword_id} ;;
+  }
+  join: adgroups{
+    relationship: many_to_one
+    sql_on: ${keywords.ad_id} = ${adgroups.ad_id} ;;
+  }
+  join: campaigns {
+    relationship: many_to_one
+    sql_on: ${campaigns.campaign_id} = ${adgroups.campaign_id} ;;
+    type: full_outer
   }
 }
 
-explore: sessions {
-  hidden: yes
-  label: "Web Session Data"
-#   access_filter_fields: [product_viewed.brand]
-  access_filter: {
-    field: product_viewed.brand
-    user_attribute: brand
-  }
 
-  join: events {
-    sql_on: ${sessions.session_id} = ${events.session_id} ;;
-    relationship: one_to_many
-  }
 
-  join: product_viewed {
-    from: products
-    sql_on: ${events.viewed_product_id} = ${product_viewed.id} ;;
+explore: sessions{
+  fields: [ALL_FIELDS*, -sessions.funnel_view*]
+  label: "(2) Marketing Attribution"
+  join: adevents {
     relationship: many_to_one
+    sql_on: ${adevents.adevent_id} = ${sessions.ad_event_id} ;;
   }
-
-  join: session_landing_page {
-    from: events
-    sql_on: ${sessions.landing_event_id} = ${session_landing_page.event_id} ;;
-    fields: [simple_page_info*]
-    relationship: one_to_one
-  }
-
-  join: session_bounce_page {
-    from: events
-    sql_on: ${sessions.bounce_event_id} = ${session_bounce_page.event_id} ;;
-    fields: [simple_page_info*]
-    relationship: one_to_one
-  }
-
   join: users {
+    view_label: "Users"
     relationship: many_to_one
-    sql_on: ${users.id} = ${sessions.session_user_id} ;;
+    sql_on: ${sessions.session_user_id} = ${users.id} ;;
+  }
+  join: user_session_fact {
+    view_label: "Users"
+    relationship: one_to_one
+    sql_on: ${users.id} = ${user_session_fact.session_user_id} ;;
+#     fields: [user_session_measures*] -- ZL: commenting out so I can use first and last touch attribution sources as regular dimensions
   }
 
-  join: user_order_facts {
+  join: session_attribution {
     relationship: many_to_one
-    sql_on: ${user_order_facts.user_id} = ${users.id} ;;
-    view_label: "Users"
+    sql_on: ${sessions.session_user_id} = ${session_attribution.session_user_id}
+          and ${sessions.session_start_raw} >= ${session_attribution.last_session_end_raw}
+          and ${sessions.session_end_raw} <= ${session_attribution.session_end_raw};;
+    fields: [attribution_detail*]
+  }
+  join: keywords {
+    relationship: many_to_one
+    sql_on:${keywords.keyword_id} = ${adevents.keyword_id} ;;
+  }
+  join: adgroups{
+    relationship: many_to_one
+    sql_on: ${keywords.ad_id} = ${adgroups.ad_id} ;;
+  }
+  join: campaigns {
+    relationship: many_to_one
+    sql_on: ${campaigns.campaign_id} = ${adgroups.campaign_id} ;;
   }
 }
