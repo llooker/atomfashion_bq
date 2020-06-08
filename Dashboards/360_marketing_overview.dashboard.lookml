@@ -651,7 +651,7 @@
   - title: First Touch to Last Touch Analysis
     name: First Touch to Last Touch Analysis
     explore: events
-    type: sankey2
+    type: sankey
     fields: [user_session_fact.site_acquisition_source, sessions.traffic_source, session_purchase_facts.revenue]
     filters:
       user_session_fact.site_acquisition_source: "-NULL"

@@ -124,7 +124,7 @@ view: events {
 
   dimension: uri {
     type: string
-    sql: ${TABLE}.uri ;;
+    sql: ${TABLE}."uri" ;;
   }
 
   dimension: user_id {
@@ -168,7 +168,7 @@ view: events {
   }
 
   dimension: full_page_url {
-    sql: ${TABLE}.uri ;;
+    sql: ${TABLE}."uri" ;;
   }
 
   dimension: viewed_product_id {
@@ -251,6 +251,14 @@ view: events {
     sql: ${count}/1000000.0 ;;
     drill_fields: [simple_page_info*]
     value_format: "#.### \"M\""
+  }
+
+  measure: unique_visitors {
+    type: count_distinct
+    description: "Uniqueness determined by IP Address and User Login"
+    view_label: "Visitors"
+    sql: ${ip_address} ;;
+    drill_fields: [visitors*]
   }
 
 #   measure: unique_visitors_m {
