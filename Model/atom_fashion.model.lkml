@@ -168,6 +168,10 @@ explore: web_events {
   view_name: events
   label: "(2) Web Event Data"
   fields: [ALL_FIELDS*, -sessions.spend_per_session, -sessions.spend_per_purchase, -sessions.weeks_since_campaing_start]
+  access_filter: {
+    field: product_viewed.brand
+    user_attribute: brand
+  }
 
   join: sessions {
     type: left_outer
@@ -217,7 +221,10 @@ explore: web_sessions {
   view_name: sessions
   label: "(3) Web Session Data"
   fields: [ALL_FIELDS*, -sessions.spend_per_session, -sessions.spend_per_purchase, -sessions.weeks_since_campaing_start]
-
+  access_filter: {
+    field: product_viewed.brand
+    user_attribute: brand
+  }
 
   join: events {
     type: left_outer
