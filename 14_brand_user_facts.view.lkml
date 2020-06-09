@@ -1,5 +1,6 @@
 view: brand_user_facts {
   derived_table: {
+    datagroup_trigger: ecommerce_etl
     sql: select product_brand as brand
         , order_items.user_id as user_id
         , count(*) as total_orders
@@ -9,7 +10,6 @@ from ecomm.order_items
 left join ecomm.inventory_items on order_items.inventory_item_id = inventory_items.id
 group by 1, 2
        ;;
-    sql_trigger_value: SELECT MAX(created_at) FROM ecomm.order_items ;;
   }
 
   dimension: primary_key {

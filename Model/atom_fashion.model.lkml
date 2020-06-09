@@ -12,6 +12,8 @@ datagroup: ecommerce_etl {
   sql_trigger: SELECT max(completed_at) FROM ecomm.etl_jobs ;;
   max_cache_age: "24 hours"}
 
+persist_with: ecommerce_etl
+
 ########################################
 ############## Base Explores ###########
 ########################################
@@ -69,7 +71,7 @@ explore: order_items {
 }
 
 explore: projected_revenue {
-  label: "(2) Projected Revenue"
+  label: "(7) Projected Revenue"
   access_filter: {
     field: projected_revenue.brand
     user_attribute: brand

@@ -1,5 +1,6 @@
 view: user_order_facts {
   derived_table: {
+    datagroup_trigger: ecommerce_etl
     sql: SELECT
         user_id
         , COUNT(DISTINCT order_id) AS lifetime_orders
@@ -10,7 +11,6 @@ view: user_order_facts {
 FROM ecomm.order_items
 GROUP BY user_id
        ;;
-    sql_trigger_value: SELECT MAX(created_at) FROM ecomm.order_items ;;
   }
 
   dimension: user_id {

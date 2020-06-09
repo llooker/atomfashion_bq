@@ -1,6 +1,6 @@
 view: repeat_purchase_facts {
   derived_table: {
-    sql_trigger_value: SELECT MAX(created_at) FROM order_items ;;
+    datagroup_trigger: ecommerce_etl
     sql: SELECT
         order_items.order_id
         , COUNT(DISTINCT repeat_order_items.id) AS number_subsequent_orders

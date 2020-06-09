@@ -1,5 +1,6 @@
 view: order_facts {
   derived_table: {
+    datagroup_trigger: ecommerce_etl
     sql: SELECT
           order_items.order_id AS order_id
         , COUNT(*) AS items_in_order
@@ -11,7 +12,6 @@ view: order_facts {
         ON order_items.inventory_item_id = inventory_items.id
       GROUP BY order_items.order_id, order_items.user_id, order_items.created_at
        ;;
-    sql_trigger_value: SELECT MAX(created_at) FROM ecomm.order_items ;;
   }
 
   ## DIMENSIONS ##
