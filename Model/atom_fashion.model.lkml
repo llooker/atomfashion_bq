@@ -46,6 +46,15 @@ explore: order_items {
     sql_on: ${order_items.user_id} = ${users.id} ;;
   }
 
+  join: city_sales_tax {
+    type: inner
+    sql_on: ${users.city} = ${city_sales_tax.city}
+          AND ${users.state} = ${city_sales_tax.state}
+          AND ${users.country} = ${city_sales_tax.country}
+      ;;
+    relationship: many_to_many
+  }
+
   join: user_order_facts {
     view_label: "Users"
     relationship: many_to_one

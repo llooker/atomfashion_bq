@@ -294,6 +294,12 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
+  dimension: tax_amount {
+    type: number
+    value_format: "$#,##0.00"
+    sql: ${sale_price} * ${city_sales_tax.city_tax} ;;
+  }
+
   dimension: gross_margin {
     type: number
     value_format: "$#,##0.00"
@@ -328,6 +334,12 @@ view: order_items {
     value_format: "$#,##0.00"
     sql: round(${sale_price}, 2) ;;
     drill_fields: [order_id, user_id, shipped_date, total_sale_price]
+  }
+
+  measure: total_tax_amount {
+    type: sum
+    value_format: "$#,##0.00"
+    sql: round(${tax_amount}, 2) ;;
   }
 
   measure: total_returns {
