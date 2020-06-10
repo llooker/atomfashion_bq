@@ -8,6 +8,10 @@ include: "/Dashboards/*.dashboard"
 # include all the dashboards
 # include: "*.dashboard"
 
+named_value_format: big_money {
+  value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$0.00"
+}
+
 datagroup: ecommerce_etl {
   sql_trigger: SELECT max(completed_at) FROM ecomm.etl_jobs ;;
   max_cache_age: "24 hours"}
