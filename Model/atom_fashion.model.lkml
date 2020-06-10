@@ -77,6 +77,13 @@ explore: order_items {
     sql_on: ${distribution_centers.id} = ${inventory_items.product_distribution_center_id} ;;
     relationship: many_to_one
   }
+
+  join: best_day_ever {
+    view_label: "Order Items"
+    type: inner
+    sql_on: ${order_items.created_date} = ${best_day_ever.created_date} ;;
+    relationship: many_to_one
+  }
 }
 
 explore: projected_revenue {
