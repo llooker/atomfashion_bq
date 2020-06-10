@@ -105,7 +105,7 @@ view: inventory_items {
 
   measure: total_cost {
     type: sum
-    value_format: "$#,##0.00"
+    value_format_name: big_money
     sql: ${cost} ;;
   }
 
