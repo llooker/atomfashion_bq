@@ -16,55 +16,9 @@ view: order_items {
 
   dimension: order_id {
     description: "This is the Order ID"
-    view_label: "Order ID"
+    view_label: "Orders"
     type: number
     sql: ${TABLE}.order_id ;;
-    action: {
-      label: "Send this to slack channel"
-      url: "https://hooks.zapier.com/hooks/catch/1662138/tvc3zj/"
-
-      param: {
-        name: "user_dash_link"
-        value: "https://demo.looker.com/dashboards/160?Email={{ users.email._value}}"
-      }
-
-      form_param: {
-        name: "Message"
-        type: textarea
-      }
-
-      form_param: {
-        name: "Recipient"
-        type: select
-        default: "zevl"
-        option: {
-          name: "zevl"
-          label: "Zev"
-        }
-        option: {
-          name: "slackdemo"
-          label: "Slack Demo User"
-        }
-
-      }
-
-      form_param: {
-        name: "Channel"
-        type: select
-        default: "cs"
-        option: {
-          name: "cs"
-          label: "Customer Support"
-        }
-        option: {
-          name: "general"
-          label: "General"
-        }
-
-      }
-
-
-    }
   }
 
   dimension: user_id {
@@ -335,6 +289,18 @@ view: order_items {
     sql: round(${sale_price}, 2) ;;
     drill_fields: [order_id, user_id, shipped_date, total_sale_price]
   }
+
+#   measure: total_sale_price_drill {
+#     hidden: yes
+#     label: "Total Sale Price"
+#     type: sum
+#     value_format: "$#,##0.00"
+#     sql: round(${sale_price}, 2) ;;
+#     link: {
+#       label: "See Category Breakout"
+#       url: "/embed/query/atom_fashion/order_items?fields=products.category,order_items.total_sale_price&f[order_items.created_date]={{ best_day_ever.best_day_date._value }}&f[order_items.created_hour_of_day]={{ order_items.created_hour_of_day._value }}&sorts=order_items.total_sale_price+desc&limit=500&query_timezone=America%2FLos_Angeles&vis=%7B%22value_labels%22%3A%22legend%22%2C%22label_type%22%3A%22labPer%22%2C%22inner_radius%22%3A20%2C%22series_labels%22%3A%7B%7D%2C%22series_types%22%3A%7B%7D%2C%22type%22%3A%22looker_pie%22%2C%22show_value_labels%22%3Atrue%2C%22font_size%22%3A12%2C%22defaults_version%22%3A1%2C%22x_axis_gridlines%22%3Afalse%2C%22y_axis_gridlines%22%3Atrue%2C%22show_view_names%22%3Afalse%2C%22show_y_axis_labels%22%3Atrue%2C%22show_y_axis_ticks%22%3Atrue%2C%22y_axis_tick_density%22%3A%22default%22%2C%22y_axis_tick_density_custom%22%3A5%2C%22show_x_axis_label%22%3Atrue%2C%22show_x_axis_ticks%22%3Atrue%2C%22y_axis_scale_mode%22%3A%22linear%22%2C%22x_axis_reversed%22%3Afalse%2C%22y_axis_reversed%22%3Afalse%2C%22plot_size_by_field%22%3Afalse%2C%22trellis%22%3A%22%22%2C%22stacking%22%3A%22%22%2C%22limit_displayed_rows%22%3Afalse%2C%22legend_position%22%3A%22center%22%2C%22point_style%22%3A%22none%22%2C%22label_density%22%3A25%2C%22x_axis_scale%22%3A%22auto%22%2C%22y_axis_combined%22%3Atrue%2C%22show_null_points%22%3Atrue%2C%22interpolation%22%3A%22linear%22%2C%22show_totals_labels%22%3Afalse%2C%22show_silhouette%22%3Afalse%2C%22totals_color%22%3A%22%23808080%22%2C%22hidden_fields%22%3A%5B%5D%2C%22hidden_points_if_no%22%3A%5B%5D%7D&filter_config=%7B%22order_items.created_date%22%3A%5B%7B%22type%22%3A%22on%22%2C%22values%22%3A%5B%7B%22date%22%3A%222020-03-22T00%3A00%3A00.000Z%22%2C%22unit%22%3A%22day%22%2C%22tz%22%3Atrue%7D%5D%2C%22id%22%3A2%2C%22error%22%3Afalse%7D%5D%2C%22order_items.created_hour_of_day%22%3A%5B%7B%22type%22%3A%22%3D%22%2C%22values%22%3A%5B%7B%22constant%22%3A%2210%22%7D%2C%7B%7D%5D%2C%22id%22%3A0%2C%22error%22%3Afalse%7D%5D%7D&origin=share-expanded"
+#     }
+#   }
 
   measure: total_tax_amount {
     type: sum
