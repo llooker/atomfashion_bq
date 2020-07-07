@@ -46,6 +46,7 @@ view: user_cohort {
           AND {% condition user_cohort.city_filter %} city {% endcondition %}
           AND {% condition user_cohort.gender_filter %} gender {% endcondition %}
           AND {% condition user_cohort.state_filter %} state {% endcondition %}
+          AND {% condition user_cohort.location_filter %} location {% endcondition %}
           AND {% condition user_cohort.country_filter %} country {% endcondition %}
           AND {% condition user_cohort.traffic_source_filter %} traffic_source {% endcondition %}
           AND {% condition user_cohort.created_at_filter %} created_at {% endcondition %}
