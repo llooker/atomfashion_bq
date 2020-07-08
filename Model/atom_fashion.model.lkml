@@ -30,10 +30,10 @@ explore: order_items {
     field: products.brand
     user_attribute: brand
   }
-  access_filter: {
-    field: order_items.created_date
-    user_attribute: time_horizon
-  }
+#   access_filter: {
+#     field: order_items.created_date
+#     user_attribute: time_horizon
+#   }
 
   join: order_facts {
     view_label: "Orders"
