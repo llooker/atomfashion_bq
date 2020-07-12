@@ -6,6 +6,7 @@ view: users {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+    tags: ["atom-notification"]
   }
 
   dimension: first_name {
@@ -59,7 +60,7 @@ view: users {
 
   dimension: email {
     sql: ${TABLE}.email ;;
-
+    tags: ["atom-notification"]
     link: {
       label: "Customer Profile"
       url: "https://fashionly.style/embeds/customer_profile?Email={{ value | encode_uri }} target=\"_blank\""
