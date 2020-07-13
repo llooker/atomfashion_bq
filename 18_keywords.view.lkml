@@ -42,21 +42,21 @@ view: keywords {
   dimension: criterion_name {
     type: string
     sql: ${TABLE}.CRITERION_NAME ;;
-    link: {
-      icon_url: "https://www.google.com/images/branding/product/ico/googleg_lodp.ico"
-      label: "Google Search"
-      url: "https://www.google.com/search?q={{ value | encode_uri}}"
-    }
-    link: {
-      label: "View on AdWords"
-      icon_url: "https://www.google.com/s2/favicons?domain=www.adwords.google.com"
-      url: "https://adwords.google.com/aw/adgroups?campaignId={{ criterion_name._value | encode_uri }}"
-    }
-    link: {
-      label: "Pause Keyword"
-      icon_url: "https://www.google.com/s2/favicons?domain=www.adwords.google.com"
-      url: "https://adwords.google.com/aw/ads?keywordId={{ criterion_name._value | encode_uri }}"
-    }
+#     link: {
+#       icon_url: "https://www.google.com/images/branding/product/ico/googleg_lodp.ico"
+#       label: "Google Search"
+#       url: "https://www.google.com/search?q={{ value | encode_uri}}"
+#     }
+#     link: {
+#       label: "View on AdWords"
+#       icon_url: "https://www.google.com/s2/favicons?domain=www.adwords.google.com"
+#       url: "https://adwords.google.com/aw/adgroups?campaignId={{ criterion_name._value | encode_uri }}"
+#     }
+#     link: {
+#       label: "Pause Keyword"
+#       icon_url: "https://www.google.com/s2/favicons?domain=www.adwords.google.com"
+#       url: "https://adwords.google.com/aw/ads?keywordId={{ criterion_name._value | encode_uri }}"
+#     }
   }
 
   dimension: keyword_match_type {

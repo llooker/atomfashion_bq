@@ -60,11 +60,6 @@ view: users {
   dimension: email {
     sql: ${TABLE}.email ;;
 
-    link: {
-      label: "Customer Profile"
-      url: "https://fashionly.style/embeds/customer_profile?Email={{ value | encode_uri }} target=\"_blank\""
-      icon_url: "http://www.google.com/s2/favicons?domain=fashionly.style"
-    }
     action: {
       label: "Email Promotion to Customer"
       url: "https://desolate-refuge-53336.herokuapp.com/posts"

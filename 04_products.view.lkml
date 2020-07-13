@@ -36,7 +36,11 @@ view: products {
   }
 
   dimension: category_type {
-    # sql: trim(${TABLE}.category) ;;
+    type: string
+#     link: {
+#       label: "View {{value}} inventory"
+#       url: "/dashboards/137?Product%20Category%20Type={{ value | encode_uri }}"
+#     }
     case: {
       when: {
         sql: ${category} = 'Blazers & Jackets'
@@ -68,10 +72,7 @@ view: products {
       # Possibly more when statements
     }
     alpha_sort: yes
-    link: {
-      label: "View {{value}} inventory"
-      url: "/dashboards/137?Product%20Category%20Type={{ value | encode_uri }}"
-    }
+
   }
 
 
@@ -93,11 +94,11 @@ view: products {
       icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
     }
 
-    link: {
-      label: "Brand Analytics Dashboard"
-      url: "/dashboards/5?Brand%20Name={{ value | encode_uri }}"
-      icon_url: "http://www.looker.com/favicon.ico"
-    }
+#     link: {
+#       label: "Brand Analytics Dashboard"
+#       url: "/dashboards/5?Brand%20Name={{ value | encode_uri }}"
+#       icon_url: "http://www.looker.com/favicon.ico"
+#     }
   }
   dimension: retail_price {
     type: number

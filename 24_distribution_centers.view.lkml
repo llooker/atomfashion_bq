@@ -25,11 +25,7 @@ view: distribution_centers {
 
   dimension: name {
     sql: ${TABLE}.name ;;
-    link: {
-      label: "Shipping Dashboard"
-      url: "/dashboards/6?Distribution%20Center={{ value | encode_uri }}"
-      icon_url: "https://www.evernote.com/l/An8ygmzU7MVBBoI3yUkTQgWXGg3ehAFh3ooB/image.png"
-    }
+
   }
 
   measure: count {

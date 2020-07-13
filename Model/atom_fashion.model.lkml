@@ -14,7 +14,8 @@ named_value_format: big_money {
 
 datagroup: ecommerce_etl {
   sql_trigger: SELECT max(completed_at) FROM ecomm.etl_jobs ;;
-  max_cache_age: "24 hours"}
+  max_cache_age: "24 hours"
+}
 
 persist_with: ecommerce_etl
 
