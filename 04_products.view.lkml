@@ -81,7 +81,14 @@ view: products {
   }
 
   dimension: brand {
-    sql: trim(${TABLE}.brand) ;;
+    sql: CASE WHEN LEFT(${TABLE}.brand, 1) in ('A', 'B', 'N', 'P') or ${TABLE}.brand = 'Columbia' THEN 'Columbia'
+              WHEN LEFT(${TABLE}.brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or ${TABLE}.brand = 'Calvin Klein' THEN 'Calvin Klein'
+              WHEN LEFT(${TABLE}.brand, 1) in ('C', 'H', 'I','R') THEN 'Carhartt'
+              WHEN LEFT(${TABLE}.brand, 1) in ('L', 'G', 'O') THEN 'Levi''s'
+              ELSE 'Dockers'
+          END;;
+
+#     sql: trim(${TABLE}.brand) ;;
     link: {
       label: "Website"
       url: "http://www.google.com/search?q={{ value | encode_uri }}+clothes&btnI"
