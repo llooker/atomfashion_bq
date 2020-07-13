@@ -36,7 +36,7 @@ view: keywords {
     ]
     convert_tz: no
     datatype: date
-    sql: ${TABLE}.CREATED_AT ;;
+    sql: dateadd(d,1,${TABLE}.CREATED_AT) ;;
   }
 
   dimension: criterion_name {

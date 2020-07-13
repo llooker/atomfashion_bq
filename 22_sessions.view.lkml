@@ -79,13 +79,13 @@ view: sessions {
   dimension_group: session_start {
     type: time
     timeframes: [raw, time, date, week, month, quarter, hour_of_day, day_of_week]
-    sql: ${TABLE}.session_start ;;
+    sql: dateadd(d,1,${TABLE}.session_start) ;;
   }
 
   dimension_group: session_end {
     type: time
     timeframes: [raw, time, date, week, month,quarter]
-    sql: ${TABLE}.session_end ;;
+    sql: dateadd(d,1,${TABLE}.session_end) ;;
   }
 
   dimension: duration {

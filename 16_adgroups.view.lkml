@@ -31,7 +31,7 @@ view: adgroups {
     ]
     convert_tz: no
     datatype: date
-    sql: ${TABLE}.created_at ;;
+    sql: dateadd(d,1,${TABLE}.created_at) ;;
   }
 
   dimension: headline {

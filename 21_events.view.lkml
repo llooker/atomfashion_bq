@@ -55,7 +55,7 @@ view: events {
       quarter,
       year
     ]
-    sql: ${TABLE}.created_at ;;
+    sql: dateadd(d,1,${TABLE}.created_at) ;;
   }
 
   filter: previous_period_filter {

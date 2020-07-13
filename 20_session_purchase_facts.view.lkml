@@ -148,7 +148,7 @@ view: session_purchase_facts {
     view_label: "Sessions"
     type: time
     timeframes: [raw, time, date, week, month]
-    sql: ${TABLE}.last_session_end;;
+    sql: dateadd(d,1,${TABLE}.last_session_end);;
   }
 
   dimension_group: session_end {
@@ -156,14 +156,14 @@ view: session_purchase_facts {
     view_label: "Sessions"
     label: "Purchase End Session"
     timeframes: [raw, time, date, week, month]
-    sql: ${TABLE}.session_end ;;
+    sql: dateadd(d,1,${TABLE}.session_end) ;;
   }
 
   dimension_group: session_start {
     hidden: yes
     type: time
     timeframes: [raw, time, date, week, month]
-    sql: ${TABLE}.session_start ;;
+    sql: dateadd(d,1,${TABLE}.session_start) ;;
   }
 
   dimension: session_user_id {
