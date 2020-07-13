@@ -83,7 +83,7 @@ ORDER BY 1,2,3) Y) YY
       label: "Created"
       timeframes: [raw,date,day_of_month,week_of_year,month,quarter,year,day_of_year,month_name,month_num]
       type: time
-      sql: TO_TIMESTAMP(${TABLE}.day) ;;
+      sql: dateadd(d,1,TO_TIMESTAMP(${TABLE}.day)) ;;
     }
 
     dimension: revenue {

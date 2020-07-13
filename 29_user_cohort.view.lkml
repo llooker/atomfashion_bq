@@ -49,9 +49,9 @@ view: user_cohort {
           AND {% condition user_cohort.location_filter %} location {% endcondition %}
           AND {% condition user_cohort.country_filter %} country {% endcondition %}
           AND {% condition user_cohort.traffic_source_filter %} traffic_source {% endcondition %}
-          AND {% condition user_cohort.created_at_filter %} created_at {% endcondition %}
-          AND {% condition user_cohort.first_order_filter %} first_order {% endcondition %}
-          AND {% condition user_cohort.latest_order_filter %} latest_order {% endcondition %}
+          AND {% condition user_cohort.created_at_filter %} dateadd(d,1,created_at) {% endcondition %}
+          AND {% condition user_cohort.first_order_filter %} dateadd(d,1,first_order) {% endcondition %}
+          AND {% condition user_cohort.latest_order_filter %} dateadd(d,1,latest_order) {% endcondition %}
           AND {% condition user_cohort.days_as_customer_filter %} days_as_customer {% endcondition %}
           AND {% condition user_cohort.repeat_customer_filter %} repeat_customer {% endcondition %}
           AND {% condition user_cohort.lifetime_orders_filter %} lifetime_orders {% endcondition %}

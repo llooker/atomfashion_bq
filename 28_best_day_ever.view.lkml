@@ -18,7 +18,7 @@ view: best_day_ever {
     label: "Best Day"
     type: time
     timeframes: [date]
-    sql: ${TABLE}."DAY" ;;
+    sql: dateadd(d,1,${TABLE}."DAY") ;;
   }
 
   dimension: best_day_vs_today {
