@@ -6,6 +6,7 @@ view: users {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+    tags: ["atom-notification"]
   }
 
   dimension: first_name {
@@ -59,7 +60,7 @@ view: users {
 
   dimension: email {
     sql: ${TABLE}.email ;;
-
+    tags: ["atom-notification"]
     action: {
       label: "Email Promotion to Customer"
       url: "https://desolate-refuge-53336.herokuapp.com/posts"
