@@ -77,7 +77,12 @@ view: products {
 
 
   dimension: item_name {
-    sql: trim(${TABLE}.name) ;;
+    sql: REPLACE(trim(${TABLE}.name), ${original_brand}, ${brand}) ;;
+  }
+
+  dimension: original_brand {
+    type: string
+    sql: ${TABLE}.brand ;;
   }
 
   dimension: brand {
@@ -107,6 +112,7 @@ view: products {
 #       icon_url: "http://www.looker.com/favicon.ico"
 #     }
   }
+
   dimension: retail_price {
     type: number
     sql: ${TABLE}.retail_price ;;
