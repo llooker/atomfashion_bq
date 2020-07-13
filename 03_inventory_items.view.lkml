@@ -17,7 +17,7 @@ view: inventory_items {
   dimension_group: created {
     type: time
     timeframes: [time, date, week, month, raw]
-    sql: ${TABLE}.created_at ;;
+    sql: dateadd(d,1,${TABLE}.created_at);;
   }
 
   dimension: product_id {
@@ -29,7 +29,7 @@ view: inventory_items {
   dimension_group: sold {
     type: time
     timeframes: [time, date, week, month, raw]
-    sql: ${TABLE}.sold_at ;;
+    sql: dateadd(d,1,${TABLE}.sold_at) ;;
   }
 
   dimension: is_sold {

@@ -32,9 +32,10 @@ explore: order_items {
     user_attribute: brand
   }
   access_filter: {
-    field: order_items.created_date
+    field: order_items.created_time
     user_attribute: time_horizon
   }
+  sql_always_where: ${order_items.created_time} <= current_timestamp ;;
 
   join: order_facts {
     view_label: "Orders"

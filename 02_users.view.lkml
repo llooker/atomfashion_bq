@@ -169,7 +169,7 @@ view: users {
     type: time
     description: "Date a user account was first created"
     timeframes: [time, date, week, month, raw]
-    sql: ${TABLE}.created_at ;;
+    sql: DATEADD(d,1,${TABLE}.created_at) ;;
   }
 
   dimension: history {
@@ -203,21 +203,25 @@ view: users {
   }
 
   dimension: is_user_created_in_last_60_days {
+    hidden: yes
     type: yesno
     sql: datediff('days', ${created_date}, current_date()) < 60 ;;
   }
 
   dimension: is_user_created_in_last_month {
+    hidden: yes
     type: yesno
     sql: datediff('days', ${created_date}, current_date()) < 30 ;;
   }
 
   dimension: is_user_created_in_last_day {
+    hidden: yes
     type: yesno
     sql: ${created_date} = current_date()-7 ;;
   }
 
   measure: count_users_this_month {
+    hidden: yes
     type: count
 
     filters: {
@@ -227,6 +231,7 @@ view: users {
   }
 
   measure: count_users_today {
+    hidden: yes
     type: count
 
     filters: {

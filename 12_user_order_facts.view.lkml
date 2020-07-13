@@ -23,20 +23,20 @@ GROUP BY user_id
 
   dimension_group: first_order {
     type: time
-    timeframes: [date, week, month, year]
-    sql: ${TABLE}.first_order ;;
+    timeframes: [date, week, month, year, raw]
+    sql: dateadd(d,1,${TABLE}.first_order) ;;
   }
 
   dimension_group: latest_order {
     type: time
-    timeframes: [date, week, month, year]
-    sql: ${TABLE}.latest_order ;;
+    timeframes: [date, week, month, year, raw]
+    sql: dateadd(d,1,${TABLE}.latest_order) ;;
   }
 
   dimension: days_as_customer {
     description: "Days between first and latest order"
     type: number
-    sql: DATEDIFF('day', ${TABLE}.first_order, ${TABLE}.latest_order)+1 ;;
+    sql: DATEDIFF('day', ${first_order_raw}, ${latest_order_raw})+1 ;;
   }
 
   dimension: days_as_customer_tiered {

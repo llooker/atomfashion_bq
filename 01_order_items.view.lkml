@@ -42,6 +42,7 @@ view: order_items {
   }
 
   measure: count_percent_increase_this_month {
+    hidden: yes
     type: number
     sql: round(1.0 * (1.0*${order_count_last_60_days} - 1.0*${order_count_last_month})/NULLIF(${order_count_last_month}, 0), 2) ;;
     value_format_name: decimal_2
@@ -49,6 +50,7 @@ view: order_items {
   }
 
   measure: order_count_last_60_days {
+    hidden: yes
     type: count
 
     filters: {
@@ -58,6 +60,7 @@ view: order_items {
   }
 
   measure: order_count_last_month {
+    hidden: yes
     type: count
 
     filters: {
@@ -67,6 +70,7 @@ view: order_items {
   }
 
   measure: order_count_today {
+    hidden: yes
     type: count
 
     filters: {
@@ -111,22 +115,23 @@ view: order_items {
   dimension_group: returned {
     type: time
     timeframes: [time, date, week, month, raw]
-    sql: ${TABLE}.returned_at ;;
+    sql: DATEADD(d,1,${TABLE}.returned_at) ;;
   }
 
   dimension_group: shipped {
     type: time
     timeframes: [date, week, month, raw]
-    sql: ${TABLE}.shipped_at ;;
+    sql: DATEADD(d,1,${TABLE}.shipped_at) ;;
   }
 
   dimension_group: delivered {
     type: time
     timeframes: [date, week, month, raw]
-    sql: ${TABLE}.delivered_at ;;
+    sql: DATEADD(d,1,${TABLE}.delivered_at) ;;
   }
 
   dimension_group: created {
+    label: "Created"
     view_label: "Orders"
     description: "Date an order was placed"
     type: time
@@ -143,7 +148,7 @@ view: order_items {
       raw,
       week_of_year
     ]
-    sql: ${TABLE}.created_at ;;
+    sql: DATEADD(d, 1, ${TABLE}.created_at) ;;
   }
 
   filter: previous_period_filter {
@@ -171,16 +176,19 @@ view: order_items {
   }
 
   dimension: is_order_in_last_60_days {
+    hidden: yes
     type: yesno
     sql: datediff('days', ${order_items.created_date}, current_date()) < 60 ;;
   }
 
   dimension: is_order_in_last_month {
+    hidden: yes
     type: yesno
     sql: datediff('days', ${order_items.created_date}, current_date()) < 30 ;;
   }
 
   dimension: is_order_in_last_day {
+    hidden: yes
     type: yesno
     sql: ${order_items.created_date} = current_date()-7 ;;
   }
@@ -317,6 +325,7 @@ view: order_items {
   }
 
   measure: total_sale_price_today {
+    hidden: yes
     type: sum
     value_format: "$#,##0.00"
     sql: ${sale_price} ;;
@@ -328,6 +337,7 @@ view: order_items {
   }
 
   measure: total_sale_price_this_month {
+    hidden: yes
     type: sum
     value_format: "$#,##0.00"
     sql: ${sale_price} ;;
@@ -339,6 +349,7 @@ view: order_items {
   }
 
   measure: total_sale_price_last_60_days {
+    hidden: yes
     type: sum
     value_format: "$#,##0.00"
     sql: ${sale_price} ;;
@@ -350,6 +361,7 @@ view: order_items {
   }
 
   measure: sale_price_percent_increase_this_month {
+    hidden: yes
     type: number
     sql: round((1.0*${total_sale_price_last_60_days} - 1.0*${total_sale_price_this_month})/NULLIF(${total_sale_price_this_month},0), 2) ;;
     value_format_name: decimal_2

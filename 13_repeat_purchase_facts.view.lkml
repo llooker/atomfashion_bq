@@ -41,6 +41,6 @@ view: repeat_purchase_facts {
     type: time
     timeframes: [raw, date]
     hidden: yes
-    sql: ${TABLE}.next_order_date ;;
+    sql: dateadd(d,1,${TABLE}.next_order_date) ;;
   }
 }
