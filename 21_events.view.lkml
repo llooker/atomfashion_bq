@@ -1,5 +1,11 @@
 view: events {
-  sql_table_name: ecomm.events ;;
+  sql_table_name: atom.events ;;
+
+  ## ATOM.VIEW SQL
+    # create view atom.events as
+    # select *,
+    #   dateadd(d,1,created_at) as created_at_advance
+    # from ecomm.events
 
   dimension: event_id {
     primary_key: yes
@@ -55,7 +61,7 @@ view: events {
       quarter,
       year
     ]
-    sql: dateadd(d,1,${TABLE}.created_at) ;;
+    sql: ${TABLE}.created_at_advance ;;
   }
 
   filter: previous_period_filter {

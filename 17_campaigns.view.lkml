@@ -3,7 +3,7 @@ view: campaigns {
   derived_table: {
     datagroup_trigger: ecommerce_etl
     sql: SELECT *
-      FROM   ecomm.campaigns
+      FROM   atom.campaigns
       UNION
       SELECT 9999                 AS id,
       NULL                        AS advertising_channel,
@@ -11,7 +11,8 @@ view: campaigns {
       NULL                        AS bid_type,
       'Total'                     AS campaign_name,
       '60'                        AS period,
-      Dateadd(day, -1, current_timestamp()::timestamp_ntz) AS created_at  ;;
+      Dateadd(day, -1, current_timestamp()::timestamp_ntz) AS created_at,
+      Dateadd(day, -1, current_timestamp()::timestamp_ntz) AS created_at_advance;;
   }
 
 ##### Campaign Facts #####
@@ -104,7 +105,7 @@ view: campaigns {
     ]
     convert_tz: no
     datatype: date
-    sql: dateadd(d,1,${TABLE}.CREATED_AT) ;;
+    sql: ${TABLE}.CREATED_AT_advance ;;
   }
 
   dimension_group: end {

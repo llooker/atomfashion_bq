@@ -38,8 +38,8 @@ view: session_purchase_facts {
         , sum(sale_price) AS sale_price
         --, sum(inventory_items.cost) as cost
         , sum(search_sessions) as search_session_count
-        , MIN(events.created_at) AS session_start
-        , MAX(events.created_at) AS session_end
+        , MIN(events.created_at_advance) AS session_start
+        , MAX(events.created_at_advance) AS session_end
         , MAX(events.user_id) AS session_user_id
       FROM ecomm.events
       JOIN ecomm.order_items on order_items.created_at = events.created_at
@@ -148,7 +148,7 @@ view: session_purchase_facts {
     view_label: "Sessions"
     type: time
     timeframes: [raw, time, date, week, month]
-    sql: dateadd(d,1,${TABLE}.last_session_end);;
+    sql: ${TABLE}.last_session_end;;
   }
 
   dimension_group: session_end {
@@ -156,14 +156,14 @@ view: session_purchase_facts {
     view_label: "Sessions"
     label: "Purchase End Session"
     timeframes: [raw, time, date, week, month]
-    sql: dateadd(d,1,${TABLE}.session_end) ;;
+    sql: ${TABLE}.session_end ;;
   }
 
   dimension_group: session_start {
     hidden: yes
     type: time
     timeframes: [raw, time, date, week, month]
-    sql: dateadd(d,1,${TABLE}.session_start) ;;
+    sql: ${TABLE}.session_start ;;
   }
 
   dimension: session_user_id {

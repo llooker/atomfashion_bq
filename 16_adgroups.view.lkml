@@ -1,6 +1,12 @@
 view: adgroups {
   view_label: "Ad Groups"
-  sql_table_name: ecomm.ad_groups ;;
+  sql_table_name: atom.ad_groups ;;
+
+  ## ATOM.VIEW SQL
+    # create view atom.ad_groups as
+    # select *,
+    #   dateadd(d,1,created_at) as created_at_advance
+    # from ecomm.ad_groups
 
   dimension: ad_id {
     primary_key: yes
@@ -31,7 +37,7 @@ view: adgroups {
     ]
     convert_tz: no
     datatype: date
-    sql: dateadd(d,1,${TABLE}.created_at) ;;
+    sql: ${TABLE}.created_at_advance ;;
   }
 
   dimension: headline {

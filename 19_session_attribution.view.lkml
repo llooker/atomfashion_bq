@@ -101,14 +101,14 @@ view: session_attribution {
   view_label: "Sessions"
   type: time
   timeframes: [raw, time, date, week, quarter, month]
-  sql: dateadd(d,1,${TABLE}.last_session_end);;
+  sql: ${TABLE}.last_session_end;;
 }
 dimension_group: session_end {
   type: time
   view_label: "Sessions"
   label: "Purchase End Session"
   timeframes: [raw, time, date, week, month]
-  sql: dateadd(d,1,${TABLE}.session_end) ;;
+  sql: ${TABLE}.session_end ;;
 }
 
 set: attribution_detail {

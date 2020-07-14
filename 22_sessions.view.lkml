@@ -12,8 +12,8 @@ view: sessions {
       FROM(
       SELECT
         session_id
-        , MIN(created_at) AS session_start
-        , MAX(created_at) AS session_end
+        , MIN(created_at_advance) AS session_start
+        , MAX(created_at_advance) AS session_end
         , COUNT(*) AS number_of_events_in_session
         , SUM(CASE WHEN event_type IN ('Category','Brand') THEN 1 else 0 END) AS browse_events
         , SUM(CASE WHEN event_type = 'Product' THEN 1 else 0 END) AS product_events
@@ -79,13 +79,13 @@ view: sessions {
   dimension_group: session_start {
     type: time
     timeframes: [raw, time, date, week, month, quarter, hour_of_day, day_of_week]
-    sql: dateadd(d,1,${TABLE}.session_start) ;;
+    sql: ${TABLE}.session_start ;;
   }
 
   dimension_group: session_end {
     type: time
     timeframes: [raw, time, date, week, month,quarter]
-    sql: dateadd(d,1,${TABLE}.session_end) ;;
+    sql: ${TABLE}.session_end ;;
   }
 
   dimension: duration {

@@ -1,6 +1,12 @@
 view: adevents {
   view_label: "Ad Events"
-  sql_table_name: ecomm.ad_events ;;
+  sql_table_name: atom.ad_events ;;
+
+    ## ATOM.VIEW SQL
+    # create view atom.ad_events as
+    # select *,
+    #   dateadd(d,1,created_at) as created_at_advance
+    # from ecomm.ad_events
 
   dimension: adevent_id {
     type: number
@@ -27,7 +33,7 @@ view: adevents {
       quarter,
       year
     ]
-    sql: dateadd(d,1,${TABLE}.created_at) ;;
+    sql: ${TABLE}.created_at_advance ;;
   }
 
   filter: previous_period_filter {

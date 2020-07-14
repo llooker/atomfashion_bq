@@ -1,5 +1,11 @@
 view: keywords {
-  sql_table_name: ecomm.keywords ;;
+  sql_table_name: atom.keywords ;;
+
+  ## ATOM.VIEW SQL
+    # create view atom.keywords as
+    # select *,
+    #   dateadd(d,1,created_at) as created_at_advance
+    # from ecomm.keywords
 
   dimension: keyword_id {
     primary_key: yes
@@ -36,7 +42,7 @@ view: keywords {
     ]
     convert_tz: no
     datatype: date
-    sql: dateadd(d,1,${TABLE}.CREATED_AT) ;;
+    sql: ${TABLE}.CREATED_AT_advance ;;
   }
 
   dimension: criterion_name {
