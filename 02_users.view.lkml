@@ -1,5 +1,13 @@
 view: users {
-  sql_table_name: ecomm.users ;;
+  sql_table_name: atom.users ;;
+
+  ## ATOM.VIEW SQL
+  #   create view atom.users as
+  #     select *,
+  #     DATEADD(d,1,created_at) as created_at_advance
+  #     from ecomm.users
+
+
   ## Demographics ##
 
   dimension: id {
@@ -169,7 +177,8 @@ view: users {
     type: time
     description: "Date a user account was first created"
     timeframes: [time, date, week, month, raw]
-    sql: DATEADD(d,1,${TABLE}.created_at) ;;
+#     sql: ${TABLE}.created_at ;;
+    sql: ${TABLE}.created_at_advance ;;
   }
 
   dimension: history {

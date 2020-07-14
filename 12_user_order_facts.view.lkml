@@ -5,10 +5,10 @@ view: user_order_facts {
         user_id
         , COUNT(DISTINCT order_id) AS lifetime_orders
         , SUM(sale_price) AS lifetime_revenue
-        , MIN(NULLIF(created_at,0::timestamp_ntz)) AS first_order
-        , MAX(NULLIF(created_at,0::timestamp_ntz)) AS latest_order
-        , COUNT(DISTINCT DATE_TRUNC('month', NULLIF(created_at,0::timestamp_ntz))) AS number_of_distinct_months_with_orders
-FROM ecomm.order_items
+        , MIN(NULLIF(created_at_advance,0::timestamp_ntz)) AS first_order
+        , MAX(NULLIF(created_at_advance,0::timestamp_ntz)) AS latest_order
+        , COUNT(DISTINCT DATE_TRUNC('month', NULLIF(created_at_advance,0::timestamp_ntz))) AS number_of_distinct_months_with_orders
+FROM atom.order_items
 GROUP BY user_id
        ;;
   }
@@ -24,13 +24,13 @@ GROUP BY user_id
   dimension_group: first_order {
     type: time
     timeframes: [date, week, month, year, raw]
-    sql: dateadd(d,1,${TABLE}.first_order) ;;
+    sql: ${TABLE}.first_order ;;
   }
 
   dimension_group: latest_order {
     type: time
     timeframes: [date, week, month, year, raw]
-    sql: dateadd(d,1,${TABLE}.latest_order) ;;
+    sql: ${TABLE}.latest_order ;;
   }
 
   dimension: days_as_customer {

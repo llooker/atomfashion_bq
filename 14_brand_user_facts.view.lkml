@@ -6,8 +6,8 @@ view: brand_user_facts {
         , count(*) as total_orders
         , sum(sale_price) as total_sale_price
         , RANK() OVER(partition by product_brand order by total_sale_price desc, user_id) as rank
-from ecomm.order_items
-left join ecomm.inventory_items on order_items.inventory_item_id = inventory_items.id
+from atom.order_items
+left join atom.inventory_items on order_items.inventory_item_id = inventory_items.id
 group by 1, 2
        ;;
   }

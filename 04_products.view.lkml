@@ -1,5 +1,17 @@
 view: products {
-  sql_table_name: ecomm.products ;;
+  sql_table_name: atom.products ;;
+
+  ## ATOM.VIEW SQL
+  #   create view atom.products as
+  #     select *,
+  #     CASE WHEN LEFT(brand, 1) in ('A', 'B', 'N', 'P') or brand = 'Columbia' THEN 'Columbia'
+  #                   WHEN LEFT(brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or brand = 'Calvin Klein' THEN 'Calvin Klein'
+  #                   WHEN LEFT(brand, 1) in ('C', 'H', 'I','R') THEN 'Carhartt'
+  #                   WHEN LEFT(brand, 1) in ('L', 'G', 'O') THEN 'Levi''s'
+  #                   ELSE 'Dockers'
+  #               END as brand_name
+  #     from ecomm.products
+
 
   dimension: id {
     primary_key: yes
@@ -81,19 +93,22 @@ view: products {
   }
 
   dimension: original_brand {
+    hidden: yes
     type: string
     sql: ${TABLE}.brand ;;
   }
 
   dimension: brand {
-    sql: CASE WHEN LEFT(${TABLE}.brand, 1) in ('A', 'B', 'N', 'P') or ${TABLE}.brand = 'Columbia' THEN 'Columbia'
-              WHEN LEFT(${TABLE}.brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or ${TABLE}.brand = 'Calvin Klein' THEN 'Calvin Klein'
-              WHEN LEFT(${TABLE}.brand, 1) in ('C', 'H', 'I','R') THEN 'Carhartt'
-              WHEN LEFT(${TABLE}.brand, 1) in ('L', 'G', 'O') THEN 'Levi''s'
-              ELSE 'Dockers'
-          END;;
+        sql: trim(${TABLE}.brand_name) ;;
 
-#     sql: trim(${TABLE}.brand) ;;
+#     sql: CASE WHEN LEFT(${TABLE}.brand, 1) in ('A', 'B', 'N', 'P') or ${TABLE}.brand = 'Columbia' THEN 'Columbia'
+#               WHEN LEFT(${TABLE}.brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or ${TABLE}.brand = 'Calvin Klein' THEN 'Calvin Klein'
+#               WHEN LEFT(${TABLE}.brand, 1) in ('C', 'H', 'I','R') THEN 'Carhartt'
+#               WHEN LEFT(${TABLE}.brand, 1) in ('L', 'G', 'O') THEN 'Levi''s'
+#               ELSE 'Dockers'
+#           END;;
+
+
     link: {
       label: "Website"
       url: "http://www.google.com/search?q={{ value | encode_uri }}+clothes&btnI"

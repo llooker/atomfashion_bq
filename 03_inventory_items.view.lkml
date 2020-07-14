@@ -1,5 +1,13 @@
 view: inventory_items {
-  sql_table_name: ecomm.inventory_items ;;
+  sql_table_name: atom.inventory_items ;;
+
+## ATOM.VIEW SQL
+  #   create view atom.inventory_items as
+  #     select *,
+  #     DATEADD(d,1,created_at) as created_at_advance,
+  #     DATEADD(d,1,sold_at) as sold_at_advance
+  #     from ecomm.inventory_items
+
   ## DIMENSIONS ##
 
   dimension: id {
@@ -17,7 +25,7 @@ view: inventory_items {
   dimension_group: created {
     type: time
     timeframes: [time, date, week, month, raw]
-    sql: dateadd(d,1,${TABLE}.created_at);;
+    sql: ${TABLE}.created_at_advance;;
   }
 
   dimension: product_id {
@@ -29,7 +37,7 @@ view: inventory_items {
   dimension_group: sold {
     type: time
     timeframes: [time, date, week, month, raw]
-    sql: dateadd(d,1,${TABLE}.sold_at) ;;
+    sql: ${TABLE}.sold_at_advance ;;
   }
 
   dimension: is_sold {

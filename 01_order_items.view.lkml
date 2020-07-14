@@ -1,5 +1,15 @@
 view: order_items {
-  sql_table_name: ecomm.order_items ;;
+  sql_table_name: atom.order_items ;;
+
+  ## ATOM.VIEW SQL
+  #   create view atom.order_items as
+  #     select *,
+  #     DATEADD(d,1,created_at) as created_at_advance,
+  #     DATEADD(d,1,delivered_at) as delivered_at_advance,
+  #     DATEADD(d,1,shipped_at) as shipped_at_advance,
+  #     DATEADD(d,1,returned_at) as returned_at_advance
+  #     from ecomm.order_items
+
   ########## IDs, Foreign Keys, Counts ##########
 
   dimension: id {
@@ -115,19 +125,19 @@ view: order_items {
   dimension_group: returned {
     type: time
     timeframes: [time, date, week, month, raw]
-    sql: DATEADD(d,1,${TABLE}.returned_at) ;;
+    sql: ${TABLE}.returned_at_advance ;;
   }
 
   dimension_group: shipped {
     type: time
     timeframes: [date, week, month, raw]
-    sql: DATEADD(d,1,${TABLE}.shipped_at) ;;
+    sql: ${TABLE}.shipped_at_advance;;
   }
 
   dimension_group: delivered {
     type: time
     timeframes: [date, week, month, raw]
-    sql: DATEADD(d,1,${TABLE}.delivered_at) ;;
+    sql: ${TABLE}.delivered_at_advance ;;
   }
 
   dimension_group: created {
@@ -148,7 +158,7 @@ view: order_items {
       raw,
       week_of_year
     ]
-    sql: DATEADD(d, 1, ${TABLE}.created_at) ;;
+    sql: ${TABLE}.created_at_advance ;;
   }
 
   filter: previous_period_filter {
