@@ -109,6 +109,14 @@ view: inventory_items {
     sql: ${cost} ;;
   }
 
+  measure: total_cost_negative {
+    hidden: yes
+    label: "Total Cost"
+    type: sum
+    value_format_name: usd
+    sql: -1.0*${cost} ;;
+  }
+
   measure: average_cost {
     type: average
     value_format: "$#,##0.00"

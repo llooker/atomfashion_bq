@@ -157,8 +157,8 @@ explore: projected_revenue {
 }
 
 explore: products {
-  hidden: yes
-  label: "Brands"
+#   hidden: yes
+  label: "Products & Inventory"
 #   access_filter_fields: [products.brand]
   access_filter: {
     field: products.brand
@@ -181,6 +181,12 @@ explore: products {
     view_label: "Users"
     relationship: many_to_one
     sql_on: ${user_order_facts.user_id} = ${users.id} ;;
+  }
+
+  join: inventory_items {
+    type: left_outer
+    sql_on: ${products.id} = ${inventory_items.product_id} ;;
+    relationship: one_to_many
   }
 }
 
