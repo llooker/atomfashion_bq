@@ -40,7 +40,7 @@ view: user_session_fact {
       ,month_num
       ,quarter_of_year
     ]
-    sql: dateadd(d,1,${TABLE}.first_visit_dt) ;;
+    sql: ${TABLE}.first_visit_dt ;;
   }
 
   dimension_group: first_purchase {

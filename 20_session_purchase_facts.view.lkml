@@ -41,9 +41,9 @@ view: session_purchase_facts {
         , MIN(events.created_at_advance) AS session_start
         , MAX(events.created_at_advance) AS session_end
         , MAX(events.user_id) AS session_user_id
-      FROM ecomm.events
-      JOIN ecomm.order_items on order_items.created_at = events.created_at
-      --JOIN ecomm.inventory_items  AS inventory_items ON inventory_items.id = order_items.inventory_item_id
+      FROM atom.events
+      JOIN atom.order_items on order_items.created_at = events.created_at
+      --JOIN atom.inventory_items  AS inventory_items ON inventory_items.id = order_items.inventory_item_id
       JOIN session_purchase on session_purchase.session_id = events.session_id
       JOIN session_contains_search on session_purchase.session_id = session_contains_search.session_id
       GROUP BY events.session_id, order_id, session_purchase.traffic_source

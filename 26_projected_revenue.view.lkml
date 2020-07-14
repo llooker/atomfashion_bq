@@ -7,9 +7,9 @@ view: projected_revenue {
         FROM (
         SELECT PRODUCTS.BRAND                                                AS BRAND,
                TO_DATE(DATEADD('DAY',F.NUMBER,'2014-01-01'))                 AS DAY
-        FROM ECOMM.ORDER_ITEMS
-        LEFT JOIN ECOMM.INVENTORY_ITEMS ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
-        LEFT JOIN ECOMM.PRODUCTS ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
+        FROM ATOM.ORDER_ITEMS
+        LEFT JOIN ATOM.INVENTORY_ITEMS ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
+        LEFT JOIN ATOM.PRODUCTS ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
         CROSS JOIN (SELECT SEQ8() AS NUMBER FROM TABLE(GENERATOR(ROWCOUNT => 3650))) F
         GROUP BY 1,2
         ORDER BY 1,2)
@@ -23,9 +23,9 @@ DAILY_HISTORY AS
                         EXTRACT(YEAR FROM ORDER_ITEMS.CREATED_AT)                                             AS YEAR,
                         TO_DATE(ORDER_ITEMS.CREATED_AT)                                                       AS DAY,
                         SUM(SALE_PRICE)                                                                       AS REVENUE
-               FROM     ECOMM.ORDER_ITEMS
-               LEFT JOIN ECOMM.INVENTORY_ITEMS ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
-               LEFT JOIN ECOMM.PRODUCTS ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
+               FROM     ATOM.ORDER_ITEMS
+               LEFT JOIN ATOM.INVENTORY_ITEMS ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
+               LEFT JOIN ATOM.PRODUCTS ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
                GROUP BY 1,2,3) D)
 
 SELECT  ROW_NUMBER() OVER (ORDER BY DAY) AS PK,
@@ -83,7 +83,7 @@ ORDER BY 1,2,3) Y) YY
       label: "Created"
       timeframes: [raw,date,day_of_month,week_of_year,month,quarter,year,day_of_year,month_name,month_num]
       type: time
-      sql: dateadd(d,1,TO_TIMESTAMP(${TABLE}.day)) ;;
+      sql: TO_TIMESTAMP(${TABLE}.day) ;;
     }
 
     dimension: revenue {
