@@ -16,8 +16,6 @@ datagroup: ecommerce_etl {
   sql_trigger: SELECT current_date ;;
 }
 
-persist_with: ecommerce_etl
-
 ########################################
 ############## Base Explores ###########
 ########################################

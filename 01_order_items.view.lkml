@@ -248,7 +248,7 @@ view: order_items {
 
   measure: average_days_to_process {
     type: average
-    value_format_name: decimal_4
+    value_format_name: decimal_1
     sql: ${days_to_process} ;;
   }
 
@@ -274,7 +274,7 @@ view: order_items {
 
   dimension: gross_margin {
     type: number
-    value_format: "$#,##0.00"
+    value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$#,##0.00"
     sql: ${sale_price} - ${inventory_items.cost} ;;
   }
 
@@ -303,7 +303,7 @@ view: order_items {
 
   measure: total_sale_price {
     type: sum
-    value_format: "$#,##0.00"
+    value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$#,##0.00"
     sql: round(${sale_price}, 2) ;;
     drill_fields: [order_id, user_id, shipped_date, total_sale_price]
   }
@@ -328,7 +328,7 @@ view: order_items {
 
   measure: total_returns {
     type: sum
-    value_format_name: usd
+    value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$#,##0.00"
     sql: ${sale_price} ;;
     filters: [returned_date: "-null"]
     drill_fields: [order_id, user_id, total_returns]
@@ -380,13 +380,13 @@ view: order_items {
   measure: total_gross_margin {
     type: sum
     description: "Sum of Gross Margin"
-    value_format: "$#,##0.00"
+    value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$#,##0.00"
     sql: round(${gross_margin}, 2) ;;
   }
 
   measure: average_sale_price {
     type: average
-    value_format: "$#,##0.00"
+    value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$#,##0.00"
     sql: ${sale_price} ;;
   }
 

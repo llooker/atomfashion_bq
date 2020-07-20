@@ -53,6 +53,28 @@ view: users {
     sql: ${age} ;;
   }
 
+  dimension: generation {
+    order_by_field: generation_order
+    type: string
+    sql: CASE WHEN ${age} <= 25 THEN 'Gen Z'
+              WHEN ${age} <= 40 THEN 'Millenials'
+              WHEN ${age} <= 55 THEN 'Gen X'
+              WHEN ${age} <= 76 THEN 'Baby Boomers'
+            ELSE 'Silent'
+            END;;
+  }
+
+  dimension: generation_order {
+    hidden: yes
+    type: number
+    sql: CASE WHEN ${generation} = 'Gen Z' THEN 5
+              WHEN ${generation} = 'Millenials' THEN 4
+              WHEN ${generation} = 'Gen X' THEN 3
+              WHEN ${generation} = 'Baby Boomers' THEN 2
+            ELSE 1
+            END;;
+  }
+
   dimension: gender {
     sql: ${TABLE}.gender ;;
   }
