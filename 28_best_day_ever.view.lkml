@@ -1,5 +1,6 @@
 view: best_day_ever {
   derived_table: {
+    datagroup_trigger: ecommerce_etl
     sql:
       select day, best_day_vs_today
       from

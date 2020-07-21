@@ -12,6 +12,14 @@ named_value_format: big_money {
   value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$0.00"
 }
 
+# datagroup: 3_hours {
+#   sql_trigger: SELECT FLOOR(DATE_PART('EPOCH_SECOND', CURRENT_TIMESTAMP) / (3*60*60)) ;;
+# }
+#
+# datagroup: ecommerce_etl {
+#   sql_trigger: SELECT MAX(completed_at) FROM "ECOMM"."ETL_JOBS";;
+# }
+
 datagroup: ecommerce_etl {
   sql_trigger: SELECT FLOOR(DATE_PART('EPOCH_SECOND', CURRENT_TIMESTAMP) / (3*60*60)) ;;
 }
