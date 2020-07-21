@@ -13,7 +13,7 @@ named_value_format: big_money {
 }
 
 datagroup: ecommerce_etl {
-  sql_trigger: SELECT current_date ;;
+  sql_trigger: SELECT FLOOR(DATE_PART('EPOCH_SECOND', CURRENT_TIMESTAMP) / (3*60*60)) ;;
 }
 
 ########################################
