@@ -4,6 +4,7 @@ label: "Atom Fashion"
 # include all the views
 include: "/*.view"
 include: "/Dashboards/*.dashboard"
+include: "order_items.aggregate"
 
 # include all the dashboards
 # include: "*.dashboard"
@@ -19,6 +20,10 @@ named_value_format: big_money {
 # datagroup: ecommerce_etl {
 #   sql_trigger: SELECT MAX(completed_at) FROM "ECOMM"."ETL_JOBS";;
 # }
+
+datagroup: every_hour {
+  sql_trigger: SELECT TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) ;;
+}
 
 datagroup: ecommerce_etl {
   sql_trigger: SELECT FLOOR(DATE_PART('EPOCH_SECOND', CURRENT_TIMESTAMP) / (3*60*60)) ;;
@@ -37,7 +42,7 @@ explore: order_items {
     user_attribute: brand
   }
   access_filter: {
-    field: order_items.created_time
+    field: order_items.created_date
     user_attribute: time_horizon
   }
   sql_always_where: ${order_items.created_time} <= current_timestamp ;;
