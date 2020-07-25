@@ -10,7 +10,7 @@ explore: +order_items {
       ]
       measures: [order_count, total_sale_price]
       filters: [order_items.created_date: "24 months"]
-#       timezone: "America/Los_Angeles"
+      timezone: "America/Los_Angeles"
     }
 
     materialization: {
