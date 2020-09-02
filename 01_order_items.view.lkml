@@ -130,7 +130,7 @@ view: order_items {
 
   dimension_group: shipped {
     type: time
-    timeframes: [date, week, month, raw]
+    timeframes: [date, week, month, raw, week_of_year]
     sql: ${TABLE}.shipped_at_advance;;
   }
 

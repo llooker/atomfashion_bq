@@ -13,6 +13,7 @@ view: users {
   dimension: id {
     primary_key: yes
     type: number
+    value_format_name: id
     sql: ${TABLE}.id ;;
     tags: ["atom-notification"]
   }
