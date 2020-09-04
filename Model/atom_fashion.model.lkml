@@ -5,7 +5,7 @@ label: "Atom Fashion"
 # include all the views
 include: "/*.view"
 include: "/Dashboards/*.dashboard"
-include: "order_items.aggregate"
+include: "/Model/z_aggregates.lkml"
 
 # include all the dashboards
 # include: "*.dashboard"
@@ -47,7 +47,7 @@ explore: order_items {
     field: order_items.created_date
     user_attribute: time_horizon
   }
-  sql_always_where: ${order_items.created_time} <= current_timestamp ;;
+#   sql_always_where: ${order_items.created_date} <= current_date() ;;
 
   join: order_facts {
     view_label: "Orders"
@@ -149,15 +149,6 @@ explore: users {
     relationship: one_to_one
   }
 }
-#Filter Suggestion Explores
-explore: users_filters {
-  hidden: yes
-  from: users
-}
-explore: user_order_facts_filters {
-  hidden: yes
-  from: user_order_facts
-}
 
 explore: projected_revenue {
   label: "(7) Projected Revenue"
@@ -201,7 +192,18 @@ explore: products {
   }
 }
 
-
+########################################
+#########Filter Suggestions ############
+########################################
+#Filter Suggestion Explores
+explore: users_filters {
+  hidden: yes
+  from: users
+}
+explore: user_order_facts_filters {
+  hidden: yes
+  from: user_order_facts
+}
 
 ########################################
 ######### Embedded Explores #########
@@ -413,8 +415,6 @@ explore: events{
     type: full_outer
   }
 }
-
-
 
 explore: sessions{
   fields: [ALL_FIELDS*, -sessions.funnel_view*]
