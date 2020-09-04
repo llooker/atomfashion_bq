@@ -1,7 +1,7 @@
 connection: "snowflake"
 label: "Atom Fashion"
 
-##testing a change
+
 # include all the views
 include: "/*.view"
 include: "/Dashboards/*.dashboard"
@@ -9,6 +9,8 @@ include: "/Model/z_aggregates.lkml"
 
 # include all the dashboards
 # include: "*.dashboard"
+persist_for: "24 hours"
+
 persist_for: "24 hours"
 
 named_value_format: big_money {
