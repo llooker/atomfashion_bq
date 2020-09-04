@@ -27,6 +27,10 @@ datagroup: every_hour {
   sql_trigger: SELECT TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) ;;
 }
 
+datagroup: every_day {
+  sql_trigger: select current_date ;;
+}
+
 datagroup: ecommerce_etl {
   sql_trigger: SELECT FLOOR(DATE_PART('EPOCH_SECOND', CURRENT_TIMESTAMP) / (3*60*60)) ;;
 }

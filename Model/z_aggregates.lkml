@@ -7,14 +7,15 @@ explore: +order_items {
       dimensions: [
         order_items.created_date,
         products.brand,
+        products.category,
         created_date
       ]
       measures: [order_count, total_sale_price]
-      timezone: "America/Los_Angeles"
+#       timezone: "America/Los_Angeles"
     }
 
     materialization: {
-      persist_for: "24 hours"
+      datagroup_trigger: every_day
     }
   }
 }
