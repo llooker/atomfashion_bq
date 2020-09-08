@@ -1,7 +1,6 @@
 connection: "snowflake"
 label: "Atom Fashion"
 
-##testing a change
 # include all the views
 include: "/*.view"
 include: "/Dashboards/*.dashboard"
