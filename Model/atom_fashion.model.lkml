@@ -8,7 +8,7 @@ include: "/Model/z_aggregates.lkml"
 
 # include all the dashboards
 # include: "*.dashboard"
-persist_for: "24 hours"
+persist_with: every_day
 
 named_value_format: big_money {
   value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$0.00"
@@ -76,7 +76,7 @@ explore: order_items {
           AND ${users.state} = ${city_sales_tax.state}
           AND ${users.country} = ${city_sales_tax.country}
       ;;
-    relationship: many_to_many
+    relationship: many_to_one
   }
 
   join: user_order_facts {
