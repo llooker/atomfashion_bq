@@ -98,6 +98,7 @@ view: order_items {
       field: order_facts.is_first_purchase
       value: "Yes"
     }
+    drill_fields: [users.detail*]
   }
 
   measure: count_users_this_month {
@@ -108,6 +109,7 @@ view: order_items {
       field: is_order_in_last_month
       value: "yes"
     }
+    drill_fields: [users.detail*]
   }
 
   measure: count_users_today {
@@ -118,6 +120,7 @@ view: order_items {
       field: is_order_in_last_day
       value: "yes"
     }
+    drill_fields: [users.detail*]
   }
 
   ########## Time Dimensions ##########
@@ -249,6 +252,7 @@ view: order_items {
     type: average
     value_format_name: decimal_1
     sql: ${days_to_process} ;;
+    drill_fields: [detail*]
   }
 
   measure: average_shipping_time {
@@ -437,6 +441,7 @@ view: order_items {
     type: number
     value_format_name: usd
     sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
+    drill_fields: [detail*]
   }
 
   ########## Sets ##########

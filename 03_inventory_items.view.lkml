@@ -115,6 +115,7 @@ view: inventory_items {
     type: sum
     value_format_name: big_money
     sql: ${cost} ;;
+    drill_fields: [simple*]
   }
 
   measure: total_cost_negative {
@@ -129,16 +130,20 @@ view: inventory_items {
     type: average
     value_format: "$#,##0.00"
     sql: ${cost} ;;
+    drill_fields: [simple*]
   }
 
   measure: count {
     type: count
+    drill_fields: [simple*]
   }
 
   measure: number_on_hand {
     type: number
     sql: ${count} - ${sold_count} ;;
+    drill_fields: [simple*]
   }
+
 
   set: detail {
     fields: [

@@ -219,6 +219,7 @@ view: users {
   measure: count {
     description: "Count of the distinct number of Users"
     type: count
+    drill_fields: [detail*]
   }
 
   measure: count_percent_of_total {
@@ -260,6 +261,7 @@ view: users {
       field: is_user_created_in_last_month
       value: "yes"
     }
+    drill_fields: [detail*]
   }
 
   measure: count_users_today {
@@ -270,6 +272,7 @@ view: users {
       field: is_user_created_in_last_day
       value: "yes"
     }
+    drill_fields: [detail*]
   }
 
   set: detail {
