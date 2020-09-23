@@ -142,7 +142,6 @@ view: order_items {
 
   dimension_group: created {
     label: "Created"
-    view_label: "Orders"
     description: "Date an order was placed"
     type: time
     timeframes: [

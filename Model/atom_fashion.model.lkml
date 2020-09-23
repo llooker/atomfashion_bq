@@ -1,7 +1,6 @@
 connection: "snowflake"
 label: "Atom Fashion"
 
-
 # include all the views
 include: "/*.view"
 include: "/Dashboards/*.dashboard"
@@ -9,7 +8,7 @@ include: "/Model/z_aggregates.lkml"
 
 # include all the dashboards
 # include: "*.dashboard"
-persist_for: "24 hours"
+persist_with: every_day
 
 persist_for: "24 hours"
 
@@ -79,7 +78,7 @@ explore: order_items {
           AND ${users.state} = ${city_sales_tax.state}
           AND ${users.country} = ${city_sales_tax.country}
       ;;
-    relationship: many_to_many
+    relationship: many_to_one
   }
 
   join: user_order_facts {
