@@ -1,6 +1,6 @@
 view: brand_user_facts {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    datagroup_trigger: every_day
     sql: select product_brand as brand
         , order_items.user_id as user_id
         , count(*) as total_orders

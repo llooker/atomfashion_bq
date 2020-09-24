@@ -1,6 +1,6 @@
 view: user_order_facts {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    datagroup_trigger: every_day
     sql: SELECT
         user_id
         , COUNT(DISTINCT order_id) AS lifetime_orders

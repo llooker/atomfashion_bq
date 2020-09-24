@@ -1,6 +1,6 @@
 view: repeat_purchase_facts {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    datagroup_trigger: every_day
     sql: SELECT
         order_items.order_id
         , COUNT(DISTINCT repeat_order_items.id) AS number_subsequent_orders

@@ -1,6 +1,6 @@
 view: order_facts {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    datagroup_trigger: every_day
     sql: SELECT
           order_items.order_id AS order_id
         , COUNT(*) AS items_in_order
