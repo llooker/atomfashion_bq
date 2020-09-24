@@ -1,6 +1,6 @@
 view: user_purchase_facts {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    datagroup_trigger: every_day
 
     sql:
     with user_product_sales as (

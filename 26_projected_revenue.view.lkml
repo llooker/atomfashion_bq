@@ -57,7 +57,7 @@ FROM DATE_TABLE DT
 LEFT JOIN DAILY_HISTORY DH ON TO_DATE(DT.DAY) = TO_DATE(DH.DAY) AND DT.BRAND = DH.BRAND
 ORDER BY 1,2,3) Y) YY
              ;;
-      sql_trigger_value: SELECT current_date() ;;
+      datagroup_trigger: every_day
     }
 
     dimension: pk {

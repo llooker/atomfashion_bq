@@ -1,6 +1,6 @@
 view: user_session_fact {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    datagroup_trigger: every_day
     explore_source: events {
       column: session_user_id { field: sessions.session_user_id }
       column: site_acquisition_ad_event_id { field: sessions.site_acquisition_ad_event_id }
