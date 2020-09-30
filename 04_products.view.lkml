@@ -97,13 +97,17 @@ view: products {
 
 
   dimension: item_name {
-    sql: REPLACE(trim(${TABLE}.name), ${original_brand}, ${brand}) ;;
+    sql: REPLACE(trim(${original_item_name}), ${original_brand}, ${brand}) ;;
   }
 
+  dimension: original_item_name {
+    hidden: yes
+    sql: INITCAP(${TABLE}.name) ;;
+  }
   dimension: original_brand {
     hidden: yes
     type: string
-    sql: ${TABLE}.brand ;;
+    sql: INITCAP(${TABLE}.brand) ;;
   }
 
   dimension: brand {
