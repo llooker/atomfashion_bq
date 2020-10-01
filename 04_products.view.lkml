@@ -45,7 +45,15 @@ view: products {
       url: "http://www.google.com/search?q=site:facebook.com+{{value}}&btnI"
       icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
     }
+
   }
+
+  dimension: product_image {
+    type: string
+    sql: concat(${category}, '-',${department}) ;;
+    html: <img width="100%" src="https://storage.cloud.google.com/atom-products/{{ value | encode_uri }}.jpg" /> ;;
+  }
+
 
   dimension: category_type {
     type: string
@@ -89,13 +97,17 @@ view: products {
 
 
   dimension: item_name {
-    sql: REPLACE(trim(${TABLE}.name), ${original_brand}, ${brand}) ;;
+    sql: REPLACE(trim(${original_item_name}), ${original_brand}, ${brand}) ;;
   }
 
+  dimension: original_item_name {
+    hidden: yes
+    sql: INITCAP(${TABLE}.name) ;;
+  }
   dimension: original_brand {
     hidden: yes
     type: string
-    sql: ${TABLE}.brand ;;
+    sql: INITCAP(${TABLE}.brand) ;;
   }
 
   dimension: brand {

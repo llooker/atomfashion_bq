@@ -109,12 +109,8 @@ GROUP BY user_id
     type: tier
     tiers: [
       0,
-      25,
-      50,
       100,
-      200,
-      500,
-      1000
+      500
     ]
     sql: ${lifetime_revenue} ;;
     style: integer
