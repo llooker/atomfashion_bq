@@ -31,7 +31,6 @@ view: events {
       raw,
       time,
       date,
-      day_of_week,
       week,
       month,
       quarter,
@@ -104,11 +103,5 @@ view: events {
   measure: count {
     type: count
     drill_fields: [id, users.last_name, users.id, users.first_name]
-  }
-
-  measure: total_distinct_sessions {
-    type: count_distinct
-    sql: ${session_id} ;;
-    drill_fields: [id, created_date, user_id, session_id]
   }
 }

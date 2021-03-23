@@ -15,6 +15,7 @@ view: order_items {
       raw,
       time,
       date,
+      day_of_week,
       week,
       month,
       quarter,
@@ -97,6 +98,14 @@ view: order_items {
   measure: count {
     type: count
     drill_fields: [detail*]
+  }
+
+  measure: total_revenue {
+    type: sum
+    sql: ${sale_price} ;;
+    drill_fields: [id, created_date, status, shipped_date, sale_price]
+    value_format_name: usd_0
+    description: "This is the sum of sale price"
   }
 
   # ----- Sets of fields for drilling ------
