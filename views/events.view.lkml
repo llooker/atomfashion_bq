@@ -31,6 +31,7 @@ view: events {
       raw,
       time,
       date,
+      day_of_week,
       week,
       month,
       quarter,
@@ -59,6 +60,12 @@ view: events {
     sql: ${TABLE}.longitude ;;
   }
 
+  dimension: location {
+    type: location
+    sql_latitude: ${latitude} ;;
+    sql_longitude: ${longitude} ;;
+  }
+
   dimension: os {
     type: string
     sql: ${TABLE}.os ;;
@@ -76,7 +83,9 @@ view: events {
 
   dimension: state {
     type: string
+    map_layer_name: us_states
     sql: ${TABLE}.state ;;
+    drill_fields: [zip]
   }
 
   dimension: traffic_source {
@@ -97,11 +106,18 @@ view: events {
 
   dimension: zip {
     type: zipcode
+    map_layer_name: us_zipcode_tabulation_areas
     sql: ${TABLE}.zip ;;
   }
 
   measure: count {
     type: count
     drill_fields: [id, users.last_name, users.id, users.first_name]
+  }
+
+  measure: total_distinct_sessions {
+    type: count_distinct
+    sql: ${session_id} ;;
+    drill_fields: [id, session_id, user_id, zip, state]
   }
 }
