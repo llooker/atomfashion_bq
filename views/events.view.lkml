@@ -60,12 +60,6 @@ view: events {
     sql: ${TABLE}.longitude ;;
   }
 
-  dimension: location {
-    type: location
-    sql_latitude: ${latitude} ;;
-    sql_longitude: ${longitude} ;;
-  }
-
   dimension: os {
     type: string
     sql: ${TABLE}.os ;;
@@ -84,8 +78,6 @@ view: events {
   dimension: state {
     type: string
     sql: ${TABLE}.state ;;
-    map_layer_name: us_states
-    drill_fields: [zip]
   }
 
   dimension: traffic_source {
@@ -107,7 +99,6 @@ view: events {
   dimension: zip {
     type: zipcode
     sql: ${TABLE}.zip ;;
-    map_layer_name: us_zipcode_tabulation_areas
   }
 
   measure: count {
@@ -115,9 +106,10 @@ view: events {
     drill_fields: [id, users.last_name, users.id, users.first_name]
   }
 
-  measure: total_distinct_users {
+  measure: total_distinct_sessions {
     type: count_distinct
-    sql: ${user_id} ;;
-    drill_fields: [user_id, id, session_id, browser]
+    sql: ${session_id} ;;
+    drill_fields: [session_id, user_id, created_date, os, state]
+    description: "This is the count of distinct sessions"
   }
 }

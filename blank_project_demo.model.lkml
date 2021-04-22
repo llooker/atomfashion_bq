@@ -23,6 +23,6 @@ explore: events {
   join: users {
     type: left_outer
     relationship: many_to_one
-    sql_on: ${users.id} = ${events.user_id} ;;
+    sql_on: ${events.user_id} = ${users.id} ;;
   }
 }
