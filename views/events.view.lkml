@@ -109,7 +109,6 @@ view: events {
   measure: total_distinct_sessions {
     type: count_distinct
     sql: ${session_id} ;;
-    drill_fields: [session_id, user_id, created_date, os, state]
-    description: "This is the count of distinct sessions"
+    drill_fields: [session_id, user_id, state, browser, zip]
   }
 }
