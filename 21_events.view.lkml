@@ -1,8 +1,8 @@
 view: events {
-  sql_table_name: looker-private-demo.events ;;
+  sql_table_name: atom.events ;;
 
   ## ATOM.VIEW SQL
-    # create view looker-private-demo.events as
+    # create view atom.events as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
     # from ecomm.events

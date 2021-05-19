@@ -8,7 +8,7 @@ view: user_order_facts {
         , MIN(NULLIF(created_at_advance,0::timestamp_ntz)) AS first_order
         , MAX(NULLIF(created_at_advance,0::timestamp_ntz)) AS latest_order
         , COUNT(DISTINCT DATE_TRUNC('month', NULLIF(created_at_advance,0::timestamp_ntz))) AS number_of_distinct_months_with_orders
-FROM looker-private-demo.order_items
+FROM atom.order_items
 GROUP BY user_id
        ;;
   }

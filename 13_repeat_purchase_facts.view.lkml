@@ -6,8 +6,8 @@ view: repeat_purchase_facts {
         , COUNT(DISTINCT repeat_order_items.id) AS number_subsequent_orders
         , MIN(repeat_order_items.created_at_advance) AS next_order_date
         , MIN(repeat_order_items.order_id) AS next_order_id
-      FROM looker-private-demo.order_items
-      LEFT JOIN looker-private-demo.order_items repeat_order_items
+      FROM atom.order_items
+      LEFT JOIN atom.order_items repeat_order_items
         ON order_items.user_id = repeat_order_items.user_id
         AND order_items.created_at < repeat_order_items.created_at
       GROUP BY 1

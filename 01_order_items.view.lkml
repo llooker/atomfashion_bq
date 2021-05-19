@@ -1,8 +1,8 @@
 view: order_items {
-  sql_table_name: looker-private-demo.order_items ;;
+  sql_table_name: atom.order_items ;;
 
   ## ATOM.VIEW SQL
-  #   create view looker-private-demo.order_items as
+  #   create view atom.order_items as
   #     select *,
   #     DATEADD(d,1,created_at) as created_at_advance,
   #     DATEADD(d,1,delivered_at) as delivered_at_advance,

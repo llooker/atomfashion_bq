@@ -1,8 +1,8 @@
 view: keywords {
-  sql_table_name: looker-private-demo.keywords ;;
+  sql_table_name: atom.keywords ;;
 
   ## ATOM.VIEW SQL
-    # create view looker-private-demo.keywords as
+    # create view atom.keywords as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
     # from ecomm.keywords
