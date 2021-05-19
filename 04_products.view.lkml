@@ -1,8 +1,8 @@
 view: products {
-  sql_table_name: atom.products ;;
+  sql_table_name: looker-private-demo.products ;;
 
   ## ATOM.VIEW SQL
-  #   create view atom.products as
+  #   create view looker-private-demo.products as
   #     select *,
   #     CASE WHEN LEFT(brand, 1) in ('A', 'B', 'N', 'P') or brand = 'Columbia' THEN 'Columbia'
   #                   WHEN LEFT(brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or brand = 'Calvin Klein' THEN 'Calvin Klein'
