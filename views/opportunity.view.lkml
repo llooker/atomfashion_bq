@@ -17,7 +17,7 @@ view: opportunity {
 
   dimension: amount {
     type: number
-    sql: ${TABLE}.amount ;;
+    sql: ${TABLE}.amount;;
   }
 
   dimension: campaign_id {
@@ -104,6 +104,7 @@ view: opportunity {
 
   dimension: is_deleted {
     type: yesno
+    label: "Opportunity Was Deleted"
     sql: ${TABLE}.is_deleted ;;
   }
 
@@ -161,7 +162,7 @@ view: opportunity {
     type: sum
     sql: ${amount} ;;
     value_format_name: usd_0
-    drill_fields: [id, close_date, type, created_by_id, created_date, amount]
+    drill_fields: [id, close_date, created_date, amount]
   }
 
   # ----- Sets of fields for drilling ------

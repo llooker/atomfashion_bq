@@ -162,6 +162,6 @@ view: lead {
 
   measure: count {
     type: count
-    drill_fields: [lead_id, last_name, first_name, campaign_member.count]
+    drill_fields: [lead_id, last_name, first_name]
   }
 }

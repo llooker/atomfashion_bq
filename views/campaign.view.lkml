@@ -101,6 +101,6 @@ view: campaign {
 
   measure: count {
     type: count
-    drill_fields: [id, opportunity.count, campaign_member.count]
+    drill_fields: [id, opportunity.count]
   }
 }

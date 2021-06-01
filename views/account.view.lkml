@@ -196,6 +196,6 @@ view: account {
 
   measure: count {
     type: count
-    drill_fields: [id, name, contact.count, opportunity.count]
+    drill_fields: [id, name, opportunity.count]
   }
 }
