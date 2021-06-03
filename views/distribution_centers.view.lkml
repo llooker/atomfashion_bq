@@ -1,5 +1,5 @@
-view: event {
-  sql_table_name: `looker-private-demo.military_surveillance.event`
+view: distribution_centers {
+  sql_table_name: `looker-private-demo.thelook.distribution_centers`
     ;;
   drill_fields: [id]
 
@@ -7,11 +7,6 @@ view: event {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
-  }
-
-  dimension: date {
-    type: string
-    sql: ${TABLE}.date ;;
   }
 
   dimension: latitude {
@@ -29,13 +24,8 @@ view: event {
     sql: ${TABLE}.name ;;
   }
 
-  dimension: people_killed {
-    type: number
-    sql: ${TABLE}.people_killed ;;
-  }
-
   measure: count {
     type: count
-    drill_fields: [id, name]
+    drill_fields: [id, name, products.count]
   }
 }
