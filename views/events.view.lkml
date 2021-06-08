@@ -77,8 +77,8 @@ view: events {
 
   dimension: state {
     type: string
-    map_layer_name: us_states
     sql: ${TABLE}.state ;;
+    map_layer_name: us_states
     drill_fields: [zip]
   }
 
@@ -95,7 +95,7 @@ view: events {
   dimension: user_id {
     type: number
     # hidden: yes
-    sql: ${TABLE}.user_id ;;
+    sql: ${TABLE}.user_id;;
   }
 
   dimension: zip {
@@ -109,9 +109,9 @@ view: events {
     drill_fields: [id, users.last_name, users.id, users.first_name]
   }
 
-  measure: total_distinct_sessions {
+  measure: total_distinct_users {
     type: count_distinct
-    sql: ${session_id} ;;
-    drill_fields: [session_id, user_id, zip, state, city]
+    sql: ${user_id} ;;
+    drill_fields: [id, session_id, user_id, zip]
   }
 }
