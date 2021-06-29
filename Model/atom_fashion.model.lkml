@@ -8,7 +8,7 @@ include: "/Model/z_aggregates.lkml"
 
 # include all the dashboards
 # include: "*.dashboard"
-persist_with: every_day
+persist_for: "0 seconds"
 
 persist_for: "24 hours"
 
