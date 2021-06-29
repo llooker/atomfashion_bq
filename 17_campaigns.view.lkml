@@ -3,7 +3,7 @@ view: campaigns {
   derived_table: {
     datagroup_trigger: every_day
     sql: SELECT *
-      FROM   atom.campaigns
+      FROM   looker-private-demo.ecomm.campaigns
       UNION
       SELECT 9999                 AS id,
       NULL                        AS advertising_channel,

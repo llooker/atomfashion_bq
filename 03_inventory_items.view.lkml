@@ -1,8 +1,8 @@
 view: inventory_items {
-  sql_table_name: atom.inventory_items ;;
+  sql_table_name: looker-private-demo.ecomm.inventory_items ;;
 
 ## ATOM.VIEW SQL
-  #   create view atom.inventory_items as
+  #   create view looker-private-demo.ecomm.inventory_items as
   #     select *,
   #     DATEADD(d,1,created_at) as created_at_advance,
   #     DATEADD(d,1,sold_at) as sold_at_advance

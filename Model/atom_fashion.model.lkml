@@ -1,4 +1,4 @@
-connection: "snowflake"
+connection: "looker-private-demo"
 label: "Atom Fashion"
 
 # include all the views
