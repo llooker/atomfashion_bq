@@ -1,189 +1,106 @@
 view: campaign {
-  sql_table_name: `looker-private-demo.adwords.campaign`
+  sql_table_name: `looker-private-demo.salesforce.campaign`
     ;;
-  drill_fields: [campaign_id]
+  drill_fields: [id]
 
-  dimension: campaign_id {
+  dimension: id {
     primary_key: yes
-    type: number
-    sql: ${TABLE}.campaign_id ;;
-  }
-
-  dimension: advertising_channel_sub_type {
     type: string
-    sql: ${TABLE}.advertising_channel_sub_type ;;
+    sql: ${TABLE}.ID ;;
   }
 
-  dimension: advertising_channel_type {
+  dimension: ad__type___c {
     type: string
-    sql: ${TABLE}.advertising_channel_type ;;
+    sql: ${TABLE}.AD__TYPE___C ;;
   }
 
-  dimension: amount {
-    type: number
-    sql: ${TABLE}.amount ;;
-  }
-
-  dimension: bid_type {
+  dimension: conversion__point___c {
     type: string
-    sql: ${TABLE}.bid_type ;;
+    sql: ${TABLE}.CONVERSION__POINT___C ;;
   }
 
-  dimension: bidding_strategy_id {
-    type: number
-    sql: ${TABLE}.bidding_strategy_id ;;
-  }
-
-  dimension: bidding_strategy_name {
-    type: string
-    sql: ${TABLE}.bidding_strategy_name ;;
-  }
-
-  dimension: bidding_strategy_type {
-    type: string
-    sql: ${TABLE}.bidding_strategy_type ;;
-  }
-
-  dimension: budget_id {
-    type: number
-    sql: ${TABLE}.budget_id ;;
-  }
-
-  dimension: campaign_desktop_bid_modifier {
-    type: string
-    sql: ${TABLE}.campaign_desktop_bid_modifier ;;
-  }
-
-  dimension: campaign_group_id {
-    type: number
-    sql: ${TABLE}.campaign_group_id ;;
-  }
-
-  dimension: campaign_mobile_bid_modifier {
-    type: string
-    sql: ${TABLE}.campaign_mobile_bid_modifier ;;
-  }
-
-  dimension: campaign_name {
-    type: string
-    sql: ${TABLE}.campaign_name ;;
-  }
-
-  dimension: campaign_status {
-    type: string
-    sql: ${TABLE}.campaign_status ;;
-  }
-
-  dimension: campaign_tablet_bid_modifier {
-    type: string
-    sql: ${TABLE}.campaign_tablet_bid_modifier ;;
-  }
-
-  dimension: campaign_trial_type {
-    type: string
-    sql: ${TABLE}.campaign_trial_type ;;
-  }
-
-  dimension: customer_id {
-    type: number
-    sql: ${TABLE}.customer_id ;;
-  }
-
-  dimension_group: date {
+  dimension_group: created {
     type: time
     timeframes: [
       raw,
-      time,
       date,
       week,
       month,
       quarter,
       year
     ]
-    sql: ${TABLE}.date ;;
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}.CREATED_DATE ;;
   }
 
-  dimension: end_date {
+  dimension_group: end {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}.END_DATE ;;
+  }
+
+  dimension: grouping___c {
     type: string
-    sql: ${TABLE}.end_date ;;
+    sql: ${TABLE}.GROUPING___C ;;
   }
 
-  dimension: enhanced_cpc_enabled {
+  dimension: is_deleted {
     type: yesno
-    sql: ${TABLE}.enhanced_cpc_enabled ;;
+    sql: ${TABLE}.IS_DELETED ;;
   }
 
-  dimension: external_customer_id {
-    type: number
-    sql: ${TABLE}.external_customer_id ;;
-  }
-
-  dimension: is_budget_explicitly_shared {
-    type: yesno
-    sql: ${TABLE}.is_budget_explicitly_shared ;;
-  }
-
-  dimension: label_ids {
+  dimension: offer__type___c {
     type: string
-    sql: ${TABLE}.label_ids ;;
+    sql: ${TABLE}.OFFER__TYPE___C ;;
   }
 
-  dimension: labels {
+  dimension: owner_id {
     type: string
-    sql: ${TABLE}.labels ;;
+    sql: ${TABLE}.OWNER_ID ;;
   }
 
-  dimension: period {
+  dimension: parent_id {
     type: string
-    sql: ${TABLE}.period ;;
+    sql: ${TABLE}.PARENT_ID ;;
   }
 
-  dimension: serving_status {
+  dimension: region_c {
     type: string
-    sql: ${TABLE}.serving_status ;;
+    sql: ${TABLE}.REGION_C ;;
   }
 
   dimension_group: start {
     type: time
     timeframes: [
       raw,
-      time,
       date,
       week,
       month,
       quarter,
       year
     ]
-    sql: ${TABLE}.start_date ;;
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}.START_DATE ;;
   }
 
-  dimension: tracking_url_template {
+  dimension: type {
     type: string
-    sql: ${TABLE}.tracking_url_template ;;
-  }
-
-  dimension: url_custom_parameters {
-    type: string
-    sql: ${TABLE}.url_custom_parameters ;;
+    sql: ${TABLE}.TYPE ;;
   }
 
   measure: count {
     type: count
-    drill_fields: [detail*]
-  }
-
-  # ----- Sets of fields for drilling ------
-  set: detail {
-    fields: [
-      campaign_id,
-      bidding_strategy_name,
-      campaign_name,
-      ad.count,
-      ad_stats.count,
-      ad_group_stats.count,
-      keyword.count,
-      ad_group.count,
-      geo_stats.count
-    ]
+    drill_fields: [id, opportunity.count]
   }
 }
