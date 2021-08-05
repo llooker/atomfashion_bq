@@ -23,6 +23,6 @@ explore: opportunity {
   join: account {
     type: left_outer
     relationship: many_to_one
-    sql_on: ${opportunity.account_id} = ${account.id} ;;
+    sql_on: ${account.id} = ${opportunity.account_id} ;;
   }
 }

@@ -1,3 +1,4 @@
+# The name of this view in Looker is "Opportunity"
 view: opportunity {
   sql_table_name: `looker-private-demo.salesforce.opportunity`
     ;;
@@ -9,15 +10,16 @@ view: opportunity {
     sql: ${TABLE}.id ;;
   }
 
+
   dimension: account_id {
     type: string
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.account_id ;;
   }
 
   dimension: amount {
     type: number
-    sql: ${TABLE}.amount;;
+    sql: ${TABLE}.amount ;;
   }
 
   dimension: campaign_id {
@@ -152,16 +154,38 @@ view: opportunity {
     sql: ${TABLE}.type ;;
   }
 
+  # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
+  # measures for numeric dimensions, but you can also add measures of many different types.
+  # Click on the type parameter to see all the options in the Quick Help panel on the right.
+
   measure: count {
     type: count
     drill_fields: [detail*]
   }
 
-  measure: total_opportunity_amount {
+  # These sum and average measures are hidden by default.
+  # If you want them to show up in your explore, remove hidden: yes.
+
+  measure: total_amount {
     type: sum
     sql: ${amount} ;;
     value_format_name: usd_0
-    drill_fields: [close_date, id, account.name]
+    drill_fields: [close_date, id, amount, probability]
+  }
+
+  measure: average_amount {
+    type: average
+    sql: ${amount} ;;
+  }
+
+  measure: total_probability {
+    type: sum
+    sql: ${probability} ;;
+  }
+
+  measure: average_probability {
+    type: average
+    sql: ${probability} ;;
   }
 
   # ----- Sets of fields for drilling ------
@@ -173,7 +197,6 @@ view: opportunity {
       account.id,
       account.name,
       campaign.id,
-      opportunity_line_item.count,
       opportunity_history.count
     ]
   }
