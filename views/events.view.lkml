@@ -43,8 +43,8 @@ view: events {
       raw,
       time,
       date,
-      week,
       day_of_week,
+      week,
       month,
       quarter,
       year
@@ -84,13 +84,14 @@ view: events {
 
   dimension: session_id {
     type: string
-    hidden: yes
     sql: ${TABLE}.session_id ;;
   }
 
   dimension: state {
     type: string
     sql: ${TABLE}.state ;;
+    map_layer_name: us_states
+    drill_fields: [zip]
   }
 
   dimension: traffic_source {
@@ -106,11 +107,12 @@ view: events {
   dimension: user_id {
     type: number
     # hidden: yes
-    sql: ${TABLE}.user_id ;;
+    sql: ${TABLE}.user_id;;
   }
 
   dimension: zip {
     type: zipcode
+    map_layer_name: us_zipcode_tabulation_areas
     sql: ${TABLE}.zip ;;
   }
 
@@ -122,6 +124,14 @@ view: events {
     type: count
     drill_fields: [id, users.last_name, users.id, users.first_name]
   }
+
+  measure: total_distinct_users {
+    type: count_distinct
+    sql: ${user_id} ;;
+    drill_fields: [user_id, state, city, browser, zip]
+    description: "This is a count distinct of user ID"
+  }
+
 
   # These sum and average measures are hidden by default.
   # If you want them to show up in your explore, remove hidden: yes.
@@ -160,11 +170,5 @@ view: events {
     type: average
     hidden: yes
     sql: ${sequence_number} ;;
-  }
-
-  measure: total_distinct_users {
-    type: count_distinct
-    sql: ${user_id} ;;
-    drill_fields: [user_id, session_id, state, city, country]
   }
 }
