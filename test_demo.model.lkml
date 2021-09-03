@@ -19,10 +19,6 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 #   }
 # }
 
-explore: events {
-  join: users {
-    sql_on: ${events.user_id} = ${users.id} ;;
-    relationship: many_to_one
-    type: left_outer
-  }
+explore: encounter_simple {
+  label: "Encounters"
 }

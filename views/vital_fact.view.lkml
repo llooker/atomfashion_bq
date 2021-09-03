@@ -1,36 +1,29 @@
-# The name of this view in Looker is "Distribution Centers"
-view: distribution_centers {
+# The name of this view in Looker is "Vital Fact"
+view: vital_fact {
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
-  sql_table_name: `looker-private-demo.thelook.distribution_centers`
+  sql_table_name: `looker-private-demo.healthcare_demo_live.vital_fact`
     ;;
-  drill_fields: [id]
-  # This primary key is the unique key for this table in the underlying database.
-  # You need to define a primary key in a view in order to join to other views.
-
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ${TABLE}.id ;;
-  }
+  # No primary key is defined for this view. In order to join this view in an Explore,
+  # define primary_key: yes on a dimension that has no repeated values.
 
   # Here's what a typical dimension looks like in LookML.
   # A dimension is a groupable field that can be used to filter query results.
-  # This dimension will be called "Latitude" in Explore.
+  # This dimension will be called "Average" in Explore.
 
-  dimension: latitude {
+  dimension: average {
     type: number
-    sql: ${TABLE}.latitude ;;
+    sql: ${TABLE}.average ;;
   }
 
-  dimension: longitude {
+  dimension: sd {
     type: number
-    sql: ${TABLE}.longitude ;;
+    sql: ${TABLE}.sd ;;
   }
 
-  dimension: name {
+  dimension: vital {
     type: string
-    sql: ${TABLE}.name ;;
+    sql: ${TABLE}.vital ;;
   }
 
   # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
@@ -39,33 +32,33 @@ view: distribution_centers {
 
   measure: count {
     type: count
-    drill_fields: [id, name, products.count]
+    drill_fields: []
   }
 
   # These sum and average measures are hidden by default.
   # If you want them to show up in your explore, remove hidden: yes.
 
-  measure: total_latitude {
+  measure: total_average {
     type: sum
     hidden: yes
-    sql: ${latitude} ;;
+    sql: ${average} ;;
   }
 
-  measure: average_latitude {
+  measure: average_average {
     type: average
     hidden: yes
-    sql: ${latitude} ;;
+    sql: ${average} ;;
   }
 
-  measure: total_longitude {
+  measure: total_sd {
     type: sum
     hidden: yes
-    sql: ${longitude} ;;
+    sql: ${sd} ;;
   }
 
-  measure: average_longitude {
+  measure: average_sd {
     type: average
     hidden: yes
-    sql: ${longitude} ;;
+    sql: ${sd} ;;
   }
 }
