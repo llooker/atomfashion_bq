@@ -1,8 +1,8 @@
-# The name of this view in Looker is "Product"
-view: product {
+# The name of this view in Looker is "Us Stores"
+view: us_stores {
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
-  sql_table_name: `looker-private-demo.salesforce.product`
+  sql_table_name: `looker-private-demo.retail.us_stores`
     ;;
   drill_fields: [id]
   # This primary key is the unique key for this table in the underlying database.
@@ -10,57 +10,37 @@ view: product {
 
   dimension: id {
     primary_key: yes
-    type: string
+    type: number
     sql: ${TABLE}.ID ;;
   }
 
   # Here's what a typical dimension looks like in LookML.
   # A dimension is a groupable field that can be used to filter query results.
-  # This dimension will be called "Commission Family C" in Explore.
+  # This dimension will be called "Latitude" in Explore.
 
-  dimension: commission_family_c {
-    type: string
-    sql: ${TABLE}.COMMISSION_FAMILY_C ;;
-  }
-
-  dimension: created_by_id {
-    type: string
-    sql: ${TABLE}.CREATED_BY_ID ;;
-  }
-
-  dimension: family {
-    type: string
-    sql: ${TABLE}.FAMILY ;;
-  }
-
-  dimension: is_active {
-    type: yesno
-    sql: ${TABLE}.IS_ACTIVE ;;
-  }
-
-  dimension: is_deleted {
-    type: yesno
-    sql: ${TABLE}.IS_DELETED ;;
-  }
-
-  dimension: list_price {
+  dimension: latitude {
     type: number
-    sql: ${TABLE}.list_price ;;
+    sql: ${TABLE}.Latitude ;;
+  }
+
+  dimension: longitude {
+    type: number
+    sql: ${TABLE}.Longitude ;;
   }
 
   dimension: name {
     type: string
-    sql: ${TABLE}.NAME ;;
+    sql: ${TABLE}.Name ;;
   }
 
-  dimension: product__type___c {
+  dimension: sq_ft {
+    type: number
+    sql: ${TABLE}.Sq_Ft ;;
+  }
+
+  dimension: state {
     type: string
-    sql: ${TABLE}.PRODUCT__TYPE___C ;;
-  }
-
-  dimension: user_type_c {
-    type: yesno
-    sql: ${TABLE}.USER_TYPE_C ;;
+    sql: ${TABLE}.State ;;
   }
 
   # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
@@ -75,15 +55,39 @@ view: product {
   # These sum and average measures are hidden by default.
   # If you want them to show up in your explore, remove hidden: yes.
 
-  measure: total_list_price {
+  measure: total_latitude {
     type: sum
     hidden: yes
-    sql: ${list_price} ;;
+    sql: ${latitude} ;;
   }
 
-  measure: average_list_price {
+  measure: average_latitude {
     type: average
     hidden: yes
-    sql: ${list_price} ;;
+    sql: ${latitude} ;;
+  }
+
+  measure: total_longitude {
+    type: sum
+    hidden: yes
+    sql: ${longitude} ;;
+  }
+
+  measure: average_longitude {
+    type: average
+    hidden: yes
+    sql: ${longitude} ;;
+  }
+
+  measure: total_sq_ft {
+    type: sum
+    hidden: yes
+    sql: ${sq_ft} ;;
+  }
+
+  measure: average_sq_ft {
+    type: average
+    hidden: yes
+    sql: ${sq_ft} ;;
   }
 }
