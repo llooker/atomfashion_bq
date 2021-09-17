@@ -43,6 +43,7 @@ view: events {
       raw,
       time,
       date,
+      day_of_week,
       week,
       month,
       quarter,
@@ -118,7 +119,7 @@ view: events {
 
   measure: count {
     type: count
-    drill_fields: [id, users.last_name, users.first_name, users.id]
+    drill_fields: [id, users.last_name, users.id, users.first_name]
   }
 
   # These sum and average measures are hidden by default.

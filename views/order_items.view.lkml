@@ -23,7 +23,6 @@ view: order_items {
       raw,
       time,
       day_of_week,
-      hour_of_day,
       date,
       week,
       month,
@@ -78,7 +77,7 @@ view: order_items {
 
   dimension: sale_price {
     type: number
-    sql: ${TABLE}."SALE_PRICE" ;;
+    sql: ${TABLE}."SALE_PRICE";;
   }
 
   dimension_group: shipped {
@@ -137,8 +136,8 @@ view: order_items {
       inventory_items.product_name,
       inventory_items.id,
       users.last_name,
-      users.first_name,
-      users.id
+      users.id,
+      users.first_name
     ]
   }
 }
