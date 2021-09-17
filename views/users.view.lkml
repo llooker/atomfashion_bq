@@ -1,8 +1,8 @@
-# The name of this view in Looker is "Events"
-view: events {
+# The name of this view in Looker is "Users"
+view: users {
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
-  sql_table_name: "PUBLIC"."EVENTS"
+  sql_table_name: "PUBLIC"."USERS"
     ;;
   drill_fields: [id]
   # This primary key is the unique key for this table in the underlying database.
@@ -16,11 +16,11 @@ view: events {
 
   # Here's what a typical dimension looks like in LookML.
   # A dimension is a groupable field that can be used to filter query results.
-  # This dimension will be called "Browser" in Explore.
+  # This dimension will be called "Age" in Explore.
 
-  dimension: browser {
-    type: string
-    sql: ${TABLE}."BROWSER" ;;
+  dimension: age {
+    type: number
+    sql: ${TABLE}."AGE" ;;
   }
 
   dimension: city {
@@ -51,14 +51,24 @@ view: events {
     sql: ${TABLE}."CREATED_AT" ;;
   }
 
-  dimension: event_type {
+  dimension: email {
     type: string
-    sql: ${TABLE}."EVENT_TYPE" ;;
+    sql: ${TABLE}."EMAIL" ;;
   }
 
-  dimension: ip_address {
+  dimension: first_name {
     type: string
-    sql: ${TABLE}."IP_ADDRESS" ;;
+    sql: ${TABLE}."FIRST_NAME" ;;
+  }
+
+  dimension: gender {
+    type: string
+    sql: ${TABLE}."GENDER" ;;
+  }
+
+  dimension: last_name {
+    type: string
+    sql: ${TABLE}."LAST_NAME" ;;
   }
 
   dimension: latitude {
@@ -71,21 +81,6 @@ view: events {
     sql: ${TABLE}."LONGITUDE" ;;
   }
 
-  dimension: os {
-    type: string
-    sql: ${TABLE}."OS" ;;
-  }
-
-  dimension: sequence_number {
-    type: number
-    sql: ${TABLE}."SEQUENCE_NUMBER" ;;
-  }
-
-  dimension: session_id {
-    type: string
-    sql: ${TABLE}."SESSION_ID" ;;
-  }
-
   dimension: state {
     type: string
     sql: ${TABLE}."STATE" ;;
@@ -94,17 +89,6 @@ view: events {
   dimension: traffic_source {
     type: string
     sql: ${TABLE}."TRAFFIC_SOURCE" ;;
-  }
-
-  dimension: uri {
-    type: string
-    sql: ${TABLE}."URI" ;;
-  }
-
-  dimension: user_id {
-    type: number
-    # hidden: yes
-    sql: ${TABLE}."USER_ID" ;;
   }
 
   dimension: zip {
@@ -118,11 +102,23 @@ view: events {
 
   measure: count {
     type: count
-    drill_fields: [id, users.last_name, users.first_name, users.id]
+    drill_fields: [id, last_name, first_name, events.count, order_items.count]
   }
 
   # These sum and average measures are hidden by default.
   # If you want them to show up in your explore, remove hidden: yes.
+
+  measure: total_age {
+    type: sum
+    hidden: yes
+    sql: ${age} ;;
+  }
+
+  measure: average_age {
+    type: average
+    hidden: yes
+    sql: ${age} ;;
+  }
 
   measure: total_latitude {
     type: sum
@@ -146,17 +142,5 @@ view: events {
     type: average
     hidden: yes
     sql: ${longitude} ;;
-  }
-
-  measure: total_sequence_number {
-    type: sum
-    hidden: yes
-    sql: ${sequence_number} ;;
-  }
-
-  measure: average_sequence_number {
-    type: average
-    hidden: yes
-    sql: ${sequence_number} ;;
   }
 }

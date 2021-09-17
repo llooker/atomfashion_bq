@@ -1,8 +1,8 @@
-# The name of this view in Looker is "Us Stores"
-view: us_stores {
+# The name of this view in Looker is "Distribution Centers"
+view: distribution_centers {
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
-  sql_table_name: `looker-private-demo.retail.us_stores`
+  sql_table_name: "PUBLIC"."DISTRIBUTION_CENTERS"
     ;;
   drill_fields: [id]
   # This primary key is the unique key for this table in the underlying database.
@@ -11,7 +11,7 @@ view: us_stores {
   dimension: id {
     primary_key: yes
     type: number
-    sql: ${TABLE}.ID ;;
+    sql: ${TABLE}."ID" ;;
   }
 
   # Here's what a typical dimension looks like in LookML.
@@ -20,27 +20,17 @@ view: us_stores {
 
   dimension: latitude {
     type: number
-    sql: ${TABLE}.Latitude ;;
+    sql: ${TABLE}."LATITUDE" ;;
   }
 
   dimension: longitude {
     type: number
-    sql: ${TABLE}.Longitude ;;
+    sql: ${TABLE}."LONGITUDE" ;;
   }
 
   dimension: name {
     type: string
-    sql: ${TABLE}.Name ;;
-  }
-
-  dimension: sq_ft {
-    type: number
-    sql: ${TABLE}.Sq_Ft ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.State ;;
+    sql: ${TABLE}."NAME" ;;
   }
 
   # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
@@ -49,7 +39,7 @@ view: us_stores {
 
   measure: count {
     type: count
-    drill_fields: [id, name]
+    drill_fields: [id, name, products.count]
   }
 
   # These sum and average measures are hidden by default.
@@ -77,17 +67,5 @@ view: us_stores {
     type: average
     hidden: yes
     sql: ${longitude} ;;
-  }
-
-  measure: total_sq_ft {
-    type: sum
-    hidden: yes
-    sql: ${sq_ft} ;;
-  }
-
-  measure: average_sq_ft {
-    type: average
-    hidden: yes
-    sql: ${sq_ft} ;;
   }
 }
