@@ -1,4 +1,4 @@
-connection: "snowlooker"
+connection: "looker-private-demo"
 
 include: "/views/*.view.lkml"                # include all views in the views/ folder in this project
 # include: "/**/*.view.lkml"                 # include all views in this project
@@ -19,4 +19,10 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 #   }
 # }
 
-explore: order_items {}
+explore: events {
+  join: users {
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${events.user_id} = ${users.id} ;;
+  }
+}
