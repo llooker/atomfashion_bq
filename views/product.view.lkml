@@ -1,8 +1,8 @@
-# The name of this view in Looker is "Products"
-view: products {
+# The name of this view in Looker is "Product"
+view: product {
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
-  sql_table_name: `looker-private-demo.thelook.products`
+  sql_table_name: `looker-private-demo.salesforce.product`
     ;;
   drill_fields: [id]
   # This primary key is the unique key for this table in the underlying database.
@@ -10,52 +10,57 @@ view: products {
 
   dimension: id {
     primary_key: yes
-    type: number
-    sql: ${TABLE}.id ;;
+    type: string
+    sql: ${TABLE}.ID ;;
   }
 
   # Here's what a typical dimension looks like in LookML.
   # A dimension is a groupable field that can be used to filter query results.
-  # This dimension will be called "Brand" in Explore.
+  # This dimension will be called "Commission Family C" in Explore.
 
-  dimension: brand {
+  dimension: commission_family_c {
     type: string
-    sql: ${TABLE}.brand ;;
+    sql: ${TABLE}.COMMISSION_FAMILY_C ;;
   }
 
-  dimension: category {
+  dimension: created_by_id {
     type: string
-    sql: ${TABLE}.category ;;
+    sql: ${TABLE}.CREATED_BY_ID ;;
   }
 
-  dimension: cost {
+  dimension: family {
+    type: string
+    sql: ${TABLE}.FAMILY ;;
+  }
+
+  dimension: is_active {
+    type: yesno
+    sql: ${TABLE}.IS_ACTIVE ;;
+  }
+
+  dimension: is_deleted {
+    type: yesno
+    sql: ${TABLE}.IS_DELETED ;;
+  }
+
+  dimension: list_price {
     type: number
-    sql: ${TABLE}.cost ;;
-  }
-
-  dimension: department {
-    type: string
-    sql: ${TABLE}.department ;;
-  }
-
-  dimension: distribution_center_id {
-    type: string
-    sql: ${TABLE}.distribution_center_id ;;
+    sql: ${TABLE}.list_price ;;
   }
 
   dimension: name {
     type: string
-    sql: ${TABLE}.name ;;
+    sql: ${TABLE}.NAME ;;
   }
 
-  dimension: retail_price {
-    type: number
-    sql: ${TABLE}.retail_price ;;
-  }
-
-  dimension: sku {
+  dimension: product__type___c {
     type: string
-    sql: ${TABLE}.sku ;;
+    sql: ${TABLE}.PRODUCT__TYPE___C ;;
+  }
+
+  dimension: user_type_c {
+    type: yesno
+    sql: ${TABLE}.USER_TYPE_C ;;
   }
 
   # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
@@ -64,33 +69,21 @@ view: products {
 
   measure: count {
     type: count
-    drill_fields: [id, name, inventory_items.count]
+    drill_fields: [id, name]
   }
 
   # These sum and average measures are hidden by default.
   # If you want them to show up in your explore, remove hidden: yes.
 
-  measure: total_cost {
+  measure: total_list_price {
     type: sum
     hidden: yes
-    sql: ${cost} ;;
+    sql: ${list_price} ;;
   }
 
-  measure: average_cost {
+  measure: average_list_price {
     type: average
     hidden: yes
-    sql: ${cost} ;;
-  }
-
-  measure: total_retail_price {
-    type: sum
-    hidden: yes
-    sql: ${retail_price} ;;
-  }
-
-  measure: average_retail_price {
-    type: average
-    hidden: yes
-    sql: ${retail_price} ;;
+    sql: ${list_price} ;;
   }
 }
