@@ -33,6 +33,20 @@ view: products {
     sql: ${TABLE}.cost ;;
   }
 
+  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
+  # measures for this dimension, but you can also add measures of many different aggregates.
+  # Click on the type parameter to see all the options in the Quick Help panel on the right.
+
+  measure: total_cost {
+    type: sum
+    sql: ${cost} ;;
+  }
+
+  measure: average_cost {
+    type: average
+    sql: ${cost} ;;
+  }
+
   dimension: department {
     type: string
     sql: ${TABLE}.department ;;
@@ -40,7 +54,6 @@ view: products {
 
   dimension: distribution_center_id {
     type: string
-    # hidden: yes
     sql: ${TABLE}.distribution_center_id ;;
   }
 
@@ -59,39 +72,8 @@ view: products {
     sql: ${TABLE}.sku ;;
   }
 
-  # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
-  # measures for numeric dimensions, but you can also add measures of many different types.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
-
   measure: count {
     type: count
-    drill_fields: [id, name, distribution_centers.name, distribution_centers.id, inventory_items.count]
-  }
-
-  # These sum and average measures are hidden by default.
-  # If you want them to show up in your explore, remove hidden: yes.
-
-  measure: total_cost {
-    type: sum
-    hidden: yes
-    sql: ${cost} ;;
-  }
-
-  measure: average_cost {
-    type: average
-    hidden: yes
-    sql: ${cost} ;;
-  }
-
-  measure: total_retail_price {
-    type: sum
-    hidden: yes
-    sql: ${retail_price} ;;
-  }
-
-  measure: average_retail_price {
-    type: average
-    hidden: yes
-    sql: ${retail_price} ;;
+    drill_fields: [id, name, inventory_items.count]
   }
 }

@@ -80,6 +80,20 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
+  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
+  # measures for this dimension, but you can also add measures of many different aggregates.
+  # Click on the type parameter to see all the options in the Quick Help panel on the right.
+
+  measure: total_sale_price {
+    type: sum
+    sql: ${sale_price} ;;
+  }
+
+  measure: average_sale_price {
+    type: average
+    sql: ${sale_price} ;;
+  }
+
   dimension_group: shipped {
     type: time
     timeframes: [
@@ -106,28 +120,9 @@ view: order_items {
     sql: ${TABLE}.user_id ;;
   }
 
-  # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
-  # measures for numeric dimensions, but you can also add measures of many different types.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
-
   measure: count {
     type: count
     drill_fields: [detail*]
-  }
-
-  # These sum and average measures are hidden by default.
-  # If you want them to show up in your explore, remove hidden: yes.
-
-  measure: total_sale_price {
-    type: sum
-    hidden: yes
-    sql: ${sale_price} ;;
-  }
-
-  measure: average_sale_price {
-    type: average
-    hidden: yes
-    sql: ${sale_price} ;;
   }
 
   # ----- Sets of fields for drilling ------

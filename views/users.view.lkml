@@ -23,6 +23,20 @@ view: users {
     sql: ${TABLE}.age ;;
   }
 
+  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
+  # measures for this dimension, but you can also add measures of many different aggregates.
+  # Click on the type parameter to see all the options in the Quick Help panel on the right.
+
+  measure: total_age {
+    type: sum
+    sql: ${age} ;;
+  }
+
+  measure: average_age {
+    type: average
+    sql: ${age} ;;
+  }
+
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
@@ -96,51 +110,8 @@ view: users {
     sql: ${TABLE}.zip ;;
   }
 
-  # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
-  # measures for numeric dimensions, but you can also add measures of many different types.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
-
   measure: count {
     type: count
-    drill_fields: [id, last_name, first_name, events.count, order_items.count]
-  }
-
-  # These sum and average measures are hidden by default.
-  # If you want them to show up in your explore, remove hidden: yes.
-
-  measure: total_age {
-    type: sum
-    hidden: yes
-    sql: ${age} ;;
-  }
-
-  measure: average_age {
-    type: average
-    hidden: yes
-    sql: ${age} ;;
-  }
-
-  measure: total_latitude {
-    type: sum
-    hidden: yes
-    sql: ${latitude} ;;
-  }
-
-  measure: average_latitude {
-    type: average
-    hidden: yes
-    sql: ${latitude} ;;
-  }
-
-  measure: total_longitude {
-    type: sum
-    hidden: yes
-    sql: ${longitude} ;;
-  }
-
-  measure: average_longitude {
-    type: average
-    hidden: yes
-    sql: ${longitude} ;;
+    drill_fields: [id, last_name, first_name, order_items.count, events.count]
   }
 }

@@ -79,13 +79,24 @@ view: events {
 
   dimension: sequence_number {
     type: number
-    label: "Event Sequence Info"
-    description: "This is the number for the event sequence"
     sql: ${TABLE}.sequence_number ;;
   }
 
+  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
+  # measures for this dimension, but you can also add measures of many different aggregates.
+  # Click on the type parameter to see all the options in the Quick Help panel on the right.
+
+  measure: total_sequence_number {
+    type: sum
+    sql: ${sequence_number} ;;
+  }
+
+  measure: average_sequence_number {
+    type: average
+    sql: ${sequence_number} ;;
+  }
+
   dimension: session_id {
-    hidden: yes
     type: string
     sql: ${TABLE}.session_id ;;
   }
@@ -108,17 +119,13 @@ view: events {
   dimension: user_id {
     type: number
     # hidden: yes
-    sql: ${TABLE}.user_id * ${session_id} ;;
+    sql: ${TABLE}.user_id ;;
   }
 
   dimension: zip {
     type: zipcode
     sql: ${TABLE}.zip ;;
   }
-
-  # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
-  # measures for numeric dimensions, but you can also add measures of many different types.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: count {
     type: count
@@ -128,46 +135,6 @@ view: events {
   measure: total_distinct_users {
     type: count_distinct
     sql: ${user_id} ;;
-    filters: [state: "NY"]
-    drill_fields: [user_id, users.age, users.created_date, users.city]
-  }
-
-  # These sum and average measures are hidden by default.
-  # If you want them to show up in your explore, remove hidden: yes.
-
-  measure: total_latitude {
-    type: sum
-    hidden: yes
-    sql: ${latitude} ;;
-  }
-
-  measure: average_latitude {
-    type: average
-    hidden: yes
-    sql: ${latitude} ;;
-  }
-
-  measure: total_longitude {
-    type: sum
-    hidden: yes
-    sql: ${longitude} ;;
-  }
-
-  measure: average_longitude {
-    type: average
-    hidden: yes
-    sql: ${longitude} ;;
-  }
-
-  measure: total_sequence_number {
-    type: sum
-    hidden: yes
-    sql: ${sequence_number} ;;
-  }
-
-  measure: average_sequence_number {
-    type: average
-    hidden: yes
-    sql: ${sequence_number} ;;
+    drill_fields: [user_id, city, state, zip, created_date]
   }
 }
