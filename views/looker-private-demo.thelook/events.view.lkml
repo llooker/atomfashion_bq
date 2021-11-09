@@ -43,7 +43,6 @@ view: events {
       raw,
       time,
       date,
-      day_of_week,
       week,
       month,
       quarter,
@@ -118,7 +117,6 @@ view: events {
 
   dimension: user_id {
     type: number
-    # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
 
@@ -129,12 +127,6 @@ view: events {
 
   measure: count {
     type: count
-    drill_fields: [id, users.last_name, users.id, users.first_name]
-  }
-
-  measure: total_distinct_users {
-    type: count_distinct
-    sql: ${user_id} ;;
-    drill_fields: [user_id, city, state, zip, created_date]
+    drill_fields: [id]
   }
 }

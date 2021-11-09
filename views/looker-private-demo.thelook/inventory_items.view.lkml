@@ -77,7 +77,6 @@ view: inventory_items {
 
   dimension: product_id {
     type: number
-    # hidden: yes
     sql: ${TABLE}.product_id ;;
   }
 
@@ -112,6 +111,6 @@ view: inventory_items {
 
   measure: count {
     type: count
-    drill_fields: [id, product_name, products.name, products.id, order_items.count]
+    drill_fields: [id, product_name, order_items.count]
   }
 }
