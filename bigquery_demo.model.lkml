@@ -19,10 +19,4 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 #   }
 # }
 
-explore: opportunity {
-  join: campaign {
-    relationship: many_to_one
-    type: left_outer
-    sql_on: ${opportunity.campaign_id} = ${campaign.id} ;;
-  }
-}
+explore: events {}
