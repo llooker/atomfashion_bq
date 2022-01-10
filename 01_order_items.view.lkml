@@ -1,5 +1,5 @@
 view: order_items {
-  sql_table_name: looker-private-demo.ecomm.order_items ;;
+  sql_table_name: looker-private-demo.ecomm.atom_order_items ;;
 
     ## ATOM.VIEW SQL
   #   create view atom.order_items as
@@ -160,28 +160,28 @@ view: order_items {
   dimension_group: returned {
     type: time
     timeframes: [time, date, week, month, raw]
-    sql: ${TABLE}.returned_at ;;
+    sql: ${TABLE}.returned_at_advance ;;
 
   }
 
   dimension_group: shipped {
     type: time
     timeframes: [date, week, month, raw]
-    sql: CAST(${TABLE}.shipped_at AS TIMESTAMP) ;;
+    sql: CAST(${TABLE}.shipped_at_advance AS TIMESTAMP) ;;
 
   }
 
   dimension_group: delivered {
     type: time
     timeframes: [date, week, month, raw]
-    sql: CAST(${TABLE}.delivered_at AS TIMESTAMP) ;;
+    sql: CAST(${TABLE}.delivered_at_advance AS TIMESTAMP) ;;
 
   }
 
   dimension_group: created {
     type: time
     timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year,month_name]
-    sql: ${TABLE}.created_at ;;
+    sql: ${TABLE}.created_at_advance ;;
 
   }
 
@@ -270,7 +270,7 @@ view: order_items {
   dimension: item_gross_margin_percentage {
     type: number
     value_format_name: percent_2
-    sql: 1.0 * ${gross_margin}/nullif(0,${sale_price}) ;;
+    sql: 1.0 * ${gross_margin}/nullif(${sale_price}, 0) ;;
   }
 
   dimension: item_gross_margin_percentage_tier {
@@ -374,7 +374,7 @@ view: order_items {
   dimension: days_until_next_order {
     type: number
     view_label: "Repeat Purchase Facts"
-    sql: TIMESTAMP_DIFF(${created_raw},${repeat_purchase_facts.next_order_raw}, DAY) ;;
+    sql: TIMESTAMP_DIFF(${created_raw},${repeat_purchase_facts.next_order}, DAY) ;;
   }
 
   dimension: repeat_orders_within_30d {

@@ -6,11 +6,12 @@ view: projected_revenue {
                EXTRACT(MONTH FROM DAY) AS MONTH
         FROM (
         SELECT PRODUCTS.BRAND                                                AS BRAND,
-               TO_DATE(DATEADD('DAY',F.NUMBER,'2014-01-01'))                 AS DAY
-        FROM ATOM.ORDER_ITEMS
-        LEFT JOIN ATOM.INVENTORY_ITEMS ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
-        LEFT JOIN ATOM.PRODUCTS ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
-        CROSS JOIN (SELECT SEQ8() AS NUMBER FROM TABLE(GENERATOR(ROWCOUNT => 3650))) F
+               DATE_ADD('2014-01-01', INTERVAL F.NUMBER DAY)                 AS DAY
+        FROM looker-private-demo.ecomm.atom_order_items as order_items
+        LEFT JOIN looker-private-demo.ecomm.atom_inventory_items as inventory_items ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
+        LEFT JOIN looker-private-demo.ecomm.atom_products as products ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
+        CROSS JOIN (SELECT number FROM UNNEST(GENERATE_ARRAY(0,3649)) AS number) F
+
         GROUP BY 1,2
         ORDER BY 1,2)
         X),
@@ -21,11 +22,11 @@ DAILY_HISTORY AS
                FROM (
                SELECT   PRODUCTS.BRAND                                                                        AS BRAND,
                         EXTRACT(YEAR FROM ORDER_ITEMS.CREATED_AT)                                             AS YEAR,
-                        TO_DATE(ORDER_ITEMS.CREATED_AT)                                                       AS DAY,
+                        CAST(ORDER_ITEMS.CREATED_AT as date)                                                       AS DAY,
                         SUM(SALE_PRICE)                                                                       AS REVENUE
-               FROM     ATOM.ORDER_ITEMS
-               LEFT JOIN ATOM.INVENTORY_ITEMS ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
-               LEFT JOIN ATOM.PRODUCTS ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
+               FROM     looker-private-demo.ecomm.atom_order_items as order_items
+               LEFT JOIN looker-private-demo.ecomm.atom_inventory_items as inventory_items ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
+               LEFT JOIN looker-private-demo.ecomm.atom_products as products ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
                GROUP BY 1,2,3) D)
 
 SELECT  ROW_NUMBER() OVER (ORDER BY DAY) AS PK,
@@ -54,7 +55,7 @@ SELECT DT.BRAND                                                                 
             ELSE LAG(DH.YTD_REVENUE,365) OVER(PARTITION BY DT.BRAND ORDER BY DT.DAY)
             END                                                                                                                            AS LAST_YTD_REVENUE
 FROM DATE_TABLE DT
-LEFT JOIN DAILY_HISTORY DH ON TO_DATE(DT.DAY) = TO_DATE(DH.DAY) AND DT.BRAND = DH.BRAND
+LEFT JOIN DAILY_HISTORY DH ON CAST(DT.DAY as date) = CAST(DH.DAY as date) AND DT.BRAND = DH.BRAND
 ORDER BY 1,2,3) Y) YY
              ;;
       datagroup_trigger: every_day
@@ -83,7 +84,7 @@ ORDER BY 1,2,3) Y) YY
       label: "Created"
       timeframes: [raw,date,day_of_month,week_of_year,month,quarter,year,day_of_year,month_name,month_num]
       type: time
-      sql: TO_TIMESTAMP(${TABLE}.day) ;;
+      sql: CAST(${TABLE}.day as timestamp) ;;
     }
 
     dimension: revenue {

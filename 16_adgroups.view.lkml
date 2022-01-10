@@ -1,6 +1,6 @@
 view: adgroups {
   view_label: "Ad Groups"
-  sql_table_name: looker-private-demo.ecomm.ad_groups ;;
+  sql_table_name: looker-private-demo.ecomm.atom_ad_groups ;;
 
   ## ATOM.VIEW SQL
     # create view looker-private-demo.ecomm.ad_groups as

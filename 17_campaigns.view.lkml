@@ -1,19 +1,26 @@
 view: campaigns {
 
+  ## ATOM.VIEW SQL
+    # create view looker-private-demo.ecomm.campaigns as
+    # select *,
+    #   dateadd(d,1,created_at) as created_at_advance
+    # from ecomm.campaigns
+
   derived_table: {
     datagroup_trigger: every_day
     sql: SELECT *
-      FROM   looker-private-demo.ecomm.campaigns
-      UNION
+      FROM   looker-private-demo.ecomm.atom_campaigns
+      UNION ALL
       SELECT 9999                 AS id,
       NULL                        AS advertising_channel,
       0                           AS amount,
       NULL                        AS bid_type,
       'Total'                     AS campaign_name,
       '60'                        AS period,
-      Dateadd(day, -1, current_timestamp()::timestamp_ntz) AS created_at,
-      Dateadd(day, -1, current_timestamp()::timestamp_ntz) AS created_at_advance;;
+      DATE_SUB(current_date(), INTERVAL 1 DAY) AS created_at,
+      DATE_SUB(current_date(), INTERVAL 1 DAY) AS created_at_advance;;
   }
+
 
 ##### Campaign Facts #####
 
@@ -51,7 +58,8 @@ view: campaigns {
   dimension: campaign_name {
     full_suggestions: yes
     type: string
-    sql: ${campaign_id}::VARCHAR ||  ' - ' || ${campaign_name_raw} ;;
+    sql:  CONCAT(CAST(${campaign_id} as STRING) , ' - ',  CAST(${campaign_name_raw} as STRING)) ;;
+
 #     link: {
 #       label: "Campaign Performance Dashboard"
 #       icon_url: "http://www.looker.com/favicon.ico"
@@ -90,7 +98,7 @@ view: campaigns {
   }
 
   dimension: campaign_type {
-    sql: substring(substring(${campaign_name_raw},POSITION(' - ', ${campaign_name_raw})+3),POSITION(' - ', substring(${campaign_name_raw},POSITION(' - ', ${campaign_name_raw})+3))+3) ;;
+    sql: ARRAY_REVERSE(SPLIT(${campaign_name_raw}, "-"))[SAFE_OFFSET(0)];;
   }
 
   dimension_group: created {
@@ -120,21 +128,20 @@ view: campaigns {
     ]
     convert_tz: no
     datatype: date
-    sql: dateadd('day', ${period},${created_date}) ;;
+    sql: DATE_ADD( ${period},${created_date}, INTERVAL 1 DAY) ;;
   }
 
   dimension: day_of_quarter {
     type: number
-    sql: DATEDIFF(
-        'day',
+    sql: DATE_DIFF(
         CAST(CONCAT(${created_quarter}, '-01') as date),
-        ${created_raw})
+        ${created_raw}, day)
        ;;
   }
 
   dimension: period {
     type: number
-    sql: ${TABLE}.period :: int ;;
+    sql: ${TABLE}.period  ;;
   }
 
   dimension: is_active_now {

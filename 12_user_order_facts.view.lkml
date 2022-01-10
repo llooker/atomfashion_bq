@@ -1,14 +1,14 @@
 view: user_order_facts {
   derived_table: {
     datagroup_trigger: every_day
-    sql: SELECT
+    sql:  SELECT
         user_id
         , COUNT(DISTINCT order_id) AS lifetime_orders
         , SUM(sale_price) AS lifetime_revenue
-        , MIN(NULLIF(created_at_advance,0::timestamp_ntz)) AS first_order
-        , MAX(NULLIF(created_at_advance,0::timestamp_ntz)) AS latest_order
-        , COUNT(DISTINCT DATE_TRUNC('month', NULLIF(created_at_advance,0::timestamp_ntz))) AS number_of_distinct_months_with_orders
-FROM looker-private-demo.ecomm.order_items
+        , MIN(NULLIF(created_at_advance,TIMESTAMP("1970-01-01 00:00:00+00"))) AS first_order
+        , MAX(NULLIF(created_at_advance,TIMESTAMP("1970-01-01 00:00:00+00"))) AS latest_order
+        , COUNT(DISTINCT DATE_TRUNC(NULLIF(created_at_advance,TIMESTAMP("1970-01-01 00:00:00+00")), month)) AS number_of_distinct_months_with_orders
+        FROM looker-private-demo.ecomm.atom_order_items
 GROUP BY user_id
        ;;
   }
@@ -36,7 +36,7 @@ GROUP BY user_id
   dimension: days_as_customer {
     description: "Days between first and latest order"
     type: number
-    sql: DATEDIFF('day', ${first_order_raw}, ${latest_order_raw})+1 ;;
+    sql: date_diff(${first_order_raw}, ${latest_order_raw}, day)+1 ;;
   }
 
   dimension: days_as_customer_tiered {

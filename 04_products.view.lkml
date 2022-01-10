@@ -1,5 +1,5 @@
 view: products {
-  sql_table_name: looker-private-demo.ecomm.products ;;
+  sql_table_name: looker-private-demo.ecomm.atom_products ;;
 
   ## ATOM.VIEW SQL
   #   create view looker-private-demo.ecomm.products as
@@ -111,7 +111,7 @@ view: products {
   }
 
   dimension: brand {
-        sql: trim(${TABLE}.brand) ;;
+        sql: trim(${TABLE}.brand_name) ;;
 
 #     sql: CASE WHEN LEFT(${TABLE}.brand, 1) in ('A', 'B', 'N', 'P') or ${TABLE}.brand = 'Columbia' THEN 'Columbia'
 #               WHEN LEFT(${TABLE}.brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or ${TABLE}.brand = 'Calvin Klein' THEN 'Calvin Klein'
