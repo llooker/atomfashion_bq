@@ -1,8 +1,8 @@
 view: users {
-  sql_table_name: atom.users ;;
+  sql_table_name: looker-private-demo.ecomm.atom_users ;;
 
   ## ATOM.VIEW SQL
-  #   create view atom.users as
+  #   create view looker-private-demo.ecomm.users as
   #     select *,
   #     DATEADD(d,1,created_at) as created_at_advance
   #     from ecomm.users
@@ -200,7 +200,6 @@ view: users {
     type: time
     description: "Date a user account was first created"
     timeframes: [time, date, week, month, raw]
-#     sql: ${TABLE}.created_at ;;
     sql: ${TABLE}.created_at_advance ;;
   }
 
@@ -238,13 +237,13 @@ view: users {
   dimension: is_user_created_in_last_60_days {
     hidden: yes
     type: yesno
-    sql: datediff('days', ${created_date}, current_date()) < 60 ;;
+    sql: date_diff( ${created_date}, current_date(), days) < 60 ;;
   }
 
   dimension: is_user_created_in_last_month {
     hidden: yes
     type: yesno
-    sql: datediff('days', ${created_date}, current_date()) < 30 ;;
+    sql: date_diff( ${created_date}, current_date(), days) < 30 ;;
   }
 
   dimension: is_user_created_in_last_day {

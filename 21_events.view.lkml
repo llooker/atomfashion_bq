@@ -1,8 +1,8 @@
 view: events {
-  sql_table_name: atom.events ;;
+  sql_table_name: looker-private-demo.ecomm.atom_events ;;
 
   ## ATOM.VIEW SQL
-    # create view atom.events as
+    # create view looker-private-demo.ecomm.events as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
     # from ecomm.events
@@ -20,18 +20,18 @@ view: events {
 
   dimension: utm_code {
     type: string
-    sql: ${ad_event_id}:: varchar || ' - ' || ${referrer_code} ::varchar ;;
+    sql:  CONCAT(CAST(${ad_event_id} as STRING) , ' - ',  CAST(${referrer_code} as STRING)) ;;
   }
 
   dimension: ad_event_id {
     type: number
-    sql: ${TABLE}.ad_event_id :: int ;;
+    sql: CAST(${TABLE}.ad_event_id as int64) ;;
   }
 
   dimension: referrer_code {
-    hidden: yes
+    # hidden: yes
     type: number
-    sql: ${TABLE}.referrer_code :: int ;;
+    sql: SAFE_CAST(${TABLE}.referrer_code as int64) ;;
   }
 
   dimension: browser {
@@ -69,24 +69,30 @@ view: events {
     description: "Use this filter for period analysis"
   }
 
+
+
   dimension: previous_period {
     type: string
     description: "The reporting period as selected by the Previous Period Filter"
-    sql:
-      CASE
-        WHEN {% date_start previous_period_filter %} is not null AND {% date_end previous_period_filter %} is not null /* date ranges or in the past x days */
-          THEN
-            CASE
+     sql:
+       CASE
+         WHEN {% date_start previous_period_filter %} is not null AND {% date_end previous_period_filter %} is not null /* date ranges or in the past x days */
+           THEN
+             CASE
               WHEN ${event_raw} >=  {% date_start previous_period_filter %}
-                AND ${event_raw}  <= {% date_end previous_period_filter %}
-                THEN 'This Period'
-              WHEN ${event_raw}  >= DATEADD(day,-1*DATEDIFF('day',{% date_start previous_period_filter %}, {% date_end previous_period_filter %} ) + 1, DATEADD(day,-1,{% date_start previous_period_filter %} ) )
-                AND ${event_raw}  <= DATEADD(day,-1,{% date_start previous_period_filter %} )
-                THEN 'Previous Period'
-            END
-          END ;;
-  }
+                 AND ${event_raw}  <= {% date_end previous_period_filter %}
+                 THEN 'This Period'
+              WHEN ${event_raw}  >=   date_sub(  {% date_start previous_period_filter %}, INTERVAL
+                      -1*date_diff({% date_start previous_period_filter %},{% date_end previous_period_filter %}, DAY)
+                      DAY)
+                      --start of prior period
+              AND ${event_raw}  <=   date_sub({% date_start previous_period_filter %}, INTERVAL 1 DAY)
+                  THEN 'Previous Period'
+                  -- date >= (final - initial )
+               END
+           END ;;
 
+  }
 
   dimension: event_type {
     type: string
@@ -130,7 +136,7 @@ view: events {
 
   dimension: uri {
     type: string
-    sql: ${TABLE}."uri" ;;
+    sql: ${TABLE}.uri ;;
   }
 
   dimension: user_id {
@@ -173,14 +179,19 @@ view: events {
     sql: ${count_bounces}*1.0 / nullif(${count}*1.0,0) ;;
   }
 
+  # dimension: full_page_url {
+  #   sql: ${TABLE}."uri" ;;
+  # }
+
   dimension: full_page_url {
-    sql: ${TABLE}."uri" ;;
+    label: "Full Page URL"
+    sql: ${TABLE}.uri ;;
   }
 
   dimension: viewed_product_id {
     type: number
     sql: CASE
-        WHEN ${event_type} = 'Product' THEN right(${full_page_url},length(${full_page_url})-9)
+        WHEN ${event_type} = 'Product' THEN CAST(right(${full_page_url},length(${full_page_url})-9) as INT64)
       END
        ;;
   }
@@ -202,11 +213,11 @@ view: events {
   dimension: funnel_step_adwords {
     description: "Login -> Browse -> Add to Cart -> Checkout (for Adwords)"
     sql: CASE
-        WHEN ${event_type} IN ('Login', 'Home') and ${utm_code} is [not] null THEN '(1) Land'
-        WHEN ${event_type} IN ('Category', 'Brand') and ${utm_code} is [not] null THEN '(2) Browse Inventory'
-        WHEN ${event_type} = 'Product' and ${utm_code} is [not] null THEN '(3) View Product'
-        WHEN ${event_type} = 'Cart' and ${utm_code} is [not] null THEN '(4) Add Item to Cart'
-        WHEN ${event_type} = 'Purchase' and ${utm_code} is [not] null THEN '(5) Purchase'
+        WHEN ${event_type} IN ('Login', 'Home') and ${utm_code} is not null THEN '(1) Land'
+        WHEN ${event_type} IN ('Category', 'Brand') and ${utm_code} is not null THEN '(2) Browse Inventory'
+        WHEN ${event_type} = 'Product' and ${utm_code} is not null THEN '(3) View Product'
+        WHEN ${event_type} = 'Cart' and ${utm_code} is not null THEN '(4) Add Item to Cart'
+        WHEN ${event_type} = 'Purchase' and ${utm_code} is not null THEN '(5) Purchase'
       END
        ;;
   }

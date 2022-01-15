@@ -2,14 +2,14 @@ view: repeat_purchase_facts {
   derived_table: {
     datagroup_trigger: every_day
     sql: SELECT
-        order_items.order_id
+        atom_order_items.order_id
         , COUNT(DISTINCT repeat_order_items.id) AS number_subsequent_orders
         , MIN(repeat_order_items.created_at_advance) AS next_order_date
         , MIN(repeat_order_items.order_id) AS next_order_id
-      FROM atom.order_items
-      LEFT JOIN atom.order_items repeat_order_items
-        ON order_items.user_id = repeat_order_items.user_id
-        AND order_items.created_at < repeat_order_items.created_at
+      FROM looker-private-demo.ecomm.atom_order_items
+      LEFT JOIN looker-private-demo.ecomm.atom_order_items repeat_order_items
+        ON atom_order_items.user_id = repeat_order_items.user_id
+        AND atom_order_items.created_at_advance < repeat_order_items.created_at_advance
       GROUP BY 1
        ;;
   }

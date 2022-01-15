@@ -31,22 +31,22 @@ view: session_purchase_facts {
         , rank() over (partition by session_user_id order by session_end) as session_purchase_rank
     from (
       SELECT
-        events.session_id
+        atom_events.session_id
         , order_id
         , session_purchase.traffic_source as purchase_session_traffic_source
         , sum(sessions_till_purchase) as sessions_till_purchase
         , sum(sale_price) AS sale_price
         --, sum(inventory_items.cost) as cost
         , sum(search_sessions) as search_session_count
-        , MIN(events.created_at_advance) AS session_start
-        , MAX(events.created_at_advance) AS session_end
-        , MAX(events.user_id) AS session_user_id
-      FROM atom.events
-      JOIN atom.order_items on order_items.created_at = events.created_at
-      --JOIN atom.inventory_items  AS inventory_items ON inventory_items.id = order_items.inventory_item_id
-      JOIN session_purchase on session_purchase.session_id = events.session_id
+        , MIN(atom_events.created_at_advance) AS session_start
+        , MAX(atom_events.created_at_advance) AS session_end
+        , MAX(atom_events.user_id) AS session_user_id
+      FROM looker-private-demo.ecomm.atom_events
+      JOIN looker-private-demo.ecomm.atom_order_items on atom_order_items.created_at = atom_events.created_at
+      --JOIN looker-private-demo.ecomm.inventory_items  AS inventory_items ON inventory_items.id = order_items.inventory_item_id
+      JOIN session_purchase on session_purchase.session_id = atom_events.session_id
       JOIN session_contains_search on session_purchase.session_id = session_contains_search.session_id
-      GROUP BY events.session_id, order_id, session_purchase.traffic_source
+      GROUP BY atom_events.session_id, order_id, session_purchase.traffic_source
       having sum(CASE WHEN event_type = 'Purchase' THEN 1 else 0 end) > 0
       order by session_user_id
     )

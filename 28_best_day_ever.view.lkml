@@ -4,15 +4,15 @@ view: best_day_ever {
     sql:
       select day, best_day_vs_today
       from
-        (select date_trunc('day',created_at_advance) as day, 'Best Day' as best_day_vs_today
-        from atom.order_items
+        (select date_trunc(created_at_advance, day) as day, 'Best Day' as best_day_vs_today
+        from looker-private-demo.ecomm.atom_order_items
         group by 1,2
         order by sum(sale_price) desc
         limit 1)
 
       union all
 
-       (select current_date as day, 'Today' as best_day_vs_today)
+       (select CAST(current_date as timestamp) as day, 'Today' as best_day_vs_today)
        ;;
   }
 
@@ -20,7 +20,7 @@ view: best_day_ever {
     label: "Best Day"
     type: time
     timeframes: [date]
-    sql: ${TABLE}."DAY" ;;
+    sql: ${TABLE}.DAY ;;
   }
 
   dimension: best_day_vs_today {

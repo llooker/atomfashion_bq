@@ -24,7 +24,7 @@ view: sessions {
         , MAX(id) AS bounce_event_id
         , MAX(traffic_source) AS traffic_source
         , MAX(ad_event_id) AS ad_event_id
-      FROM atom.events
+      FROM looker-private-demo.ecomm.atom_events
       GROUP BY session_id
       )
 ;;
@@ -91,7 +91,7 @@ view: sessions {
   dimension: duration {
     label: "Duration (sec)"
     type: number
-    sql: DATEDIFF('second', ${session_start_raw}, ${session_end_raw}) ;;
+    sql: date_diff( ${session_end_raw}, ${session_start_raw}, second) ;;
   }
 
   measure: average_duration {
@@ -111,7 +111,8 @@ view: sessions {
 
   dimension: months_since_first_session {
     type: number
-    sql: datediff( 'month', ${users.created_raw}, ${session_start_raw} ) ;;
+    sql: date_diff( ${session_start_date}, ${users.created_date}, month) ;;
+
   }
 
   measure: count {
@@ -209,8 +210,8 @@ view: sessions {
     description:  "Weeks between campaign start and user's session start (e.g. first click)"
     view_label: "Campaigns"
     type: number
-    sql: DATEDIFF('week', ${campaigns.created_date}, ${session_start_date})  ;;
-  }
+    sql: date_diff(  ${session_start_date}, ${campaigns.created_date}, week)  ;;
+    }
 
   measure: count_with_cart {
     type: count

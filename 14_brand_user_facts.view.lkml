@@ -5,9 +5,9 @@ view: brand_user_facts {
         , order_items.user_id as user_id
         , count(*) as total_orders
         , sum(sale_price) as total_sale_price
-        , RANK() OVER(partition by product_brand order by total_sale_price desc, user_id) as rank
-from atom.order_items
-left join atom.inventory_items on order_items.inventory_item_id = inventory_items.id
+        , RANK() OVER(partition by product_brand order by sum(sale_price) desc, user_id) as rank
+from looker-private-demo.ecomm.atom_order_items as order_items
+left join looker-private-demo.ecomm.atom_inventory_items as inventory_items on order_items.inventory_item_id = inventory_items.id
 group by 1, 2
        ;;
   }
@@ -16,7 +16,7 @@ group by 1, 2
     primary_key: yes
     type: string
     hidden: yes
-    sql: ${brand} || '-' || ${user_id} ;;
+    sql: CONCAT(${brand}, '-', ${user_id}) ;;
   }
 
   dimension: brand {

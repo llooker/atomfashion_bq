@@ -1,8 +1,8 @@
 view: inventory_items {
-  sql_table_name: atom.inventory_items ;;
+  sql_table_name: looker-private-demo.ecomm.atom_inventory_items ;;
 
 ## ATOM.VIEW SQL
-  #   create view atom.inventory_items as
+  #   create view looker-private-demo.ecomm.inventory_items as
   #     select *,
   #     DATEADD(d,1,created_at) as created_at_advance,
   #     DATEADD(d,1,sold_at) as sold_at_advance
@@ -25,7 +25,7 @@ view: inventory_items {
   dimension_group: created {
     type: time
     timeframes: [time, date, week, month, raw]
-    sql: ${TABLE}.created_at_advance;;
+    sql: TIMESTAMP(${TABLE}.created_at_advance);;
   }
 
   dimension: product_id {
@@ -48,7 +48,7 @@ view: inventory_items {
   dimension: days_in_inventory {
     description: "days between created and sold date"
     type: number
-    sql: DATEDIFF('day', ${created_raw}, coalesce(${sold_raw},current_date())) ;;
+    sql:  TIMESTAMP_DIFF(coalesce(${sold_raw}, CURRENT_TIMESTAMP()), TIMESTAMP(${created_raw}), DAY)  ;;
   }
 
   dimension: days_in_inventory_tier {
@@ -70,7 +70,7 @@ view: inventory_items {
   dimension: days_since_arrival {
     description: "days since created - useful when filtering on sold yesno for items still in inventory"
     type: number
-    sql: DATEDIFF('day', ${created_date}, current_date())) ;;
+    sql: TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), TIMESTAMP(${created_raw}), DAY) ;;
   }
 
   dimension: days_since_arrival_tier {

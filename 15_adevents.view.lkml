@@ -1,9 +1,9 @@
 view: adevents {
   view_label: "Ad Events"
-  sql_table_name: atom.ad_events ;;
+  sql_table_name: looker-private-demo.ecomm.atom_ad_events ;;
 
     ## ATOM.VIEW SQL
-    # create view atom.ad_events as
+    # create view looker-private-demo.ecomm.ad_events as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
     # from ecomm.ad_events
@@ -45,19 +45,37 @@ view: adevents {
   {
     type: string
     description: "The reporting period as selected by the Previous Period Filter"
+    # sql:
+    #   CASE
+    #     WHEN {% date_start previous_period_filter %} is [not] null AND {% date_end previous_period_filter %} is [not] null /* date ranges or in the past x days */
+    #       THEN
+    #         CASE
+    #           WHEN ${created_raw} >=  {% date_start previous_period_filter %}
+    #             AND ${created_raw}  <= {% date_end previous_period_filter %}
+    #             THEN 'This Period'
+    #           WHEN ${created_raw}  >= DATEADD(day,-1*DATEDIFF('day',{% date_start previous_period_filter %}, {% date_end previous_period_filter %} ) + 1, DATEADD(day,-1,{% date_start previous_period_filter %} ) )
+    #             AND ${created_raw}  <= DATEADD(day,-1,{% date_start previous_period_filter %} )
+    #             THEN 'Previous Period'
+    #         END
+    #       END ;;
+
     sql:
       CASE
-        WHEN {% date_start previous_period_filter %} is [not] null AND {% date_end previous_period_filter %} is [not] null /* date ranges or in the past x days */
+        WHEN {% date_start previous_period_filter %} is not null AND {% date_end previous_period_filter %} is not null /* date ranges or in the past x days */
           THEN
-            CASE
-              WHEN ${created_raw} >=  {% date_start previous_period_filter %}
-                AND ${created_raw}  <= {% date_end previous_period_filter %}
-                THEN 'This Period'
-              WHEN ${created_raw}  >= DATEADD(day,-1*DATEDIFF('day',{% date_start previous_period_filter %}, {% date_end previous_period_filter %} ) + 1, DATEADD(day,-1,{% date_start previous_period_filter %} ) )
-                AND ${created_raw}  <= DATEADD(day,-1,{% date_start previous_period_filter %} )
-                THEN 'Previous Period'
-            END
-          END ;;
+          CASE
+            WHEN ${created_raw} >=  {% date_start previous_period_filter %}
+              AND ${created_raw}  <= {% date_end previous_period_filter %}
+              THEN 'This Period'
+            WHEN ${created_raw}  >=   date_sub(  {% date_start previous_period_filter %}, INTERVAL
+              -1*date_diff({% date_start previous_period_filter %},{% date_end previous_period_filter %}, DAY)
+              DAY)
+              --start of prior period
+              AND ${created_raw}  <=   date_sub({% date_start previous_period_filter %}, INTERVAL 1 DAY)
+              THEN 'Previous Period'
+            -- date >= (final - initial )
+          END
+        END ;;
   }
 
   dimension: device_type {

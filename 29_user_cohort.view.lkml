@@ -28,12 +28,12 @@ view: user_cohort {
             ELSE 'Undefined'
             END AS lifetime_revenue_tier,
           CASE WHEN users.latitude  IS NOT NULL AND users.longitude  IS NOT NULL THEN (
-            COALESCE(CAST(users.latitude  AS VARCHAR),'') || ',' ||
-            COALESCE(CAST(users.longitude  AS VARCHAR),'')) ELSE NULL END
+            COALESCE(CAST(users.latitude  AS STRING),'') || ',' ||
+            COALESCE(CAST(users.longitude  AS STRING),'')) ELSE NULL END
              AS location,
           CASE WHEN user_order_facts.lifetime_orders > 1  THEN 'Yes' ELSE 'No' END
              AS repeat_customer
-        FROM "ATOM"."USERS" as users
+        FROM looker-private-demo.ecomm.atom_users as users
         LEFT JOIN ${user_order_facts.SQL_TABLE_NAME} as user_order_facts
         on users.id = user_order_facts.user_id
         WHERE
@@ -216,7 +216,7 @@ view: user_cohort {
   dimension: id {
     hidden: yes
     type: number
-    sql: ${TABLE}."ID" ;;
+    sql: ${TABLE}.id ;;
   }
 
   dimension: first_name {
