@@ -374,7 +374,7 @@ view: order_items {
   dimension: days_until_next_order {
     type: number
     view_label: "Repeat Purchase Facts"
-    sql: TIMESTAMP_DIFF(${created_raw},${repeat_purchase_facts.next_order}, DAY) ;;
+    sql: TIMESTAMP_DIFF(${created_raw},${repeat_purchase_facts.next_order_raw}, DAY) ;;
   }
 
   dimension: repeat_orders_within_30d {
@@ -471,4 +471,20 @@ view: order_items {
   set: return_detail {
     fields: [id, order_id, status, created_date, returned_date, sale_price, products.brand, products.item_name, users.portrait, users.name, users.email]
   }
+
+  set: simple {
+    fields: [
+      id,
+      order_id,
+      status,
+      created_date,
+      sale_price,
+      gross_margin,
+      count,
+      order_count,
+      total_gross_margin,
+      average_gross_margin
+    ]
+  }
+
 }
