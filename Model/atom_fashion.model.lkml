@@ -31,7 +31,7 @@ datagroup: every_day {
 }
 
 datagroup: ecommerce_etl {
-  sql_trigger: SELECT FLOOR(DATE_PART('EPOCH_SECOND', CURRENT_TIMESTAMP) / (3*60*60)) ;;
+  sql_trigger: SELECT FLOOR(((TIMESTAMP_DIFF(CURRENT_TIMESTAMP(),'1970-01-01 00:00:00',SECOND)) - 60*60*3)/(60*60*24));;
 }
 
 ########################################
