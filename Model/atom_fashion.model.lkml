@@ -23,11 +23,11 @@ named_value_format: big_money {
 # }
 
 datagroup: every_hour {
-  sql_trigger: SELECT TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) ;;
+  sql_trigger: SELECT EXTRACT(HOUR FROM CURRENT_TIMESTAMP());;
 }
 
 datagroup: every_day {
-  sql_trigger: select current_date ;;
+  sql_trigger: SELECT FORMAT_TIMESTAMP('%F', CURRENT_TIMESTAMP(), 'America/Los_Angeles');;
 }
 
 datagroup: ecommerce_etl {
