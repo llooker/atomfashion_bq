@@ -287,11 +287,18 @@ view: order_items {
     drill_fields: [detail*]
   }
 
-
   measure: total_tax_amount {
     type: sum
     value_format: "$#,##0.00"
     sql: round(${tax_amount}, 2) ;;
+  }
+
+  measure: total_returns {
+    type: sum
+    value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$#,##0.00"
+    sql: ${sale_price} ;;
+    filters: [returned_date: "-null"]
+    drill_fields: [order_id, user_id, total_returns]
   }
 
   measure: total_gross_margin {
