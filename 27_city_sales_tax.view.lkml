@@ -35,6 +35,6 @@ view: city_sales_tax {
   dimension: city_tax {
     type: number
     sql: ${TABLE}.CITY_TAX ;;
-    value_format_name: decimal_5
+    value_format_name: decimal_2
   }
 }
