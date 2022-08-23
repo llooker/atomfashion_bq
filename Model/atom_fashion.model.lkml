@@ -42,14 +42,14 @@ explore: order_items {
   label: "(1) Order Information"
   description: "All information related to Orders placed including shipping information, user facts, and product information"
   view_name: order_items
-  access_filter: {
-    field: products.brand
-    user_attribute: brand
-  }
-  access_filter: {
-    field: order_items.created_date
-    user_attribute: time_horizon
-  }
+  # access_filter: {
+  #   field: products.brand
+  #   user_attribute: brand
+  # }
+  # access_filter: {
+  #   field: order_items.created_date
+  #   user_attribute: time_horizon
+  # }
 #   sql_always_where: ${order_items.created_date} <= current_date() ;;
 
   join: order_facts {
