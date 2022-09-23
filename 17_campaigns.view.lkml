@@ -1,7 +1,7 @@
 view: campaigns {
 
   ## ATOM.VIEW SQL
-    # create view looker-private-demo.ecomm.campaigns as
+    # create view daveward-ps-dev.ecomm.campaigns as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
     # from ecomm.campaigns
@@ -9,7 +9,7 @@ view: campaigns {
   derived_table: {
     datagroup_trigger: every_day
     sql: SELECT *
-      FROM   looker-private-demo.ecomm.atom_campaigns
+      FROM   daveward-ps-dev.ecomm.atom_campaigns
       UNION ALL
       SELECT 9999                 AS id,
       NULL                        AS advertising_channel,

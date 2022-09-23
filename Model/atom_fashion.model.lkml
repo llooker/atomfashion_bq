@@ -1,4 +1,4 @@
-connection: "bigquery_personal_instance"
+connection: "looker_private_demo"
 label: "Atom Fashion"
 
 # include all the views

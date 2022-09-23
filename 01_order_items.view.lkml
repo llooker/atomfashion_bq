@@ -1,5 +1,5 @@
 view: order_items {
-  sql_table_name: looker-private-demo.ecomm.atom_order_items ;;
+  sql_table_name: ecomm.atom_order_items ;;
 
     ## ATOM.VIEW SQL
   #   create view atom.order_items as

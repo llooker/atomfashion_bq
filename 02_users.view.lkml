@@ -1,8 +1,8 @@
 view: users {
-  sql_table_name: looker-private-demo.ecomm.atom_users ;;
+  sql_table_name: ecomm.atom_users ;;
 
   ## ATOM.VIEW SQL
-  #   create view looker-private-demo.ecomm.users as
+  #   create view daveward-ps-dev.ecomm.users as
   #     select *,
   #     DATEADD(d,1,created_at) as created_at_advance
   #     from ecomm.users

@@ -1,9 +1,9 @@
 view: adevents {
   view_label: "Ad Events"
-  sql_table_name: looker-private-demo.ecomm.atom_ad_events ;;
+  sql_table_name: daveward-ps-dev.ecomm.atom_ad_events ;;
 
     ## ATOM.VIEW SQL
-    # create view looker-private-demo.ecomm.ad_events as
+    # create view daveward-ps-dev.ecomm.ad_events as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
     # from ecomm.ad_events

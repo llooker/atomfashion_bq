@@ -33,7 +33,7 @@ view: user_cohort {
              AS location,
           CASE WHEN user_order_facts.lifetime_orders > 1  THEN 'Yes' ELSE 'No' END
              AS repeat_customer
-        FROM looker-private-demo.ecomm.atom_users as users
+        FROM daveward-ps-dev.ecomm.atom_users as users
         LEFT JOIN ${user_order_facts.SQL_TABLE_NAME} as user_order_facts
         on users.id = user_order_facts.user_id
         WHERE
