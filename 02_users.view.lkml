@@ -32,6 +32,12 @@ view: users {
     sql: initcap(${first_name} || ' ' || ${last_name}) ;;
   }
 
+  measure: count_of_davids2 {
+    type: count_distinct
+    sql: id ;;
+    filters: [first_name: "David"]
+  }
+
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
