@@ -41,9 +41,9 @@ view: session_purchase_facts {
         , MIN(atom_events.created_at_advance) AS session_start
         , MAX(atom_events.created_at_advance) AS session_end
         , MAX(atom_events.user_id) AS session_user_id
-      FROM daveward-ps-dev.ecomm.atom_events
-      JOIN daveward-ps-dev.ecomm.atom_order_items on atom_order_items.created_at = atom_events.created_at
-      --JOIN daveward-ps-dev.ecomm.inventory_items  AS inventory_items ON inventory_items.id = order_items.inventory_item_id
+      FROM ecomm.atom_events
+      JOIN ecomm.atom_order_items on atom_order_items.created_at = atom_events.created_at
+      --JOIN ecomm.inventory_items  AS inventory_items ON inventory_items.id = order_items.inventory_item_id
       JOIN session_purchase on session_purchase.session_id = atom_events.session_id
       JOIN session_contains_search on session_purchase.session_id = session_contains_search.session_id
       GROUP BY atom_events.session_id, order_id, session_purchase.traffic_source

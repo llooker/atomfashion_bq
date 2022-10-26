@@ -24,7 +24,7 @@ view: sessions {
         , MAX(id) AS bounce_event_id
         , MAX(traffic_source) AS traffic_source
         , MAX(ad_event_id) AS ad_event_id
-      FROM daveward-ps-dev.ecomm.atom_events
+      FROM ecomm.atom_events
       GROUP BY session_id
       )
 ;;

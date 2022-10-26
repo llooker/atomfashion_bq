@@ -8,7 +8,7 @@ view: user_order_facts {
         , MIN(NULLIF(created_at_advance,TIMESTAMP("1970-01-01 00:00:00+00"))) AS first_order
         , MAX(NULLIF(created_at_advance,TIMESTAMP("1970-01-01 00:00:00+00"))) AS latest_order
         , COUNT(DISTINCT DATE_TRUNC(NULLIF(created_at_advance,TIMESTAMP("1970-01-01 00:00:00+00")), month)) AS number_of_distinct_months_with_orders
-        FROM daveward-ps-dev.ecomm.atom_order_items
+        FROM ecomm.atom_order_items
 GROUP BY user_id
        ;;
   }

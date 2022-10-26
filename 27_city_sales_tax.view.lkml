@@ -9,7 +9,7 @@ view: city_sales_tax {
     # group by 1,2,3
     # ;;
     sql:SELECT city, state, country, (0 + RAND() * (.1 - 0)) as city_tax
-          FROM daveward-ps-dev.ecomm.users
+          FROM ecomm.users
           group by 1,2,3
     ;;
   }

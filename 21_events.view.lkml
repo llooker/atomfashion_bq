@@ -1,8 +1,8 @@
 view: events {
-  sql_table_name: daveward-ps-dev.ecomm.atom_events ;;
+  sql_table_name: ecomm.atom_events ;;
 
   ## ATOM.VIEW SQL
-    # create view daveward-ps-dev.ecomm.events as
+    # create view ecomm.events as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
     # from ecomm.events

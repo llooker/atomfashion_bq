@@ -1,8 +1,8 @@
 view: products {
-  sql_table_name: daveward-ps-dev.ecomm.atom_products ;;
+  sql_table_name: ecomm.atom_products ;;
 
   ## ATOM.VIEW SQL
-  #   create view daveward-ps-dev.ecomm.products as
+  #   create view ecomm.products as
   #     select *,
   #     CASE WHEN LEFT(brand, 1) in ('A', 'B', 'N', 'P') or brand = 'Columbia' THEN 'Columbia'
   #                   WHEN LEFT(brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or brand = 'Calvin Klein' THEN 'Calvin Klein'

@@ -1,6 +1,6 @@
 view: adgroups {
   view_label: "Ad Groups"
-  sql_table_name: daveward-ps-dev.ecomm.atom_ad_groups ;;
+  sql_table_name: ecomm.atom_ad_groups ;;
 
   ## ATOM.VIEW SQL
     # create view daveward-ps-dev.ecomm.ad_groups as

@@ -1,5 +1,5 @@
 view: keywords {
-  sql_table_name: daveward-ps-dev.ecomm.keywords ;;
+  sql_table_name:ecomm.keywords ;;
 
   ## ATOM.VIEW SQL
     # create view daveward-ps-dev.ecomm.keywords as

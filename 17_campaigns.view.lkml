@@ -9,7 +9,7 @@ view: campaigns {
   derived_table: {
     datagroup_trigger: every_day
     sql: SELECT *
-      FROM   daveward-ps-dev.ecomm.atom_campaigns
+      FROM   ecomm.atom_campaigns
       UNION ALL
       SELECT 9999                 AS id,
       NULL                        AS advertising_channel,
