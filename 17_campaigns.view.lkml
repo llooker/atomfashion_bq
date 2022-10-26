@@ -128,7 +128,7 @@ view: campaigns {
     ]
     convert_tz: no
     datatype: date
-    sql: DATE_ADD( ${period},${created_date}, INTERVAL 1 DAY) ;;
+    sql: DATE_ADD( ${created_date}, INTERVAL 1 DAY) ;;
   }
 
   dimension: day_of_quarter {
