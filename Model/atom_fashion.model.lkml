@@ -458,3 +458,424 @@ explore: sessions{
     sql_on: ${campaigns.campaign_id} = ${adgroups.campaign_id} ;;
   }
 }
+
+
+# Place in `atom_fashion` model
+explore: +order_items {
+  aggregate_table: rollup__created_week__0 {
+    query: {
+      dimensions: [created_week]
+      measures: [average_days_to_process]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        order_items.created_week: "2 weeks",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+      timezone: "Europe/London"
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__created_week__1 {
+    query: {
+      dimensions: [created_week]
+      measures: [total_sale_price]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        order_items.created_week: "2 weeks",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+      timezone: "Europe/London"
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__created_week__2 {
+    query: {
+      dimensions: [created_week]
+      measures: [total_tax_amount]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        order_items.created_week: "2 weeks",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+      timezone: "Europe/London"
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__created_week__3 {
+    query: {
+      dimensions: [created_week]
+      measures: [total_returns]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        order_items.created_week: "2 weeks",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+      timezone: "Europe/London"
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__total_gross_margin_percentage__4 {
+    query: {
+      measures: [total_gross_margin_percentage]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__return_rate__returned_count__5 {
+    query: {
+      measures: [return_rate, returned_count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__products_category__6 {
+    query: {
+      dimensions: [products.category]
+      measures: [first_purchase_count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+      timezone: "Europe/London"
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__products_brand__7 {
+    query: {
+      dimensions: [products.brand]
+      measures: [order_count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+      timezone: "Europe/London"
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__users_created_date__8 {
+    query: {
+      dimensions: [users.created_date]
+      measures: [users.count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No",
+        # "users.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        users.created_date: "this year to second"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__created_date__9 {
+    query: {
+      dimensions: [created_date]
+      measures: [return_rate]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        order_items.created_date: "7 days",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__created_date__10 {
+    query: {
+      dimensions: [created_date]
+      measures: [average_days_to_process]
+      filters: [
+        # "inventory_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        inventory_items.created_date: "this year to second",
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        order_items.created_date: "7 days",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__products_department__11 {
+    query: {
+      dimensions: [products.department]
+      measures: [order_count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__users_city__users_generation__12 {
+    query: {
+      dimensions: [users.city, users.generation]
+      measures: [users.count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__users_generation__users_traffic_source__13 {
+    query: {
+      dimensions: [users.generation, users.traffic_source]
+      measures: [users.count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__users_age_tier__users_country__14 {
+    query: {
+      dimensions: [users.age_tier, users.country]
+      measures: [users.count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__products_brand__products_category__products_category_type__15 {
+    query: {
+      dimensions: [products.brand, products.category, products.category_type]
+      measures: [products.count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__distribution_centers_name__products_brand__16 {
+    query: {
+      dimensions: [distribution_centers.name, products.brand]
+      measures: [order_count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__inventory_items_days_in_inventory_tier__products_brand__17 {
+    query: {
+      dimensions: [inventory_items.days_in_inventory_tier, products.brand]
+      measures: [count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__user_order_facts_lifetime_orders_tier__users_generation__18 {
+    query: {
+      dimensions: [user_order_facts.lifetime_orders_tier, users.generation]
+      measures: [order_count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+
+  aggregate_table: rollup__distribution_centers_name__19 {
+    query: {
+      dimensions: [distribution_centers.name]
+      measures: [count]
+      filters: [
+        # "order_facts.is_first_purchase" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_facts.is_first_purchase: "Yes,No",
+        # "order_items.created_date" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.created_date: "this year to second",
+        # "order_items.is_returned" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.is_returned: "No,Yes",
+        # "order_items.repeat_orders_within_15d" was filtered by dashboard. The aggregate table will only optimize against exact match queries.
+        order_items.repeat_orders_within_15d: "Yes,No",
+        order_items.status: "Shipped"
+      ]
+    }
+
+    materialization: {
+      datagroup_trigger: every_day
+    }
+  }
+}

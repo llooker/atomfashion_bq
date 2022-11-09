@@ -23,27 +23,33 @@ view: products {
     sql: trim(${TABLE}.category) ;;
 
     link: {
+      label: "Go to {{value}} Dashboard"
+      url: "/dashboards/38?Category={{value | url_encode}}"
+      icon_url: "http://www.google.com/s2/favicons?domain=looker.com"
+    }
+
+    link: {
       label: "Google"
       url: "http://www.google.com/search?q={{value}}"
-      icon_url: "http://google.com/favicon.ico"
+      icon_url: "http://www.google.com/s2/favicons?domain=google.com"
     }
 
     link: {
       label: "Wikipedia"
       url: "http://www.google.com/search?q=site:wikipedia.com+{{value}}&btnI"
-      icon_url: "https://en.wikipedia.org/static/favicon/wikipedia.ico"
+      icon_url: "http://www.google.com/s2/favicons?domain=wikipedia.com"
     }
 
     link: {
       label: "Twitter"
       url: "http://www.google.com/search?q=site:twitter.com+{{value}}&btnI"
-      icon_url: "https://abs.twimg.com/favicons/favicon.ico"
+      icon_url: "http://www.google.com/s2/favicons?domain=twitter.com"
     }
 
     link: {
       label: "Facebook"
       url: "http://www.google.com/search?q=site:facebook.com+{{value}}&btnI"
-      icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
+      icon_url: "http://www.google.com/s2/favicons?domain=facebook.com"
     }
 
   }
