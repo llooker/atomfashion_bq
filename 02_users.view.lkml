@@ -345,6 +345,12 @@ view: users {
     drill_fields: [detail*]
   }
 
+  measure: count_of_cities {
+    type: count_distinct
+    sql: ${city} ;;
+    value_format_name: decimal_0
+  }
+
   set: detail {
     fields: [
       id,
