@@ -7,6 +7,11 @@ view: autotelemetry_aggr {
     sql: ${TABLE}.battery ;;
   }
 
+  dimension: random {
+    type: number
+    sql: RAND() ;;
+  }
+
   dimension: c_temp {
     type: number
     sql: ${TABLE}.cTemp ;;

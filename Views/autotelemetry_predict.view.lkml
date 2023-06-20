@@ -4,7 +4,7 @@ view: autotelemetry_predict {
 
   dimension: battery {
     type: number
-    sql: ${TABLE}.battery ;;
+    sql: ${TABLE}.battery - (CASE WHEN RAND() > 0.5 THEN RAND() * -1 ELSE RAND() END) ;;
   }
 
   dimension: c_temp {
@@ -69,7 +69,7 @@ view: autotelemetry_predict {
 
   dimension: speed {
     type: number
-    sql: ${TABLE}.speed ;;
+    sql: ${TABLE}.speed - (CASE WHEN RAND() > 0.5 THEN RAND() * -1 ELSE RAND() END);;
   }
 
   dimension: t_adv {

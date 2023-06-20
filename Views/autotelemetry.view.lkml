@@ -7,9 +7,19 @@ view: autotelemetry {
     sql: ${TABLE}.accData ;;
   }
 
+  dimension: random {
+    type: number
+    sql: RAND() ;;
+  }
+
   dimension: battery {
     type: number
     sql: ${TABLE}.battery ;;
+  }
+
+  dimension: battery_predicted {
+    type: number
+    sql: ${TABLE}.battery - (CASE WHEN RAND() > 0.5 THEN RAND() * -2000 ELSE RAND() * 2000 END);;
   }
 
   dimension: c_temp {
@@ -82,6 +92,8 @@ view: autotelemetry {
     timeframes: [
       raw,
       time,
+      time_of_day,
+      hour_of_day,
       date,
       week,
       month,
