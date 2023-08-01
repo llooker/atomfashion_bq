@@ -1,4 +1,4 @@
-connection: "looker-private-demo"
+connection: "@{connection}"
 
 include: "/Views/**/*.view.lkml"
 include: "/Views/*.view.lkml" # include all views in the views/ folder in this project
