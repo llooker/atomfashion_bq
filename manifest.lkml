@@ -23,3 +23,14 @@ constant: drill_link_2 {
   {{endif}}
 "
 }
+
+
+constant: connection {
+  value: "looker_bq_hub"
+  export: override_required
+}
+
+constant: schema {
+  value: "ecomm_hub"
+  export: override_required
+}

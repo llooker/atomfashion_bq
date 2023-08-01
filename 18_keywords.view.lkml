@@ -1,11 +1,11 @@
 view: keywords {
-  sql_table_name:ecomm.keywords ;;
+  sql_table_name:@{schema}.keywords ;;
 
   ## ATOM.VIEW SQL
-    # create view daveward-ps-dev.ecomm.keywords as
+    # create view @{schema}.keywords as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
-    # from ecomm.keywords
+    # from @{schema}.keywords
 
   dimension: keyword_id {
     primary_key: yes

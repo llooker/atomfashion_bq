@@ -1,7 +1,7 @@
 view: users {
   # derived_table: {
   #   sql:
-  #   select * from ecomm.atom_users
+  #   select * from @{schema}.atom_users
   #   limit {% parameter rows_per_page %}
   #       offset {{ rows_per_page._parameter_value | times: page_number._parameter_value | minus: rows_per_page._parameter_value }}
   #   ;;
@@ -19,13 +19,13 @@ view: users {
   # }
 
 
-  sql_table_name: ecomm.atom_users ;;
+  sql_table_name: @{schema}.atom_users ;;
 
   ## ATOM.VIEW SQL
-  #   create view daveward-ps-dev.ecomm.users as
+  #   create view @{schema}.users as
   #     select *,
   #     DATEADD(d,1,created_at) as created_at_advance
-  #     from ecomm.users
+  #     from @{schema}.users
 
 
   ## Demographics ##

@@ -1,5 +1,5 @@
 view: order_items {
-  sql_table_name: ecomm.atom_order_items ;;
+  sql_table_name: @{schema}.atom_order_items ;;
 
     ## ATOM.VIEW SQL
   #   create view atom.order_items as
@@ -8,7 +8,7 @@ view: order_items {
   #     DATEADD(d,1,delivered_at) as delivered_at_advance,
   #     DATEADD(d,1,shipped_at) as shipped_at_advance,
   #     DATEADD(d,1,returned_at) as returned_at_advance
-  #     from ecomm.order_items
+  #     from @{schema}.order_items
 
   ########## IDs, Foreign Keys, Counts ###########
 

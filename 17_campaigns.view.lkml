@@ -1,15 +1,15 @@
 view: campaigns {
 
   ## ATOM.VIEW SQL
-    # create view daveward-ps-dev.ecomm.campaigns as
+    # create view @{schema}.campaigns as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
-    # from ecomm.campaigns
+    # from @{schema}.campaigns
 
   derived_table: {
     datagroup_trigger: every_day
     sql: SELECT *
-      FROM   ecomm.atom_campaigns
+      FROM   @{schema}.atom_campaigns
       UNION ALL
       SELECT 9999                 AS id,
       NULL                        AS advertising_channel,

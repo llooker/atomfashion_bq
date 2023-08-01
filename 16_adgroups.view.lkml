@@ -1,12 +1,12 @@
 view: adgroups {
   view_label: "Ad Groups"
-  sql_table_name: ecomm.atom_ad_groups ;;
+  sql_table_name: @{schema}.atom_ad_groups ;;
 
   ## ATOM.VIEW SQL
-    # create view daveward-ps-dev.ecomm.ad_groups as
+    # create view @{schema}.ad_groups as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
-    # from ecomm.ad_groups
+    # from @{schema}.ad_groups
 
   dimension: ad_id {
     primary_key: yes

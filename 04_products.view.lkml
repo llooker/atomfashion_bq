@@ -1,8 +1,8 @@
 view: products {
-  sql_table_name: ecomm.atom_products ;;
+  sql_table_name: @{schema}.atom_products ;;
 
   ## ATOM.VIEW SQL
-  #   create view ecomm.products as
+  #   create view @{schema}.products as
   #     select *,
   #     CASE WHEN LEFT(brand, 1) in ('A', 'B', 'N', 'P') or brand = 'Columbia' THEN 'Columbia'
   #                   WHEN LEFT(brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or brand = 'Calvin Klein' THEN 'Calvin Klein'
@@ -10,7 +10,7 @@ view: products {
   #                   WHEN LEFT(brand, 1) in ('L', 'G', 'O') THEN 'Levi''s'
   #                   ELSE 'Dockers'
   #               END as brand_name
-  #     from ecomm.products
+  #     from @{schema}.products
 
 
   dimension: id {

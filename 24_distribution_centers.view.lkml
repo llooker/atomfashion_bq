@@ -1,5 +1,5 @@
 view: distribution_centers {
-  sql_table_name: ecomm.distribution_centers ;;
+  sql_table_name: @{schema}.distribution_centers ;;
 
   dimension: id {
     primary_key: yes

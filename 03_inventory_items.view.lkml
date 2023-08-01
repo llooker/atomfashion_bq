@@ -1,12 +1,12 @@
 view: inventory_items {
-  sql_table_name: ecomm.atom_inventory_items ;;
+  sql_table_name: @{schema}.atom_inventory_items ;;
 
 ## ATOM.VIEW SQL
-  #   create view ecomm.inventory_items as
+  #   create view @{schema}.inventory_items as
   #     select *,
   #     DATEADD(d,1,created_at) as created_at_advance,
   #     DATEADD(d,1,sold_at) as sold_at_advance
-  #     from ecomm.inventory_items
+  #     from @{schema}.inventory_items
 
   ## DIMENSIONS ##
 

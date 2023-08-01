@@ -7,9 +7,9 @@ view: projected_revenue {
         FROM (
         SELECT PRODUCTS.BRAND                                                AS BRAND,
                DATE_ADD('2014-01-01', INTERVAL F.NUMBER DAY)                 AS DAY
-        FROM ecomm.atom_order_items as order_items
-        LEFT JOIN ecomm.atom_inventory_items as inventory_items ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
-        LEFT JOIN ecomm.atom_products as products ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
+        FROM @{schema}.atom_order_items as order_items
+        LEFT JOIN @{schema}.atom_inventory_items as inventory_items ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
+        LEFT JOIN @{schema}.atom_products as products ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
         CROSS JOIN (SELECT number FROM UNNEST(GENERATE_ARRAY(0,3649)) AS number) F
 
         GROUP BY 1,2
@@ -24,9 +24,9 @@ DAILY_HISTORY AS
                         EXTRACT(YEAR FROM ORDER_ITEMS.CREATED_AT)                                             AS YEAR,
                         CAST(ORDER_ITEMS.CREATED_AT as date)                                                       AS DAY,
                         SUM(SALE_PRICE)                                                                       AS REVENUE
-               FROM     ecomm.atom_order_items as order_items
-               LEFT JOIN ecomm.atom_inventory_items as inventory_items ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
-               LEFT JOIN ecomm.atom_products as products ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
+               FROM     @{schema}.atom_order_items as order_items
+               LEFT JOIN @{schema}.atom_inventory_items as inventory_items ON ORDER_ITEMS.INVENTORY_ITEM_ID = INVENTORY_ITEMS.ID
+               LEFT JOIN @{schema}.atom_products as products ON INVENTORY_ITEMS.PRODUCT_ID = PRODUCTS.ID
                GROUP BY 1,2,3) D)
 
 SELECT  ROW_NUMBER() OVER (ORDER BY DAY) AS PK,
