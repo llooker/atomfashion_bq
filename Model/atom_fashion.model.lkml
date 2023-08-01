@@ -5,7 +5,8 @@ label: "Atom Fashion"
 include: "/*.view"
 include: "/Dashboards/*.dashboard"
 include: "/Model/z_aggregates.lkml"
-
+include: "/Explores/order_items.explore.lkml"
+include: "/Explores/users.explore.lkml"
 # include all the dashboards
 # include: "*.dashboard"
 persist_with: every_day
@@ -37,125 +38,6 @@ datagroup: ecommerce_etl {
 ########################################
 ############## Base Explores ###########
 ########################################
-
-explore: order_items {
-  label: "(1) Order Information"
-  description: "All information related to Orders placed including shipping information, user facts, and product information"
-  view_name: order_items
-  # access_filter: {
-  #   field: products.brand
-  #   user_attribute: brand
-  # }
-  # access_filter: {
-  #   field: order_items.created_date
-  #   user_attribute: time_horizon
-  # }
-#   sql_always_where: ${order_items.created_date} <= current_date() ;;
-
-  join: order_facts {
-    view_label: "Orders"
-    relationship: many_to_one
-    sql_on: ${order_facts.order_id} = ${order_items.order_id} ;;
-  }
-
-  join: inventory_items {
-    type: left_outer
-    relationship: one_to_one
-    sql_on: ${inventory_items.id} = ${order_items.inventory_item_id} ;;
-  }
-
-  join: users {
-    type: left_outer
-    relationship: many_to_one
-    sql_on: ${order_items.user_id} = ${users.id} ;;
-  }
-
-  join: city_sales_tax {
-    type: inner
-    sql_on: ${users.city} = ${city_sales_tax.city}
-          AND ${users.state} = ${city_sales_tax.state}
-          AND ${users.country} = ${city_sales_tax.country}
-      ;;
-    relationship: many_to_one
-  }
-
-  join: user_order_facts {
-    view_label: "Users"
-    relationship: many_to_one
-    sql_on: ${user_order_facts.user_id} = ${order_items.user_id} ;;
-  }
-
-  join: products {
-    relationship: many_to_one
-    sql_on: ${products.id} = ${inventory_items.product_id} ;;
-  }
-
-  join: repeat_purchase_facts {
-    relationship: many_to_one
-    type: full_outer
-    sql_on: ${order_items.order_id} = ${repeat_purchase_facts.order_id} ;;
-  }
-
-  join: distribution_centers {
-    type: left_outer
-    sql_on: ${distribution_centers.id} = ${inventory_items.product_distribution_center_id} ;;
-    relationship: many_to_one
-  }
-
-  join: best_day_ever {
-    view_label: "Order Items"
-    type: inner
-    sql_on: ${order_items.created_date} = ${best_day_ever.created_date} ;;
-    relationship: many_to_one
-  }
-}
-
-explore: users {
-  description: "Please update rows per page and page number parameters"
-  # always_filter: {
-  #   filters: [users.rows_per_page: "50",users.page_number: "1"]
-  # }
-  label: "(8) User Cohort Analysis"
-  fields: [ALL_FIELDS*, -order_items.tax_amount, -order_items.days_until_next_order]
-  join: order_items {
-    type: left_outer
-    sql_on: ${users.id} = ${order_items.user_id} ;;
-    relationship: one_to_many
-  }
-
-  join: inventory_items {
-    type: left_outer
-    sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
-    relationship: one_to_one
-  }
-
-  join: products {
-    type: left_outer
-    sql_on: ${inventory_items.product_id} = ${products.id} ;;
-    relationship: many_to_one
-  }
-
-  join: user_order_facts {
-    view_label: "Users"
-    type: left_outer
-    relationship: one_to_one
-    sql_on: ${users.id} = ${user_order_facts.user_id} ;;
-  }
-
-  join: order_facts {
-    view_label: "Orders"
-    type: left_outer
-    relationship: many_to_one
-    sql_on: ${order_items.order_id} = ${order_facts.order_id}  ;;
-  }
-
-  join: user_cohort {
-    view_label: "0.Build User Cohort"
-    type: inner
-    sql_on: ${users.id} = ${user_cohort.id} ;;
-    relationship: one_to_one
-  }
-}
 
 explore: projected_revenue {
   label: "(7) Projected Revenue"
