@@ -34,3 +34,8 @@ constant: schema {
   value: "ecomm_hub"
   export: override_required
 }
+
+constant: brand_name {
+  value: "Nike"
+  export: override_optional
+}
