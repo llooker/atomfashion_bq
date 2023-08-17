@@ -39,7 +39,7 @@ view: users {
     sql: ${TABLE}.id ;;
     tags: ["atom-notification"]
     drill_fields: [detail*]
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: first_name {
@@ -55,7 +55,7 @@ view: users {
   dimension: name {
     sql: initcap(${first_name} || ' ' || ${last_name}) ;;
     drill_fields: [detail*]
-    #html: @{drill_link} ;;
+    
   }
 
   measure: count_of_davids2 {
@@ -68,7 +68,7 @@ view: users {
     type: number
     sql: ${TABLE}.age ;;
     drill_fields: [detail*]
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: age_tier {
@@ -87,7 +87,7 @@ view: users {
     style: integer
     sql: ${age} ;;
     drill_fields: [detail*]
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: generation {
@@ -164,13 +164,13 @@ view: users {
       }
     }
     required_fields: [name]
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: image_file {
     hidden: yes
     sql: ('http://www.looker.com/_content/docs/99-hidden/images/'||${gender_short}||'.jpg') ;;
-    #html: @{drill_link} ;;
+    
   }
 
   ## Demographics ##
@@ -178,7 +178,7 @@ view: users {
   dimension: city {
     sql: ${TABLE}.city ;;
     drill_fields: [detail*]
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: state {
@@ -186,7 +186,7 @@ view: users {
     map_layer_name: us_states
     sql: ${TABLE}.state ;;
     drill_fields: [detail*]
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: state_region {
@@ -222,20 +222,20 @@ view: users {
       else: "Not In US"
     }
     alpha_sort: yes
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: zip {
     drill_fields: [detail*]
     type: zipcode
     sql: ${TABLE}.zip ;;
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: country {
     drill_fields: [detail*]
     sql: ${TABLE}.country ;;
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: location {
@@ -243,7 +243,7 @@ view: users {
     type: location
     sql_latitude: ${TABLE}.latitude ;;
     sql_longitude: ${TABLE}.longitude ;;
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: approx_location {
@@ -251,7 +251,7 @@ view: users {
     type: location
     sql_latitude: round(${TABLE}.latitude,1) ;;
     sql_longitude: round(${TABLE}.longitude,1) ;;
-    #html: @{drill_link} ;;
+    
   }
 
   ## Other User Information ##
@@ -262,20 +262,20 @@ view: users {
     description: "Date a user account was first created"
     timeframes: [time, date, week, month, raw]
     sql: ${TABLE}.created_at_advance ;;
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: history {
     sql: ${TABLE}.id ;;
     html: <a href="/explore/thelook/order_items?fields=order_items.detail*&f[users.id]={{ value }}">Order History</a>
       ;;
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: traffic_source {
     sql: ${TABLE}.traffic_source ;;
     drill_fields: [detail*]
-    #html: @{drill_link} ;;
+    
   }
 
   ## MEASURES ##
@@ -284,7 +284,7 @@ view: users {
     description: "Count of the distinct number of Users"
     type: count
     drill_fields: [detail*]
-    #html: @{drill_link} ;;
+    
   }
 
   measure: count_percent_of_total {
@@ -292,35 +292,35 @@ view: users {
     type: percent_of_total
     value_format_name: decimal_1
     sql: ${count} ;;
-    #html: @{drill_link} ;;
+    
   }
 
   measure: average_age {
     type: average
     value_format_name: decimal_2
     sql: ${age} ;;
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: is_user_created_in_last_60_days {
     hidden: yes
     type: yesno
     sql: date_diff( ${created_date}, current_date(), days) < 60 ;;
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: is_user_created_in_last_month {
     hidden: yes
     type: yesno
     sql: date_diff( ${created_date}, current_date(), days) < 30 ;;
-    #html: @{drill_link} ;;
+    
   }
 
   dimension: is_user_created_in_last_day {
     hidden: yes
     type: yesno
     sql: ${created_date} = current_date()-7 ;;
-    #html: @{drill_link} ;;
+    
   }
 
   measure: count_users_this_month {
