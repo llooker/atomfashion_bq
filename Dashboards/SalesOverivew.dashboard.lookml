@@ -1,17 +1,20 @@
 - dashboard: sales_overview
   title: Sales Overview
   layout: newspaper
+  description: ''
+  preferred_slug: PEdgnAL0iZ21489OgKCl3v
   elements:
-  - title: Sales and Returns this Quarter
-    name: Sales and Returns this Quarter
+  - title: Sales, Returns & Tax this Quarter
+    name: Sales, Returns & Tax this Quarter
     model: atom_fashion
     explore: order_items
     type: looker_line
-    fields: [order_items.total_sale_price, order_items.created_date, order_items.total_returns]
+    fields: [order_items.total_sale_price, order_items.created_date, order_items.total_returns,
+      order_items.total_tax_amount]
     fill_fields: [order_items.created_date]
-    filters: {}
     sorts: [order_items.created_date]
     limit: 500
+    column_limit: 50
     query_timezone: America/Los_Angeles
     x_axis_gridlines: false
     y_axis_gridlines: true
@@ -44,7 +47,6 @@
             id: order_items.total_returns, name: Total Returns}], showLabels: true,
         showValues: true, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
         type: linear}]
-    series_types: {}
     series_colors:
       order_items.total_sale_price: "#295cf5"
       order_items.total_returns: "#f5ac1e"
@@ -63,7 +65,6 @@
     fields: [order_items.created_date, order_facts.is_first_purchase, order_items.order_count]
     pivots: [order_facts.is_first_purchase]
     fill_fields: [order_items.created_date, order_facts.is_first_purchase]
-    filters: {}
     sorts: [order_items.created_date desc, order_facts.is_first_purchase]
     limit: 500
     query_timezone: America/Los_Angeles
@@ -94,7 +95,6 @@
     show_totals_labels: false
     show_silhouette: false
     totals_color: "#808080"
-    series_types: {}
     series_colors:
       order_items.total_sale_price: "#295cf5"
       No - order_items.order_count: "#295cf5"
@@ -115,7 +115,6 @@
     type: single_value
     fields: [order_items.total_sale_price, order_items.order_count, order_items.average_days_to_process,
       order_items.average_spend_per_user]
-    filters: {}
     limit: 500
     custom_color_enabled: true
     show_single_value_title: true
@@ -155,7 +154,6 @@
     show_silhouette: false
     totals_color: "#808080"
     defaults_version: 1
-    series_types: {}
     listen:
       Date: order_items.created_date
     row: 0
@@ -169,7 +167,6 @@
     type: single_value
     fields: [order_items.total_sale_price, order_items.order_count, order_items.average_days_to_process,
       order_items.average_spend_per_user]
-    filters: {}
     limit: 500
     custom_color_enabled: true
     show_single_value_title: true
@@ -209,7 +206,6 @@
     show_silhouette: false
     totals_color: "#808080"
     defaults_version: 1
-    series_types: {}
     hidden_fields: [order_items.total_sale_price]
     listen:
       Date: order_items.created_date
@@ -224,7 +220,6 @@
     type: single_value
     fields: [order_items.total_sale_price, order_items.order_count, order_items.average_days_to_process,
       order_items.average_spend_per_user]
-    filters: {}
     limit: 500
     custom_color_enabled: true
     show_single_value_title: true
@@ -264,7 +259,6 @@
     show_silhouette: false
     totals_color: "#808080"
     defaults_version: 1
-    series_types: {}
     hidden_fields: [order_items.total_sale_price, order_items.order_count]
     listen:
       Date: order_items.created_date
@@ -279,7 +273,6 @@
     type: single_value
     fields: [order_items.total_sale_price, order_items.order_count, order_items.average_days_to_process,
       order_items.average_spend_per_user]
-    filters: {}
     limit: 500
     custom_color_enabled: true
     show_single_value_title: true
@@ -319,7 +312,6 @@
     show_silhouette: false
     totals_color: "#808080"
     defaults_version: 1
-    series_types: {}
     hidden_fields: [order_items.total_sale_price, order_items.order_count, order_items.average_days_to_process]
     listen:
       Date: order_items.created_date
@@ -385,7 +377,6 @@
     show_silhouette: false
     totals_color: "#808080"
     defaults_version: 1
-    series_types: {}
     listen:
       Date: order_items.created_date
     row: 20
@@ -425,7 +416,6 @@
     map_longitude: -93.27742338180543
     map_zoom: 4
     map_value_colors: [red, blue]
-    series_types: {}
     defaults_version: 1
     listen:
       Date: order_items.created_date
@@ -440,6 +430,9 @@
     default_value: this quarter
     allow_multiple_values: true
     required: false
+    ui_config:
+      type: advanced
+      display: popover
     model: atom_fashion
     explore: order_items
     listens_to_filters: []
