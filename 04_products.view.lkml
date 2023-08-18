@@ -116,35 +116,46 @@ view: products {
     sql: INITCAP(${TABLE}.brand) ;;
   }
 
+  dimension: brandlink {
+    hidden: no
+    type: string
+    sql: lower(regexp_replace(${TABLE}.brand_name , '[^a-zA-Z0-9]', '')) ;;
+  }
+
   dimension: brand {
         sql: trim(${TABLE}.brand_name) ;;
-
-#     sql: CASE WHEN LEFT(${TABLE}.brand, 1) in ('A', 'B', 'N', 'P') or ${TABLE}.brand = 'Columbia' THEN 'Columbia'
-#               WHEN LEFT(${TABLE}.brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or ${TABLE}.brand = 'Calvin Klein' THEN 'Calvin Klein'
-#               WHEN LEFT(${TABLE}.brand, 1) in ('C', 'H', 'I','R') THEN 'Carhartt'
-#               WHEN LEFT(${TABLE}.brand, 1) in ('L', 'G', 'O') THEN 'Levi''s'
-#               ELSE 'Dockers'
-#           END;;
-
-
-    link: {
-      label: "Website"
-      url: "http://www.google.com/search?q={{ value | encode_uri }}+clothes&btnI"
-      icon_url: "http://www.google.com/s2/favicons?domain=www.{{ value | encode_uri }}.com"
-    }
-
-    link: {
-      label: "Facebook"
-      url: "http://www.google.com/search?q=site:facebook.com+{{ value | encode_uri }}+clothes&btnI"
-      icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
-    }
-
-#     link: {
-#       label: "Brand Analytics Dashboard"
-#       url: "/dashboards/5?Brand%20Name={{ value | encode_uri }}"
-#       icon_url: "http://www.looker.com/favicon.ico"
-#     }
-  }
+      type: string
+      html:{{value}} <img src = "http://www.google.com/s2/favicons?domain={{brandlink._value}}.com" /> ;;
+      link: {
+        label: "Google search for {{value}}"
+        url: "https://www.google.com/search?q={{value}}"
+        icon_url: "https://www.google.com/favicon.ico"
+      }
+      link: {
+        label: "{{value}} Dashboard"
+        url: "/dashboards/3?Brand={{value}}"
+        icon_url: "https://www.google.com/s2/favicons?domain=looker.com"
+      }
+      link: {
+        label: "{{value}} website"
+        url: "http://www.{{brandlink._rendered_value}}.com"
+        icon_url: "http://www.google.com/s2/favicons?domain={{brandlink._value}}.com"
+      }
+      link: {
+        label: "{{value}} Facebook Page"
+        url: "https://www.facebook.com/{{brandlink._value}}"
+        icon_url: "https://www.google.com/s2/favicons?domain=facebook.com"
+      }
+      action: {
+        label: "Send a query to the Marketing Team about {{ value }}"
+        icon_url: "http://www.google.com/s2/favicons?domain={{brandlink._value}}.com"
+        url: "https://fashionlydw.free.beeceptor.com"
+        param: {
+          name: "Message Query about this brand"
+          value: "Hi I would like to make a query about {{ value }}  "
+        }
+      }
+     }
 
   dimension: retail_price {
     type: number
@@ -230,6 +241,7 @@ view: products {
       category,
       department,
       retail_price,
+      brandlink,
       count
     ]
   }
