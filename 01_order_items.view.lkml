@@ -12,58 +12,6 @@ view: order_items {
 
   ########## IDs, Foreign Keys, Counts ###########
 
-  dimension: today_from_user_attribute {
-    type: string
-    sql:
-   'test'
-    ;;
-    html:
-    {% assign current_day_of_month = 'now' | date: '%-d' %}
-
-    {% if current_day_of_month == '14' %}
-      true
-    {% else %}
-    false
-    {% endif %}
-    ;;
-
-  }
-
-
-  dimension: week_from_user_attribute {
-    type: string
-    sql:
-       'test'
-        ;;
-    html:
-    {% assign current_day_of_week = 'now' | date: '%w'  %}
-
-  {% if current_day_of_week == '4' %}
-    true
-  {% else %}
-    {{ current_day_of_week }}
-  {% endif %}
-
-          ;;
-
-  }
-
-  dimension: combined {
-    type: string
-    sql:
-    {% assign current_day_of_month = 'now' | date: '%-d' %}
-    {% assign current_day_of_week = 'now' | date: '%w'  %}
-    {% if current_day_of_month == '1' %}
-    'use day of month'
-    {% elsif current_day_of_week == '1' %}
-    'Use day of week'
-    {% else %}
-    'Use Normal Date'
-    {% endif %}
-    ;;
-
-  }
-
   dimension: id {
     primary_key: yes
     type: number
@@ -466,6 +414,59 @@ view: order_items {
     sql: 1.0 * ${count_with_repeat_purchase_within_30d} / (CASE WHEN ${count} = 0 THEN NULL ELSE ${count} END) ;;
     drill_fields: [products.brand, order_count, count_with_repeat_purchase_within_30d]
   }
+
+    dimension: today_from_user_attribute {
+      type: string
+      sql:
+         'test'
+          ;;
+      html:
+          {% assign current_day_of_month = 'now' | date: '%-d' %}
+
+            {% if current_day_of_month == '14' %}
+              true
+            {% else %}
+            false
+            {% endif %}
+            ;;
+
+    }
+
+
+    dimension: week_from_user_attribute {
+      type: string
+      sql:
+       'test'
+        ;;
+      html:
+          {% assign current_day_of_week = 'now' | date: '%w'  %}
+
+          {% if current_day_of_week == '4' %}
+            true
+          {% else %}
+            {{ current_day_of_week }}
+          {% endif %}
+
+        ;;
+
+    }
+
+    dimension: combined {
+      type: string
+      sql:
+          {% assign current_day_of_month = 'now' | date: '%-d' %}
+          {% assign current_day_of_week = 'now' | date: '%w'  %}
+          {% if current_day_of_month == '1' %}
+          'use day of month'
+          {% elsif current_day_of_week == '1' %}
+          'Use day of week'
+          {% else %}
+          'Use Normal Date'
+          {% endif %}
+          ;;
+
+    }
+
 
 ########## Dynamic Sales Cohort App ##########
 
