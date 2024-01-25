@@ -52,6 +52,7 @@ view: inventory_items {
   }
 
   dimension: days_in_inventory_tier {
+    description: "Tiered groupings of the number of days in inventory broken out doubled groupings"
     type: tier
     sql: ${days_in_inventory} ;;
     style: integer
