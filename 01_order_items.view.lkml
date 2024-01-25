@@ -12,6 +12,11 @@ view: order_items {
 
   ########## IDs, Foreign Keys, Counts ###########
 
+  measure: count_of_ids {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
   dimension: id {
     primary_key: yes
     type: number
@@ -58,7 +63,6 @@ view: order_items {
     sql: ${order_id} ;;
     filters: {
       field: order_facts.is_first_purchase
-      value: "Yes"
     }
     drill_fields: [user_id, users.name, users.email, order_id, created_date, users.traffic_source]
   }
@@ -281,6 +285,8 @@ view: order_items {
   }
 
   measure: total_sale_price {
+    label: "Total Sales"
+    description: "a sum of our sales price"
     type: sum
     value_format_name: usd
     sql: ${sale_price} ;;
