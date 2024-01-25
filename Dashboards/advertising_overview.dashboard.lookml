@@ -1,7 +1,9 @@
 - dashboard: advertising_pulse
   title: Advertising Pulse
   layout: newspaper
+  description: ''
   query_timezone: user_timezone
+  preferred_slug: jBbzWGLvMHsPrt2sIm8br5
   embed_style:
     background_color: "#f6f8fa"
     show_title: false
@@ -12,6 +14,7 @@
   elements:
   - title: Total Clicks by Channel
     name: Total Clicks by Channel
+    model: atom_fashion
     explore: events
     type: looker_column
     fields: [adevents.total_clicks, campaigns.advertising_channel, adevents.created_date]
@@ -21,6 +24,7 @@
       campaigns.advertising_channel: "-NULL"
     sorts: [campaigns.advertising_channel, adevents.created_date desc]
     limit: 500
+    query_timezone: America/Los_Angeles
     stacking: normal
     show_value_labels: false
     label_density: 25
@@ -48,7 +52,6 @@
     show_null_points: true
     point_style: circle
     interpolation: monotone
-    query_timezone: America/Los_Angeles
     column_spacing_ratio:
     column_group_spacing_ratio:
     colors: ["#294988", "#87d79b", "#476d70", "#294259", "#747474"]
@@ -64,6 +67,7 @@
     height: 7
   - title: Clicks Over Time
     name: Clicks Over Time
+    model: atom_fashion
     explore: events
     type: looker_area
     fields: [adevents.cost_per_click, adevents.total_clicks, adevents.created_date]
@@ -117,13 +121,15 @@
     series_colors: {}
     x_axis_datetime_label: "%b %d"
     hidden_fields: []
-    listen: {}
+    listen:
+      Date: adevents.created_date
     row: 9
     col: 0
     width: 12
     height: 7
   - title: Active Views
     name: Active Views
+    model: atom_fashion
     explore: events
     type: single_value
     fields: [adevents.total_viewability, adevents.total_impressions, adevents.total_clicks,
@@ -177,6 +183,7 @@
     height: 5
   - title: CPM
     name: CPM
+    model: atom_fashion
     explore: events
     type: single_value
     fields: [adevents.total_viewability, adevents.total_impressions, adevents.total_clicks,
@@ -229,6 +236,7 @@
     height: 5
   - title: Cost Per Click
     name: Cost Per Click
+    model: atom_fashion
     explore: events
     type: single_value
     fields: [campaigns.advertising_channel, adevents.total_viewability, adevents.total_impressions,
@@ -280,6 +288,7 @@
     height: 5
   - title: Clicks
     name: Clicks
+    model: atom_fashion
     explore: events
     type: single_value
     fields: [campaigns.advertising_channel, adevents.total_viewability, adevents.total_clicks,
@@ -330,6 +339,7 @@
     height: 5
   - title: Conversions
     name: Conversions
+    model: atom_fashion
     explore: events
     type: looker_column
     fields: [adevents.total_impressions, adevents.total_clicks, session_purchase_facts.total_purchases]
@@ -401,24 +411,25 @@
     col: 16
     width: 8
     height: 5
-  - title: Active Campaigns - Timeline
-    name: Active Campaigns - Timeline
+  - title: Inactive Campaigns - Timeline
+    name: Inactive Campaigns - Timeline
+    model: atom_fashion
     explore: events
     type: looker_timeline
     fields: [campaigns.campaign_name, campaigns.created_date, campaigns.end_date,
       session_purchase_facts.ROI]
     filters:
-      campaigns.is_active_now: 'Yes'
       session_purchase_facts.ROI: NOT NULL
       session_purchase_facts.revenue: ">20"
+      campaigns.is_active_now: 'No'
     sorts: [campaigns.created_date]
     limit: 500
     column_limit: 50
     query_timezone: America/Los_Angeles
-    barColors: ["#87d79b", "#294988"]
     groupBars: true
     labelSize: 10pt
     showLegend: true
+    barColors: ["#87d79b", "#294988"]
     stacking: ''
     show_value_labels: false
     label_density: 25
@@ -464,6 +475,7 @@
     colors: ['palette: Looker Classic']
     series_colors: {}
     y_axes: []
+    defaults_version: 1
     listen:
       Date: adevents.created_date
     row: 19
@@ -472,6 +484,7 @@
     height: 8
   - title: Revenue Target
     name: Revenue Target
+    model: atom_fashion
     explore: events
     type: looker_line
     fields: [events.event_week, session_purchase_facts.revenue, campaigns.bid_type]
@@ -555,13 +568,15 @@
     conditional_formatting_include_nulls: false
     hidden_fields: [session_purchase_facts.total_attribution, quota, revenue_adjusted,
       events.event_week, session_purchase_facts.revenue, total_revenue_won]
-    listen: {}
+    listen:
+      Date: adevents.created_date
     row: 27
     col: 0
     width: 12
     height: 6
   - title: Budget Target
     name: Budget Target
+    model: atom_fashion
     explore: events
     type: looker_line
     fields: [events.event_week, adevents.total_cost, campaigns.bid_type]
@@ -646,13 +661,15 @@
     conditional_formatting_include_nulls: false
     hidden_fields: [quota, adevents.total_cost, spend_adjusted, events.event_week,
       total_spent]
-    listen: {}
+    listen:
+      Date: adevents.created_date
     row: 33
     col: 0
     width: 12
     height: 5
   - title: Ad Spend
     name: Ad Spend
+    model: atom_fashion
     explore: events
     type: single_value
     fields: [events.previous_period, adevents.total_cost]
@@ -711,6 +728,7 @@
     height: 4
   - title: Revenue
     name: Revenue
+    model: atom_fashion
     explore: events
     type: single_value
     fields: [events.previous_period, session_purchase_facts.revenue]
@@ -768,14 +786,15 @@
     col: 0
     width: 4
     height: 4
-  - title: Active Campaigns - Performance Waterfall
-    name: Active Campaigns - Performance Waterfall
+  - title: inactive Campaigns - Performance Waterfall
+    name: inactive Campaigns - Performance Waterfall
+    model: atom_fashion
     explore: events
     type: looker_column
     fields: [campaigns.campaign_name, session_purchase_facts.net_profit]
     filters:
       campaigns.campaign_name_raw: "-NULL"
-      campaigns.is_active_now: 'Yes'
+      campaigns.is_active_now: 'No'
       adevents.total_cost: ">0"
     sorts: [session_purchase_facts.net_profit desc]
     limit: 500
@@ -795,25 +814,28 @@
       {table_calculation: loss_, label: Loss-, expression: 'if(${session_purchase_facts.net_profit}<0,${session_purchase_facts.net_profit}+${loss},0)',
         value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number}]
     query_timezone: America/Los_Angeles
-    stacking: normal
-    show_value_labels: false
-    label_density: 25
-    legend_position: center
     x_axis_gridlines: false
     y_axis_gridlines: true
     show_view_names: false
-    limit_displayed_rows: false
-    y_axis_combined: true
     show_y_axis_labels: true
     show_y_axis_ticks: true
     y_axis_tick_density: default
     y_axis_tick_density_custom: 5
     show_x_axis_label: false
     show_x_axis_ticks: true
-    x_axis_scale: auto
     y_axis_scale_mode: linear
     x_axis_reversed: false
     y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
     ordering: none
     show_null_labels: false
     show_totals_labels: false
@@ -847,7 +869,9 @@
       show_hide: show
       first_last: first
       num_rows: '4'
-    listen: {}
+    defaults_version: 1
+    listen:
+      Date: adevents.created_date
     row: 33
     col: 12
     width: 12
@@ -855,7 +879,6 @@
   - name: "<span class='fa fa-laptop'> Clicks and Impressions</span>"
     type: text
     title_text: "<span class='fa fa-laptop'> Clicks and Impressions</span>"
-    subtitle_text: ''
     row: 0
     col: 0
     width: 24
@@ -895,6 +918,7 @@
     height: 3
   - title: Q Over Q Tracking Revenue Target
     name: Q Over Q Tracking Revenue Target
+    model: atom_fashion
     explore: events
     type: looker_line
     fields: [campaigns.day_of_quarter, campaigns.created_quarter, session_purchase_facts.revenue]
@@ -972,12 +996,11 @@
     height: 6
   - title: Top Spend Campaigns
     name: Top Spend Campaigns
+    model: atom_fashion
     explore: sessions
     type: looker_grid
     fields: [campaigns.campaign_name, adevents.total_cost, session_attribution.ROI,
       session_attribution.total_attribution]
-    filters:
-      adevents.created_quarter: 2019-Q4
     sorts: [adevents.total_cost desc 0, session_attribution.ROI desc]
     limit: 10
     column_limit: 50
@@ -989,6 +1012,14 @@
     hide_totals: false
     hide_row_totals: false
     size_to_fit: false
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: true
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
     series_labels:
       session_attribution.total_attribution: Revenue
     series_column_widths:
@@ -1001,26 +1032,20 @@
         is_active: false
       session_attribution.ROI:
         is_active: false
-    table_theme: white
-    limit_displayed_rows: false
-    enable_conditional_formatting: true
-    header_text_alignment: left
-    header_font_size: '12'
-    rows_font_size: '12'
     conditional_formatting: [{type: less than, value: 0, background_color: '', font_color: "#ff1225",
         color_application: {collection_id: f14810d2-98d7-42df-82d0-bc185a074e42, palette_id: 90a81bec-f33f-43c9-a36a-0ea5f037dfa0,
           options: {constraints: {min: {type: minimum}, mid: {type: number, value: 0},
               max: {type: maximum}}, mirror: false, reverse: false, stepped: true}},
         bold: false, italic: false, strikethrough: false, fields: [session_attribution.ROI]}]
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
     series_value_format:
       session_attribution.ROI:
         name: percent_0
         format_string: "#,##0%"
         label: Percent (0)
     series_types: {}
-    listen: {}
+    defaults_version: 1
+    listen:
+      Date: adevents.created_date
     row: 27
     col: 12
     width: 12
@@ -1032,12 +1057,11 @@
     default_value: 90 days ago for 90 days
     allow_multiple_values: true
     required: false
+    ui_config:
+      type: advanced
+      display: popover
+      options: []
+    model: atom_fashion
     explore: events
     listens_to_filters: []
     field: adevents.created_date
-  - name: Location
-    title: Location
-    type: string_filter
-    default_value: ''
-    allow_multiple_values: true
-    required: false

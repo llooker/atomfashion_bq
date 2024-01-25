@@ -1,8 +1,8 @@
 view: products {
-  sql_table_name: looker-private-demo.ecomm.atom_products ;;
+  sql_table_name: @{schema}.atom_products ;;
 
   ## ATOM.VIEW SQL
-  #   create view looker-private-demo.ecomm.products as
+  #   create view @{schema}.products as
   #     select *,
   #     CASE WHEN LEFT(brand, 1) in ('A', 'B', 'N', 'P') or brand = 'Columbia' THEN 'Columbia'
   #                   WHEN LEFT(brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or brand = 'Calvin Klein' THEN 'Calvin Klein'
@@ -10,7 +10,7 @@ view: products {
   #                   WHEN LEFT(brand, 1) in ('L', 'G', 'O') THEN 'Levi''s'
   #                   ELSE 'Dockers'
   #               END as brand_name
-  #     from ecomm.products
+  #     from @{schema}.products
 
 
   dimension: id {
@@ -23,27 +23,33 @@ view: products {
     sql: trim(${TABLE}.category) ;;
 
     link: {
+      label: "Go to {{value}} Dashboard"
+      url: "/dashboards/38?Category={{value | url_encode}}"
+      icon_url: "http://www.google.com/s2/favicons?domain=looker.com"
+    }
+
+    link: {
       label: "Google"
       url: "http://www.google.com/search?q={{value}}"
-      icon_url: "http://google.com/favicon.ico"
+      icon_url: "http://www.google.com/s2/favicons?domain=google.com"
     }
 
     link: {
       label: "Wikipedia"
       url: "http://www.google.com/search?q=site:wikipedia.com+{{value}}&btnI"
-      icon_url: "https://en.wikipedia.org/static/favicon/wikipedia.ico"
+      icon_url: "http://www.google.com/s2/favicons?domain=wikipedia.com"
     }
 
     link: {
       label: "Twitter"
       url: "http://www.google.com/search?q=site:twitter.com+{{value}}&btnI"
-      icon_url: "https://abs.twimg.com/favicons/favicon.ico"
+      icon_url: "http://www.google.com/s2/favicons?domain=twitter.com"
     }
 
     link: {
       label: "Facebook"
       url: "http://www.google.com/search?q=site:facebook.com+{{value}}&btnI"
-      icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
+      icon_url: "http://www.google.com/s2/favicons?domain=facebook.com"
     }
 
   }
@@ -110,35 +116,46 @@ view: products {
     sql: INITCAP(${TABLE}.brand) ;;
   }
 
+  dimension: brandlink {
+    hidden: no
+    type: string
+    sql: lower(regexp_replace(${TABLE}.brand_name , '[^a-zA-Z0-9]', '')) ;;
+  }
+
   dimension: brand {
         sql: trim(${TABLE}.brand_name) ;;
-
-#     sql: CASE WHEN LEFT(${TABLE}.brand, 1) in ('A', 'B', 'N', 'P') or ${TABLE}.brand = 'Columbia' THEN 'Columbia'
-#               WHEN LEFT(${TABLE}.brand, 1) in ('D', 'E',  'X', 'J', 'K', 'M', 'W')  or ${TABLE}.brand = 'Calvin Klein' THEN 'Calvin Klein'
-#               WHEN LEFT(${TABLE}.brand, 1) in ('C', 'H', 'I','R') THEN 'Carhartt'
-#               WHEN LEFT(${TABLE}.brand, 1) in ('L', 'G', 'O') THEN 'Levi''s'
-#               ELSE 'Dockers'
-#           END;;
-
-
-    link: {
-      label: "Website"
-      url: "http://www.google.com/search?q={{ value | encode_uri }}+clothes&btnI"
-      icon_url: "http://www.google.com/s2/favicons?domain=www.{{ value | encode_uri }}.com"
-    }
-
-    link: {
-      label: "Facebook"
-      url: "http://www.google.com/search?q=site:facebook.com+{{ value | encode_uri }}+clothes&btnI"
-      icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
-    }
-
-#     link: {
-#       label: "Brand Analytics Dashboard"
-#       url: "/dashboards/5?Brand%20Name={{ value | encode_uri }}"
-#       icon_url: "http://www.looker.com/favicon.ico"
-#     }
-  }
+      type: string
+      html:{{value}} <img src = "http://www.google.com/s2/favicons?domain={{brandlink._value}}.com" /> ;;
+      link: {
+        label: "Google search for {{value}}"
+        url: "https://www.google.com/search?q={{value}}"
+        icon_url: "https://www.google.com/favicon.ico"
+      }
+      link: {
+        label: "{{value}} Dashboard"
+        url: "/dashboards/3?Brand={{value}}"
+        icon_url: "https://www.google.com/s2/favicons?domain=looker.com"
+      }
+      link: {
+        label: "{{value}} website"
+        url: "http://www.{{brandlink._rendered_value}}.com"
+        icon_url: "http://www.google.com/s2/favicons?domain={{brandlink._value}}.com"
+      }
+      link: {
+        label: "{{value}} Facebook Page"
+        url: "https://www.facebook.com/{{brandlink._value}}"
+        icon_url: "https://www.google.com/s2/favicons?domain=facebook.com"
+      }
+      action: {
+        label: "Send a query to the Marketing Team about {{ value }}"
+        icon_url: "http://www.google.com/s2/favicons?domain={{brandlink._value}}.com"
+        url: "https://fashionlydw.free.beeceptor.com"
+        param: {
+          name: "Message Query about this brand"
+          value: "Hi I would like to make a query about {{ value }}  "
+        }
+      }
+     }
 
   dimension: retail_price {
     type: number
@@ -224,6 +241,7 @@ view: products {
       category,
       department,
       retail_price,
+      brandlink,
       count
     ]
   }

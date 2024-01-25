@@ -1,5 +1,5 @@
 view: order_items {
-  sql_table_name: looker-private-demo.ecomm.atom_order_items ;;
+  sql_table_name: @{schema}.atom_order_items ;;
 
     ## ATOM.VIEW SQL
   #   create view atom.order_items as
@@ -8,9 +8,14 @@ view: order_items {
   #     DATEADD(d,1,delivered_at) as delivered_at_advance,
   #     DATEADD(d,1,shipped_at) as shipped_at_advance,
   #     DATEADD(d,1,returned_at) as returned_at_advance
-  #     from ecomm.order_items
+  #     from @{schema}.order_items
 
   ########## IDs, Foreign Keys, Counts ###########
+
+  measure: count_of_ids {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
 
   dimension: id {
     primary_key: yes
@@ -58,7 +63,6 @@ view: order_items {
     sql: ${order_id} ;;
     filters: {
       field: order_facts.is_first_purchase
-      value: "Yes"
     }
     drill_fields: [user_id, users.name, users.email, order_id, created_date, users.traffic_source]
   }
@@ -281,6 +285,8 @@ view: order_items {
   }
 
   measure: total_sale_price {
+    label: "Total Sales"
+    description: "a sum of our sales price"
     type: sum
     value_format_name: usd
     sql: ${sale_price} ;;
@@ -415,6 +421,59 @@ view: order_items {
     drill_fields: [products.brand, order_count, count_with_repeat_purchase_within_30d]
   }
 
+    dimension: today_from_user_attribute {
+      type: string
+      sql:
+         'test'
+          ;;
+      html:
+          {% assign current_day_of_month = 'now' | date: '%-d' %}
+
+            {% if current_day_of_month == '14' %}
+              true
+            {% else %}
+            false
+            {% endif %}
+            ;;
+
+    }
+
+
+    dimension: week_from_user_attribute {
+      type: string
+      sql:
+       'test'
+        ;;
+      html:
+          {% assign current_day_of_week = 'now' | date: '%w'  %}
+
+          {% if current_day_of_week == '4' %}
+            true
+          {% else %}
+            {{ current_day_of_week }}
+          {% endif %}
+
+        ;;
+
+    }
+
+    dimension: combined {
+      type: string
+      sql:
+          {% assign current_day_of_month = 'now' | date: '%-d' %}
+          {% assign current_day_of_week = 'now' | date: '%w'  %}
+          {% if current_day_of_month == '1' %}
+          'use day of month'
+          {% elsif current_day_of_week == '1' %}
+          'Use day of week'
+          {% else %}
+          'Use Normal Date'
+          {% endif %}
+          ;;
+
+    }
+
+
 ########## Dynamic Sales Cohort App ##########
 
 #   filter: cohort_by {
@@ -493,5 +552,4 @@ view: order_items {
       average_gross_margin
     ]
   }
-
 }

@@ -1,15 +1,15 @@
 view: campaigns {
 
   ## ATOM.VIEW SQL
-    # create view looker-private-demo.ecomm.campaigns as
+    # create view @{schema}.campaigns as
     # select *,
     #   dateadd(d,1,created_at) as created_at_advance
-    # from ecomm.campaigns
+    # from @{schema}.campaigns
 
   derived_table: {
     datagroup_trigger: every_day
     sql: SELECT *
-      FROM   looker-private-demo.ecomm.atom_campaigns
+      FROM   @{schema}.atom_campaigns
       UNION ALL
       SELECT 9999                 AS id,
       NULL                        AS advertising_channel,
@@ -128,7 +128,7 @@ view: campaigns {
     ]
     convert_tz: no
     datatype: date
-    sql: DATE_ADD( ${period},${created_date}, INTERVAL 1 DAY) ;;
+    sql: DATE_ADD( ${created_date}, INTERVAL 1 DAY) ;;
   }
 
   dimension: day_of_quarter {

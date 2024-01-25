@@ -5,7 +5,7 @@ view: best_day_ever {
       select day, best_day_vs_today
       from
         (select date_trunc(created_at_advance, day) as day, 'Best Day' as best_day_vs_today
-        from looker-private-demo.ecomm.atom_order_items
+        from @{schema}.atom_order_items
         group by 1,2
         order by sum(sale_price) desc
         limit 1)

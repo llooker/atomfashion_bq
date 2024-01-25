@@ -9,7 +9,7 @@ view: city_sales_tax {
     # group by 1,2,3
     # ;;
     sql:SELECT city, state, country, (0 + RAND() * (.1 - 0)) as city_tax
-          FROM looker-private-demo.ecomm.users
+          FROM @{schema}.users
           group by 1,2,3
     ;;
   }
@@ -35,6 +35,6 @@ view: city_sales_tax {
   dimension: city_tax {
     type: number
     sql: ${TABLE}.CITY_TAX ;;
-    value_format_name: decimal_5
+    value_format_name: decimal_2
   }
 }
